@@ -1,3 +1,3 @@
-# Mrcmd Plugins Changelog
+# Mrcmd Docker Plugin Changelog
 
-Все изменения в Mrcmd Plugins будут документироваться на этой странице.
+Все изменения в Mrcmd Docker Plugin будут документироваться на этой странице.

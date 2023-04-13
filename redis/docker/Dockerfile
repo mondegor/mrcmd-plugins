@@ -1,0 +1,29 @@
+# https://hub.docker.com/_/redis
+
+ARG DOCKER_IMAGE
+
+FROM ${DOCKER_IMAGE}
+
+ARG INSTALL_BASH
+ARG REDIS_PASSWORD
+
+RUN apk add --no-cache gettext
+
+RUN if [[ "${INSTALL_BASH}" == true ]]; then \
+      apk add --no-cache bash; \
+    fi;
+
+WORKDIR /opt/redis
+
+COPY ./redis.template.conf /etc/redis/redis.template.conf
+
+RUN envsubst "\${REDIS_PASSWORD}" \
+        < /etc/redis/redis.template.conf \
+        > /etc/redis/redis.conf
+
+COPY ./run.sh ./
+RUN chmod +x ./run.sh
+
+CMD [ "sh", "-c", "./run.sh" ]
+
+#EXPOSE 6379

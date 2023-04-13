@@ -1,0 +1,5 @@
+
+function mrcmd_func_${MRVAR_PLUGIN_NAME}_${MRVAR_FUNC_NAME}() {
+  local arguments="$@"
+  mrcore_echo_notice "Need to implement the function ${FUNCNAME[0]}(${arguments})"
+}

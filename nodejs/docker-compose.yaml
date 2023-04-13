@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  web-app:
+    image: ${NODEJS_DOCKER_IMAGE}
+    build:
+      context: ${NODEJS_DOCKER_CONFIG_DIR}
+      args:
+        DOCKER_IMAGE: ${NODEJS_DOCKER_IMAGE_FROM}
+        INSTALL_BASH: ${NODEJS_INSTALL_BASH}
+        HOST_USER_ID: ${NODEJS_HOST_USER_ID}
+        HOST_GROUP_ID: ${NODEJS_HOST_GROUP_ID}
+    container_name: ${NODEJS_DOCKER_CONTAINER}
+    restart: unless-stopped
+    command: npm run start
+    ports:
+      - "${NODEJS_EXT_PORT}:3000"
+    volumes:
+      - ${NODEJS_APP_VOLUME}:/opt/app
+    environment:
+      - TZ=${NODEJS_TZ}
+    networks:
+      - ${NODEJS_DOCKER_NETWORK}

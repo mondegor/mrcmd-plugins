@@ -1,0 +1,6 @@
+version: "3.9"
+
+networks:
+    appx-network:
+      name: ${DOCKER_COMPOSE_APPX_ID}-network
+      driver: bridge

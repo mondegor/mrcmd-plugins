@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db-redis:
+    build:
+      context: ${REDIS_DOCKER_CONFIG_DIR}
+      args:
+        DOCKER_IMAGE: ${REDIS_DOCKER_IMAGE}
+        INSTALL_BASH: ${REDIS_INSTALL_BASH}
+        REDIS_PASSWORD: ${REDIS_PASSWORD}
+    container_name: ${REDIS_DOCKER_CONTAINER}
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "${REDIS_EXT_PORT}:6379"
+    volumes:
+      - db-redis-volume:/data
+    environment:
+      - TZ=${REDIS_TZ}
+    networks:
+      - ${REDIS_DOCKER_NETWORK}
+
+volumes:
+  db-redis-volume:
+    driver: local
