@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  web-app: # ${WEB_PHP_DOCKER_SERVICE}
+    image: ${WEB_PHP_DOCKER_IMAGE}
+#    build:
+#      context: ${WEB_PHP_DOCKER_CONFIG_DOCKERFILE}
+#      args:
+#        DOCKER_IMAGE_FROM: ${WEB_PHP_DOCKER_IMAGE_FROM}
+    container_name: ${WEB_PHP_DOCKER_CONTAINER}
+    restart: unless-stopped
+    # ports:
+    #  - "127.0.0.1:9000:9000"
+    #  - "127.0.0.1:9003:9003"
+    volumes:
+      - ${WEB_PHP_WORK_DIR}:/opt/app
+    environment:
+      - TZ=${APPX_TZ}
+      - APPX_DB_HOST=${WEB_PHP_DB_HOST}
+      - APPX_DB_PORT=${WEB_PHP_DB_PORT}
+      - APPX_DB_NAME=${WEB_PHP_DB_NAME}
+      - APPX_DB_USER=${WEB_PHP_DB_USER}
+      - APPX_DB_PASSWORD=${WEB_PHP_DB_PASSWORD}
+      - APPX_REDIS_HOST=${WEB_PHP_REDIS_HOST}
+      - APPX_REDIS_PORT=${WEB_PHP_REDIS_PORT}
+      - APPX_REDIS_PASSWORD=${WEB_PHP_REDIS_PASSWORD}
+    networks:
+      - ${APPX_NETWORK}
+
+  web-app-nginx:
+    image: ${WEB_PHP_NGINX_DOCKER_IMAGE}
+#    build:
+#      context: ${NGINX_DOCKER_CONFIG_DOCKERFILE}
+#      args:
+#          DOCKER_IMAGE_FROM: ${NGINX_DOCKER_IMAGE_FROM}
+#          INSTALL_BASH: ${ALPINE_INSTALL_BASH}
+#          SERVICE_TYPE: php
+#          SERVICE_DOMAIN: ${WEB_PHP_APPX_DOMAIN}
+#          SERVICE_HOST: web-app
+#          SERVICE_PORT: 9000
+    container_name: ${WEB_PHP_NGINX_DOCKER_CONTAINER}
+    restart: unless-stopped
+    depends_on:
+      - web-app
+    ports:
+      - ${WEB_PHP_APPX_PUBLIC_PORT}:80
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - ${APPX_NETWORK}

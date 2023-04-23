@@ -1,0 +1,79 @@
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
+
+  readonly ${MRVAR_PLUGIN_NAME_UPPER}_NAME="${MRVAR_PLUGIN_NAME}"
+
+  readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS=(
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONTAINER"
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONFIG_DOCKERFILE"
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_COMPOSE_CONFIG_DIR"
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE"
+  )
+
+  readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT=(
+    "${APPX_ID}-${MRVAR_PLUGIN_NAME}"
+    "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker"
+    "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker-compose"
+    "docker-hub-image:${APPX_ID}-version"
+
+    "${HOST_USER_ID}"
+    "${HOST_GROUP_ID}"
+  )
+
+  mrcore_dotenv_init_var_array ${MRVAR_PLUGIN_NAME_UPPER}_VARS[@] ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT[@]
+
+  # DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_COMPOSE_CONFIG_DIR}/service-name.yaml")
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_config() {
+  mrcore_dotenv_echo_var_array ${MRVAR_PLUGIN_NAME_UPPER}_VARS[@]
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_export_config() {
+  mrcore_dotenv_export_var_array ${MRVAR_PLUGIN_NAME_UPPER}_VARS[@]
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_install() {
+  mrcore_echo_notice "Need to implement the method ${FUNCNAME[0]}($@)"
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_uninstall() {
+  mrcore_echo_notice "Need to implement the method ${FUNCNAME[0]}($@)"
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_exec() {
+  local currentCommand="${1:?}"
+  shift
+
+  case ${currentCommand} in
+
+    build)
+     mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build "$@"
+    ;;
+
+    ${MRVAR_FUNC_FILE})
+      mrcmd_plugins_call_function "${MRVAR_PLUGIN_FILE}/${MRVAR_FUNC_FILE}" "$@"
+      ;;
+
+    *)
+      ${RETURN_UNKNOWN_COMMAND}
+      ;;
+
+  esac
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_help() {
+  #markup:"------------------------------|||||||||||||||||||||||||||||||||||||||||||||"
+  echo -e "${CC_YELLOW}Commands:${CC_END}"
+  echo -e "  docker-build                Builds or rebuilds the image ${CC_GREEN}${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE}${CC_END}"
+  echo -e "  ${MRVAR_FUNC_FILE}          It is description about this function of the plugin"
+}
+
+# private
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build() {
+  mrcmd_plugins_call_function "docker/build-image-user" \
+    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONFIG_DOCKERFILE}" \
+    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE}" \
+    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE_FROM}" \
+    "$@"
+}

@@ -1,8 +1,6 @@
-# https://hub.docker.com/_/mysql
+ARG DOCKER_IMAGE_FROM
 
-ARG DOCKER_IMAGE
-
-FROM ${DOCKER_IMAGE}
+FROM ${DOCKER_IMAGE_FROM}
 
 COPY my.cnf /etc/mysql/my.cnf
 

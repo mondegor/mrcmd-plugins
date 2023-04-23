@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  web-app: # ${GO_DOCKER_SERVICE}
+    environment:
+      - APPX_DB_HOST=${APPX_DB_HOST}
+      - APPX_DB_PORT=${APPX_DB_PORT}
+      - APPX_DB_NAME=${APPX_DB_NAME}
+      - APPX_DB_USER=${APPX_DB_USER}
+      - APPX_DB_PASSWORD=${APPX_DB_PASSWORD}

@@ -1,0 +1,6 @@
+version: "3.9"
+
+networks:
+  service-network:
+    name: ${DOCKER_COMPOSE_PROJECT_NAME}-service-network
+    driver: bridge

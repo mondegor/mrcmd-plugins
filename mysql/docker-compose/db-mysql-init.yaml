@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  db-mysql: # ${MYSQL_DOCKER_SERVICE}
+    environment:
+      # created only at the first start:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_DB_ROOT_PASSWORD}
+      - MYSQL_USER=${APPX_DB_USER}
+      - MYSQL_PASSWORD=${APPX_DB_PASSWORD}
+      - MYSQL_DATABASE=${APPX_DB_NAME}

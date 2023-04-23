@@ -1,7 +1,5 @@
-# https://hub.docker.com/r/minio/minio
+ARG DOCKER_IMAGE_FROM
 
-ARG DOCKER_IMAGE
-
-FROM ${DOCKER_IMAGE}
+FROM ${DOCKER_IMAGE_FROM}
 
 COPY ./data /data/.minio.sys

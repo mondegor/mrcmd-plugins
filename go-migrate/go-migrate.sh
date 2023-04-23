@@ -1,31 +1,32 @@
 # https://hub.docker.com/r/migrate/migrate
 
-readonly GO_MIGRATE_VARS=(
-  "GO_MIGRATE_DOCKER_CONFIG_DIR"
-  "GO_MIGRATE_DOCKER_IMAGE"
-  "GO_MIGRATE_DOCKER_IMAGE_FROM"
-  "GO_MIGRATE_DOCKER_NETWORK"
-  "GO_MIGRATE_TZ"
-  "GO_MIGRATE_HOST_USER_ID"
-  "GO_MIGRATE_HOST_GROUP_ID"
-  "GO_MIGRATE_APP_VOLUME"
-  "GO_MIGRATE_DB_URL"
-)
+function mrcmd_plugins_go_migrate_method_depends() {
+  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker")
+}
 
-# default values of array: GO_MIGRATE_VARS
-readonly GO_MIGRATE_VARS_DEFAULT=(
-  "${MRCMD_DIR}/plugins/go-migrate/docker"
-  "${APPX_ID:-appx}-migrate/migrate:v4.15.2"
-  "migrate/migrate:v4.15.2"
-  "${APPX_NETWORK:-appx-network}"
-  "${TZ:-Europe/Moscow}"
-  "${HOST_USER_ID:-1000}"
-  "${HOST_GROUP_ID:-1000}"
-  "$(realpath "${APPX_DIR}")/migrations"
-  "postgres://${APPX_DB_USER:-user_app}:${APPX_DB_PASSWORD:-12345}@${APPX_DB_HOST:-db-postgres:5432}/${APPX_DB_NAME:-db_app}?sslmode=disable"
-  # "$(realpath "${APPX_DIR}")/migrations-mysql"
-  # "mysql://${APPX_DB_USER:-user_app}:${APPX_DB_PASSWORD:-12345}@tcp(${APPX_DB_HOST:-db-mysql:3306})/${APPX_DB_NAME:-db_app}"
-)
+function mrcmd_plugins_go_migrate_method_init() {
+  readonly GO_MIGRATE_NAME="DB migrate utility"
+
+  readonly GO_MIGRATE_VARS=(
+    "GO_MIGRATE_DOCKER_CONFIG_DOCKERFILE"
+    "GO_MIGRATE_DOCKER_IMAGE"
+    "GO_MIGRATE_DOCKER_IMAGE_FROM"
+    "GO_MIGRATE_DOCKER_NETWORK"
+
+    "GO_MIGRATE_DB_SRC_DIR"
+  )
+
+  readonly GO_MIGRATE_VARS_DEFAULT=(
+    "${MRCMD_DIR}/plugins/go-migrate/docker"
+    "go-migrate:${APPX_ID}-4.15.2"
+    "migrate/migrate:v4.15.2"
+    "${APPX_ID}-${APPX_NETWORK}"
+
+    "$(realpath "${APPX_DIR}")/migrations"
+  )
+
+  mrcore_dotenv_init_var_array GO_MIGRATE_VARS[@] GO_MIGRATE_VARS_DEFAULT[@]
+}
 
 function mrcmd_plugins_go_migrate_method_config() {
   mrcore_dotenv_echo_var_array GO_MIGRATE_VARS[@]
@@ -35,57 +36,63 @@ function mrcmd_plugins_go_migrate_method_export_config() {
   mrcore_dotenv_export_var_array GO_MIGRATE_VARS[@]
 }
 
-function mrcmd_plugins_go_migrate_method_init() {
-  mrcore_dotenv_init_var_array GO_MIGRATE_VARS[@] GO_MIGRATE_VARS_DEFAULT[@]
+function mrcmd_plugins_go_migrate_method_install() {
+  mrcmd_plugins_go_migrate_docker_build --no-cache
 }
 
-function mrcmd_plugins_go_migrate_method_install() {
-  mrcmd_plugins_call_function "go-migrate/docker-build" --no-cache
+function mrcmd_plugins_go_migrate_method_start() {
+  mrcmd_plugins_go_migrate_docker_build
 }
 
 function mrcmd_plugins_go_migrate_method_exec() {
-  local currentCommand=${1:?}
+  local currentCommand="${1:?}"
   shift
 
   case ${currentCommand} in
 
-    build)
-      mrcmd_plugins_call_function "go-migrate/docker-build" "$@"
+    docker-build)
+      mrcore_dotenv_echo_var_array GO_MIGRATE_VARS[@]
+      mrcmd_plugins_go_migrate_docker_build "$@"
       ;;
 
-    ## Run migrations UP
     up)
-      mrcmd_plugins_call_function "go-migrate/docker-run" up
+      mrcmd_plugins_call_function "go-migrate/docker-cli" up
       ;;
 
-    ## Rollback migrations against non test DB
     down)
-      mrcmd_plugins_call_function "go-migrate/docker-run" down 1
+      mrcmd_plugins_call_function "go-migrate/docker-cli" down 1
       ;;
 
     init)
-      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql -seq init
+      mrcmd_plugins_call_function "go-migrate/docker-cli" create -ext sql -seq init
       ;;
 
-    ## Create a DB migration files e.g `make migrate-create name=migration-name`
     create)
-      # bash ./utils/golang-db-migrate.sh create -ext sql -dir /migrations ${ARGS}
-      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql "$@"
+      mrcmd_plugins_call_function "go-migrate/docker-cli" create -ext sql "$@"
       ;;
 
     *)
-      ${RETURN_FALSE}
+      ${RETURN_UNKNOWN_COMMAND}
       ;;
 
   esac
 }
 
 function mrcmd_plugins_go_migrate_method_help() {
-  echo -e "  ${CC_YELLOW}DB migrate utility:${CC_END}"
-  echo -e "    ${CC_GREEN}build${CC_END}   Build"
-  echo -e "    ${CC_GREEN}up${CC_END}      Run migrations UP"
-  echo -e "    ${CC_GREEN}init${CC_END}    Run migrations INIT"
-  echo -e "    ${CC_GREEN}down${CC_END}    Rollback migrations against non test DB"
-  echo -e "    ${CC_GREEN}create${CC_END}  Create a DB migration files e.g 'make migrate-create name=migration-name'"
-  echo ""
+  #markup:"|-|-|---------|-------|-------|---------------------------------------|"
+  echo -e "${CC_YELLOW}Commands:${CC_END}"
+  echo -e "  docker-build        Builds or rebuilds the image ${CC_GREEN}${GO_MIGRATE_DOCKER_IMAGE}${CC_END}"
+  echo -e "  up                  Run migrations UP"
+  echo -e "  init                Run migrations INIT"
+  echo -e "  down                Rollback migrations against non test DB"
+  echo -e "  create              Create a DB migration files e.g 'make migrate-create name=migration-name'"
+}
+
+# private
+function mrcmd_plugins_go_migrate_docker_build() {
+  mrcmd_plugins_call_function "docker/build-image-user" \
+    "${GO_MIGRATE_DOCKER_CONFIG_DOCKERFILE}" \
+    "${GO_MIGRATE_DOCKER_IMAGE}" \
+    "${GO_MIGRATE_DOCKER_IMAGE_FROM}" \
+    "$@"
 }

@@ -1,21 +1,23 @@
-# https://hub.docker.com/_/golang
+ARG DOCKER_IMAGE_FROM
 
-ARG DOCKER_IMAGE
-
-FROM ${DOCKER_IMAGE}
+FROM ${DOCKER_IMAGE_FROM}
 
 ARG INSTALL_BASH
 ARG HOST_USER_ID
 ARG HOST_GROUP_ID
 
-RUN apk add --no-cache git
+# RUN echo "GOPATH: ${GOPATH}"
+# RUN echo "GOBIN: ${GOBIN}"
+# RUN echo "GOROOT: ${GOROOT}"
 
-RUN addgroup -g 1000 golang && adduser -u 1000 -G golang -s /bin/sh -D golang
-RUN chown -R golang:golang /go
+RUN apk add --no-cache git
 
 RUN if [[ "${INSTALL_BASH}" == true ]]; then \
       apk add --no-cache bash; \
     fi;
+
+RUN addgroup -g 1000 golang && adduser -u 1000 -G golang -s /bin/sh -D golang
+RUN chown -R golang:golang /go
 
 RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
       apk add --no-cache shadow \
@@ -24,6 +26,5 @@ RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
     fi;
 
 WORKDIR /opt/app
-# RUN chown -R golang:golang /opt
 
 USER golang

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  db-postgres: # ${POSTGRES_DOCKER_SERVICE}
+    environment:
+      # created only at the first start:
+      - POSTGRES_USER=${POSTGRES_DB_ROOT_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_DB_ROOT_PASSWORD}
+      - POSTGRES_DB=${APPX_DB_NAME}
