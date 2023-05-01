@@ -16,24 +16,24 @@ function mrcmd_plugins_pm_method_exec() {
         local isShowMethods=true
       fi
 
-      mrcmd_plugins_call_function "pl/available-plugins" "${isShowMethods}"
+      mrcmd_plugins_call_function "pm/available-plugins" "${isShowMethods}"
       ;;
 
     cr | create)
       local pluginName="${1-}"
-      mrcmd_plugins_call_function "pl/create-plugin" "${pluginName}"
+      mrcmd_plugins_call_function "pm/create-plugin" "${pluginName}"
       ;;
 
     cr-fn | create-func)
       local pluginName="${1-}"
       local funcName="${2-}"
-      mrcmd_plugins_call_function "pl/create-func" "${pluginName}" "${funcName}"
+      mrcmd_plugins_call_function "pm/create-func" "${pluginName}" "${funcName}"
       ;;
 
     cp | copy)
       local pluginName="${1-}"
       local newPluginName="${2-}"
-      mrcmd_plugins_call_function "pl/copy-plugin" "${pluginName}" "${newPluginName}"
+      mrcmd_plugins_call_function "pm/copy-plugin" "${pluginName}" "${newPluginName}"
       ;;
 
     *)

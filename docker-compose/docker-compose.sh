@@ -9,13 +9,13 @@ function mrcmd_plugins_docker_compose_method_init() {
   readonly DOCKER_COMPOSE_VARS=(
     "DOCKER_COMPOSE_PROJECT_NAME"
     "DOCKER_COMPOSE_CONFIG_DIR"
-    "DOCKER_COMPOSE_GENERAL_NETWORK" # OFF, CREATE, USE
+    "DOCKER_COMPOSE_GENERAL_NETWORK" # NET_OFF, NET_CREATE, NET_USE
   )
 
   readonly DOCKER_COMPOSE_DEFAULT=(
     "${APPX_ID}"
     "${MRCMD_DIR}/plugins/docker-compose"
-    "off"
+    "NET_OFF"
   )
 
   mrcore_dotenv_init_var_array DOCKER_COMPOSE_VARS[@] DOCKER_COMPOSE_DEFAULT[@]
@@ -23,7 +23,7 @@ function mrcmd_plugins_docker_compose_method_init() {
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/service-network.yaml")
 
-  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != off ]]; then
+  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != NET_OFF ]]; then
     DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_DIR}/general-network.yaml")
   fi
 }
@@ -124,12 +124,12 @@ function mrcmd_plugins_docker_compose_method_help() {
 }
 
 function mrcmd_plugins_docker_compose_general_network_var_init() {
-  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == USE ]]; then
+  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == NET_USE ]]; then
     DOCKER_COMPOSE_GENERAL_NETWORK=true
-  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == CREATE ]]; then
+  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == NET_CREATE ]]; then
     DOCKER_COMPOSE_GENERAL_NETWORK=false
-  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != OFF ]]; then
-    DOCKER_COMPOSE_GENERAL_NETWORK=OFF
-    mrcore_echo_error "DOCKER_COMPOSE_GENERAL_NETWORK can have the following values: OFF, CREATE, USE"
+  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != NET_OFF ]]; then
+    DOCKER_COMPOSE_GENERAL_NETWORK=NET_OFF
+    mrcore_echo_error "DOCKER_COMPOSE_GENERAL_NETWORK can have the following values: NET_OFF, NET_CREATE, NET_USE"
   fi
 }

@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "pl/create-plugin"
+# run: mrcmd_plugins_call_function "pm/create-plugin"
 function mrcmd_func_pm_create_plugin() {
   local pluginName="${1-}"
   local funcName="first-function"
@@ -16,7 +16,7 @@ function mrcmd_func_pm_create_plugin() {
   mrcore_echo_ok "Plugin '${pluginName}' created"
   mrcore_echo_sample "Run '${MRCMD_INFO_NAME} ${pluginName}' for usage"
 
-  mrcmd_plugins_call_function "pl/create-func" "${pluginName}" "${funcName}"
+  mrcmd_plugins_call_function "pm/create-func" "${pluginName}" "${funcName}"
 }
 
 # private

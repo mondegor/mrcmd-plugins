@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "pl/create-func"
+# run: mrcmd_plugins_call_function "pm/create-func"
 function mrcmd_func_pm_create_func() {
   local pluginName="${1-}"
   local funcName="${2-}"

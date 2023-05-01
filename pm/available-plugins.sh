@@ -1,7 +1,7 @@
 
 readonly MRCMD_AVAILABLE_PLUGIN_METHODS_ARRAY=("config" "export-config" "exec" "init" "install" "parse-arg" "uninstall" "help")
 
-# run: mrcmd_plugins_call_function "pl/available-plugins"
+# run: mrcmd_plugins_call_function "pm/available-plugins"
 function mrcmd_func_pm_available_plugins() {
   local isShowMethods=${1:-false}
   local pluginName
@@ -64,20 +64,20 @@ function pm_available_plugins_echo_plugin() {
     statusColor="${CC_RED}"
   fi
 
-  local pluginContains=()
+  local pluginSupported=()
 
   if [ -d "${pluginDir}/docker" ]; then
-    pluginContains+=("docker")
+    pluginSupported+=("docker")
   fi
 
   if [ -d "${pluginDir}/docker-compose" ]; then
-    pluginContains+=("docker-compose")
+    pluginSupported+=("docker-compose")
   fi
 
   echo -e "    ${CC_GREEN}${pluginName}${CC_END}${pluginProperties} [${statusColor}${pluginStatus}${CC_END}]"
 
-  if [ "${#pluginContains[@]}" -gt 0 ]; then
-    echo -e "      ${CC_YELLOW}contains:${CC_END} $(mrcmd_lib_implode ", " pluginContains[@])"
+  if [ "${#pluginSupported[@]}" -gt 0 ]; then
+    echo -e "      ${CC_YELLOW}supported:${CC_END} $(mrcmd_lib_implode ", " pluginSupported[@])"
   fi
 
   mrcmd_plugins_depends_plugin_load_depends "${pluginName}"
