@@ -23,6 +23,7 @@ function mrcmd_plugins_go_method_init() {
 
     "GO_LIB_DIR"
     "GO_WORK_DIR"
+    "GO_DOCKER_APP_MAIN_FILE"
 
     "GO_APPX_PUBLIC_PORT"
     "GO_APPX_HOST"
@@ -45,6 +46,7 @@ function mrcmd_plugins_go_method_init() {
 
     "$(realpath "${APPX_DIR}")/golang"
     "$(realpath "${APPX_DIR}")/app"
+    "./cmd/app/main.go"
 
     "127.0.0.1:8090"
     "0.0.0.0"
@@ -74,6 +76,7 @@ function mrcmd_plugins_go_method_export_config() {
 
 function mrcmd_plugins_go_method_install() {
   mrcore_lib_mkdir "${GO_LIB_DIR}"
+  mrcore_lib_mkdir "${GO_WORK_DIR}/logs"
   mrcmd_plugins_go_docker_build --no-cache
   mrcmd_plugins_go_download_tools
   mrcmd_plugins_call_function "go/docker-cli" go mod download
@@ -81,6 +84,7 @@ function mrcmd_plugins_go_method_install() {
 
 function mrcmd_plugins_go_method_uninstall() {
   mrcore_lib_rmdir "${GO_LIB_DIR}"
+  mrcore_lib_mkdir "${GO_WORK_DIR}/logs"
 }
 
 function mrcmd_plugins_go_method_exec() {
@@ -106,6 +110,10 @@ function mrcmd_plugins_go_method_exec() {
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${GO_DOCKER_SERVICE}" \
         "${ALPINE_INSTALL_BASH}"
+      ;;
+
+    logs)
+      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${GO_DOCKER_SERVICE}"
       ;;
 
     restart)

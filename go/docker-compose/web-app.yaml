@@ -12,7 +12,7 @@ services:
 #        HOST_GROUP_ID: ${HOST_GROUP_ID}
     container_name: ${GO_DOCKER_CONTAINER}
     restart: unless-stopped
-    command: go run ./cmd/main/app.go
+    command: go run ${GO_DOCKER_APP_MAIN_FILE}
     ports:
       - ${GO_APPX_PUBLIC_PORT}:${GO_APPX_PORT}
     volumes:

@@ -1,6 +1,5 @@
 
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
-
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_NAME="${MRVAR_PLUGIN_NAME}"
 
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS=(
@@ -15,9 +14,6 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
     "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker"
     "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker-compose"
     "docker-hub-image:${APPX_ID}-version"
-
-    "${HOST_USER_ID}"
-    "${HOST_GROUP_ID}"
   )
 
   mrcore_dotenv_init_var_array ${MRVAR_PLUGIN_NAME_UPPER}_VARS[@] ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT[@]
@@ -47,7 +43,7 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_exec() {
 
   case ${currentCommand} in
 
-    build)
+    docker-build)
      mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build "$@"
     ;;
 
@@ -63,7 +59,7 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_exec() {
 }
 
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_help() {
-  #markup:"------------------------------|||||||||||||||||||||||||||||||||||||||||||||"
+  #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
   echo -e "  docker-build                Builds or rebuilds the image ${CC_GREEN}${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE}${CC_END}"
   echo -e "  ${MRVAR_FUNC_FILE}          It is description about this function of the plugin"

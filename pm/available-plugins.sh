@@ -1,5 +1,5 @@
 
-readonly MRCMD_AVAILABLE_PLUGIN_METHODS_ARRAY=("config" "export-config" "exec" "init" "install" "parse-arg" "uninstall" "help")
+readonly MRCMD_PLUGIN_RESERVED_METHODS_ARRAY=("init" "exec" "${MRCMD_PLUGIN_METHODS_ARRAY[@]}")
 
 # run: mrcmd_plugins_call_function "pm/available-plugins"
 function mrcmd_func_pm_available_plugins() {
@@ -107,7 +107,7 @@ function pm_available_plugins_echo_plugin_methods() {
 
   echo -e "      ${CC_YELLOW}methods:${CC_END}"
 
-  for pluginMethod in "${MRCMD_AVAILABLE_PLUGIN_METHODS_ARRAY[@]}"
+  for pluginMethod in "${MRCMD_PLUGIN_RESERVED_METHODS_ARRAY[@]}"
   do
     fullPluginMethod=$(mrcmd_plugins_lib_get_plugin_method_name "${pluginName}" "${pluginMethod}")
 

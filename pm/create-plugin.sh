@@ -29,8 +29,8 @@ function pm_create_plugin_exec() {
   mkdir -m 0755 "${pluginDir}"
 
   export MRVAR_PLUGIN_FILE="${pluginName}"
-  export MRVAR_PLUGIN_NAME_UPPER="${pluginName^^}"
   export MRVAR_PLUGIN_NAME="${pluginName//[-]/_}"
+  export MRVAR_PLUGIN_NAME_UPPER="${MRVAR_PLUGIN_NAME^^}"
   export MRVAR_FUNC_FILE="${funcName}"
 
   local vars="\${MRVAR_PLUGIN_NAME},\${MRVAR_PLUGIN_NAME_UPPER},\${MRVAR_PLUGIN_FILE},\$MRVAR_FUNC_FILE"
