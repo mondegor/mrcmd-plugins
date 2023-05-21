@@ -3,13 +3,13 @@ version: "3.9"
 services:
   s3-minio: # ${MINIO_DOCKER_SERVICE}
     image: ${MINIO_DOCKER_IMAGE}
-#    build:
-#      context: ${MINIO_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${MINIO_DOCKER_IMAGE_FROM}
     container_name: ${MINIO_DOCKER_CONTAINER}
-    command: server /data --console-address ":${MINIO_WEB_PORT}"
-    restart: unless-stopped
+    command:
+      - server
+      - /data
+      - --console-address
+      - ":${MINIO_WEB_PORT}"
+    restart: always
     #ports:
     #  - 127.0.0.1:9000:9000
     #  - 127.0.0.1:9001:${MINIO_WEB_PORT}
@@ -17,24 +17,15 @@ services:
       - s3-minio-volume:/data
     environment:
       - TZ=${APPX_TZ}
-      - MINIO_ROOT_USER=${MINIO_WEB_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_WEB_ROOT_PASSWORD}
+      - MINIO_ROOT_USER=${MINIO_WEB_ADMIN_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_WEB_ADMIN_PASSWORD}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
-  s3-minio-nginx:
+  s3-minio-nginx: # ${MINIO_NGINX_DOCKER_SERVICE}
     image: ${MINIO_NGINX_DOCKER_IMAGE}
-#    build:
-#      context: ${NGINX_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#          DOCKER_IMAGE_FROM: ${NGINX_DOCKER_IMAGE_FROM}
-#          INSTALL_BASH: ${ALPINE_INSTALL_BASH}
-#          SERVICE_TYPE: web-service
-#          SERVICE_DOMAIN: ${MINIO_WEB_DOMAIN}
-#          SERVICE_HOST: s3-minio
-#          SERVICE_PORT: ${MINIO_WEB_PORT}
     container_name: ${MINIO_NGINX_DOCKER_CONTAINER}
-    restart: unless-stopped
+    restart: always
     depends_on:
       - s3-minio
     ports:
@@ -42,7 +33,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
 volumes:
   s3-minio-volume:

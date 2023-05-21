@@ -3,21 +3,17 @@ version: "3.9"
 services:
   web-app: # ${NODEJS_DOCKER_SERVICE}
     image: ${NODEJS_DOCKER_IMAGE}
-#    build:
-#      context: ${NODEJS_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${NODEJS_DOCKER_IMAGE_FROM}
-#        INSTALL_BASH: ${ALPINE_INSTALL_BASH}
-#        HOST_USER_ID: ${HOST_USER_ID}
-#        HOST_GROUP_ID: ${HOST_GROUP_ID}
     container_name: ${NODEJS_DOCKER_CONTAINER}
-    restart: unless-stopped
-    command: npm run start
+    restart: always
+    command:
+      - npm
+      - run
+      - start
     ports:
-      - ${NODEJS_PUBLIC_PORT}:3000
+      - ${NODEJS_WEBAPP_PUBLIC_PORT}:${NODEJS_WEBAPP_PORT}
     volumes:
-      - ${NODEJS_APPX_APP_DIR}:/opt/app
+      - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}

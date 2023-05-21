@@ -33,7 +33,7 @@ function pm_create_plugin_exec() {
   export MRVAR_PLUGIN_NAME_UPPER="${MRVAR_PLUGIN_NAME^^}"
   export MRVAR_FUNC_FILE="${funcName}"
 
-  local vars="\${MRVAR_PLUGIN_NAME},\${MRVAR_PLUGIN_NAME_UPPER},\${MRVAR_PLUGIN_FILE},\$MRVAR_FUNC_FILE"
+  local vars="\${MRVAR_PLUGIN_NAME},\${MRVAR_PLUGIN_NAME_UPPER},\${MRVAR_PLUGIN_FILE},\${MRVAR_FUNC_FILE}"
 
   envsubst "${vars}" < "${templateFile}" > "${pluginDir}/${pluginName}.sh"
 }

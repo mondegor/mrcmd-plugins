@@ -1,49 +1,28 @@
 
 function mrcmd_plugins_global_method_init() {
-  readonly GLOBAL_NAME="Global vars"
+  readonly GLOBAL_CAPTION="Global vars"
 
   readonly GLOBAL_VARS=(
     "APPX_ID"
-    "APPX_NETWORK"
+    "APPX_WORK_DIR"
 
-    "ALPINE_INSTALL_BASH"
     "HOST_USER_ID"
     "HOST_GROUP_ID"
     "APPX_TZ"
-
-    "APPX_APP_DIR"
-
-    "APPX_DB_TYPE"
-    "APPX_DB_HOST"
-    "APPX_DB_PORT"
-    "APPX_DB_USER"
-    "APPX_DB_PASSWORD"
-    "APPX_DB_NAME"
-    "APPX_DB_URL"
   )
 
   readonly GLOBAL_VARS_DEFAULT=(
     "sx"
-    "service-network"
+    "${APPX_DIR}/app"
 
-    "false"
     "1000"
     "1000"
     "Europe/Moscow"
-
-    "${APPX_DIR}/app"
-
-    "postgres"
-    "db-postgres" # ${POSTGRES_DOCKER_SERVICE}
-    "5432"
-    "sx_user"
-    "12345"
-    "sx_db"
-    ""
   )
 
   mrcore_dotenv_init_var_array GLOBAL_VARS[@] GLOBAL_VARS_DEFAULT[@]
-  mrcmd_plugins_global_db_url_init
+
+  DOCKER_DEFAULT_SHELL=$(mrcore_get_shell "${DOCKER_DEFAULT_SHELL}")
 }
 
 function mrcmd_plugins_global_method_config() {
@@ -56,8 +35,17 @@ function mrcmd_plugins_global_method_export_config() {
 
 function mrcmd_plugins_global_method_exec() {
   local currentCommand="${1:?}"
+  shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
+
+    id | uname | which)
+      "${currentCommand}" "$@"
+      ;;
+
+    capsh)
+      capsh --print
+      ;;
 
     chown)
       sudo chown -R "${HOST_USER_ID}:${HOST_GROUP_ID}" "${APPX_DIR}"
@@ -73,19 +61,29 @@ function mrcmd_plugins_global_method_exec() {
 function mrcmd_plugins_global_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  chown                       sudo chown -R ${HOST_USER_ID}:${HOST_GROUP_ID} ${APPX_DIR}"
+  echo -e "  id          Print user and group information"
+  echo -e "  uname       Print certain system information"
+  echo -e "  which       Used to identify the location of executables"
+  echo -e "  capsh       Display prevailing capability and related state"
+  echo -e "              https://man7.org/linux/man-pages/man7/capabilities.7.html"
+  echo -e "  chown       sudo chown -R ${HOST_USER_ID}:${HOST_GROUP_ID} ${APPX_DIR}"
 }
 
-function mrcmd_plugins_global_db_url_init() {
-  case ${APPX_DB_TYPE} in
-
-    postgres)
-      APPX_DB_URL="postgres://${APPX_DB_USER}:${APPX_DB_PASSWORD}@${APPX_DB_HOST}:${APPX_DB_PORT}/${APPX_DB_NAME}?sslmode=disable"
-      ;;
-
-    mysql)
-      APPX_DB_URL="mysql://${APPX_DB_USER}:${APPX_DB_PASSWORD}@tcp(${APPX_DB_HOST}:${APPX_DB_PORT})/${APPX_DB_NAME}"
-      ;;
-
-  esac
-}
+#
+#function mrcmd_plugins_global_db_url_init() {
+#  case "${APPX_DB_TYPE}" in
+#
+#    postgres)
+#      APPX_DB_URL="postgres://${APPX_DB_USER}:${APPX_DB_PASSWORD}@${APPX_DB_HOST}:${APPX_DB_PORT}/${APPX_DB_NAME}?sslmode=disable"
+#      ;;
+#
+#    mysql)
+#      APPX_DB_URL="mysql://${APPX_DB_USER}:${APPX_DB_PASSWORD}@tcp(${APPX_DB_HOST}:${APPX_DB_PORT})/${APPX_DB_NAME}"
+#      ;;
+#
+#    mongodb)
+#      APPX_DB_URL="mongodb://${APPX_DB_USER}:${APPX_DB_PASSWORD}@${APPX_DB_HOST}:${APPX_DB_PORT}/${APPX_DB_NAME}"
+#      ;;
+#
+#  esac
+#}

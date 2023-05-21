@@ -3,24 +3,20 @@ version: "3.9"
 services:
   web-app: # ${GO_DOCKER_SERVICE}
     image: ${GO_DOCKER_IMAGE}
-#    build:
-#      context: ${GO_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${GO_DOCKER_IMAGE_FROM}
-#        INSTALL_BASH: ${ALPINE_INSTALL_BASH}
-#        HOST_USER_ID: ${HOST_USER_ID}
-#        HOST_GROUP_ID: ${HOST_GROUP_ID}
     container_name: ${GO_DOCKER_CONTAINER}
-    restart: unless-stopped
-    command: go run ${GO_DOCKER_APP_MAIN_FILE}
+    restart: always
+    command:
+      - go
+      - run
+      - ${GO_APP_MAIN_FILE}
     ports:
-      - ${GO_APPX_PUBLIC_PORT}:${GO_APPX_PORT}
+      - ${GO_WEBAPP_PUBLIC_PORT}:${GO_WEBAPP_PORT}
     volumes:
       - ${GO_LIB_DIR}:/go
-      - ${GO_WORK_DIR}:/opt/app
+      - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
-      - APPX_HOST=${GO_APPX_HOST}
-      - APPX_PORT=${GO_APPX_PORT}
+      - APP_BIND=${GO_WEBAPP_BIND}
+      - APP_PORT=${GO_WEBAPP_PORT}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}

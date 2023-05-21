@@ -6,8 +6,9 @@ function mrcmd_func_docker_build_image() {
   local dockerImageFrom="${3:?}"
   shift; shift; shift
 
+  # --progress=plain \
   docker build "${dockerFilePath}" -t "${dockerImageName}" \
     --build-arg "DOCKER_IMAGE_FROM=${dockerImageFrom}" \
-    --build-arg "INSTALL_BASH=${ALPINE_INSTALL_BASH}" \
+    --build-arg "DEFAULT_SHELL=${DOCKER_DEFAULT_SHELL}" \
     "$@"
 }

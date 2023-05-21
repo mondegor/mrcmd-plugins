@@ -1,6 +1,6 @@
 
 # run: mrcmd_plugins_call_function "docker-compose/command"
-mrcmd_func_docker_compose_command() {
+function mrcmd_func_docker_compose_command() {
   local currentCommand="${1-}"
   local ttyInterface=""
   local configFiles=""
@@ -17,5 +17,10 @@ mrcmd_func_docker_compose_command() {
     ttyInterface="${MRCORE_TTY_INTERFACE}"
   fi
 
-  ${ttyInterface} docker compose -p "${DOCKER_COMPOSE_PROJECT_NAME}" ${configFiles} "$@"
+  ${ttyInterface} docker compose \
+    -p "${APPX_ID}" \
+    --project-directory "${APPX_DIR}" \
+    --env-file "${DOCKER_COMPOSE_CONFIG_DIR}/.env" \
+    ${configFiles} \
+    "$@"
 }

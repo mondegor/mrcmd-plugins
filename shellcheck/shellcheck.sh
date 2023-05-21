@@ -7,16 +7,14 @@ function mrcmd_plugins_shellcheck_method_depends() {
 }
 
 function mrcmd_plugins_shellcheck_method_init() {
-  readonly SHELLCHECK_NAME="Shellcheck"
+  readonly SHELLCHECK_CAPTION="Shellcheck"
 
   readonly SHELLCHECK_VARS=(
     "SHELLCHECK_DOCKER_IMAGE"
-    "SHELLCHECK_APPX_APP_DIR"
   )
 
   readonly SHELLCHECK_VARS_DEFAULT=(
     "koalaman/shellcheck-alpine:v0.9.0"
-    "$(realpath "${APPX_DIR}")"
   )
 
   mrcore_dotenv_init_var_array SHELLCHECK_VARS[@] SHELLCHECK_VARS_DEFAULT[@]
@@ -34,7 +32,7 @@ function mrcmd_plugins_shellcheck_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     check)
       mrcmd_plugins_call_function "shellcheck/docker-run" "$@"

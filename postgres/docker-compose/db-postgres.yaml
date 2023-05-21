@@ -3,13 +3,8 @@ version: "3.9"
 services:
   db-postgres: # ${POSTGRES_DOCKER_SERVICE}
     image: ${POSTGRES_DOCKER_IMAGE}
-#    build:
-#      context: ${POSTGRES_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${POSTGRES_DOCKER_IMAGE_FROM}
-#        INSTALL_BASH: ${ALPINE_INSTALL_BASH}
     container_name: ${POSTGRES_DOCKER_CONTAINER}
-    restart: unless-stopped
+    restart: always
     ports:
       - ${POSTGRES_DB_PUBLIC_PORT}:5432
     volumes:
@@ -17,7 +12,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
 volumes:
   db-postgres-volume:

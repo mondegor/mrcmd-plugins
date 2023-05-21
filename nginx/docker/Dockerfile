@@ -2,14 +2,14 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG INSTALL_BASH
+ARG DEFAULT_SHELL
 ARG SERVICE_TYPE
 ARG SERVICE_DOMAIN
 ARG SERVICE_HOST
 ARG SERVICE_PORT
 
-RUN if [[ "${INSTALL_BASH}" == true ]]; then \
-      apk add --no-cache bash; \
+RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
+      apk add --no-cache ${DEFAULT_SHELL}; \
     fi;
 
 COPY nginx.${SERVICE_TYPE}.template.conf /etc/nginx/nginx.template.conf

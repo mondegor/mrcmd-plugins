@@ -4,27 +4,29 @@ function mrcmd_plugins_docker_compose_method_depends() {
 }
 
 function mrcmd_plugins_docker_compose_method_init() {
-  readonly DOCKER_COMPOSE_NAME="Docker compose"
+  readonly DOCKER_COMPOSE_CAPTION="Docker compose"
+
+  export DOCKER_COMPOSE_LOCAL_NETWORK="local-network"
+  export DOCKER_COMPOSE_GENERAL_NETWORK="general-network"
+  export DOCKER_COMPOSE_GENERAL_NETWORK_IS_EXTERNAL=true
 
   readonly DOCKER_COMPOSE_VARS=(
-    "DOCKER_COMPOSE_PROJECT_NAME"
     "DOCKER_COMPOSE_CONFIG_DIR"
-    "DOCKER_COMPOSE_GENERAL_NETWORK" # NET_OFF, NET_CREATE, NET_USE
+    "DOCKER_COMPOSE_USE_GENERAL_NETWORK"
   )
 
   readonly DOCKER_COMPOSE_DEFAULT=(
-    "${APPX_ID}"
-    "${MRCMD_DIR}/plugins/docker-compose"
-    "NET_OFF"
+    "${MRCMD_PLUGINS_DIR}/docker-compose"
+    "false"
   )
 
   mrcore_dotenv_init_var_array DOCKER_COMPOSE_VARS[@] DOCKER_COMPOSE_DEFAULT[@]
-  mrcmd_plugins_docker_compose_general_network_var_init
+  mrcore_validate_file_required "Docker compose network" "${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_LOCAL_NETWORK}.yaml"
 
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/service-network.yaml")
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_LOCAL_NETWORK}.yaml")
 
-  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != NET_OFF ]]; then
-    DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_DIR}/general-network.yaml")
+  if [[ "${DOCKER_COMPOSE_USE_GENERAL_NETWORK}" == true ]]; then
+    DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_GENERAL_NETWORK}.yaml")
   fi
 }
 
@@ -36,13 +38,8 @@ function mrcmd_plugins_docker_compose_method_export_config() {
   mrcore_dotenv_export_var_array DOCKER_COMPOSE_VARS[@]
 }
 
-function mrcmd_plugins_docker_compose_method_install() {
-  mrcmd_plugins_call_function "docker-compose/command" build --no-cache
-}
-
 function mrcmd_plugins_docker_compose_method_start() {
-  mrcmd_plugins_call_function "docker-compose/command" build
-  mrcmd_plugins_call_function "docker-compose/command" up -d --remove-orphans
+  mrcmd_plugins_docker_compose_up -d --remove-orphans
 }
 
 function mrcmd_plugins_docker_compose_method_stop() {
@@ -57,18 +54,21 @@ function mrcmd_plugins_docker_compose_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     conf)
+      echo -e "${CC_YELLOW}DOCKER_COMPOSE_CONFIG_FILES_ARRAY:${CC_END}"
+      echo -e "  - $(mrcmd_lib_implode "\n  - " DOCKER_COMPOSE_CONFIG_FILES_ARRAY[@])\n"
+
       mrcmd_plugins_call_function "docker-compose/command" config
       ;;
 
-    build)
-      mrcmd_plugins_call_function "docker-compose/command" build --no-cache
+    up)
+      mrcmd_plugins_docker_compose_up -d --remove-orphans
       ;;
 
-    up)
-      mrcmd_plugins_call_function "docker-compose/command" up -d --remove-orphans
+    ps)
+      mrcmd_plugins_call_function "docker-compose/command" ps
       ;;
 
     im)
@@ -83,8 +83,12 @@ function mrcmd_plugins_docker_compose_method_exec() {
       mrcmd_plugins_call_function "docker-compose/command" down --remove-orphans
       ;;
 
-    dc-start | dc-stop | ps)
-      mrcmd_plugins_call_function "docker-compose/command" "${currentCommand}"
+    dc-start)
+      mrcmd_plugins_call_function "docker-compose/command" start
+      ;;
+
+    dc-stop)
+      mrcmd_plugins_call_function "docker-compose/command" stop
       ;;
 
     dc-restart)
@@ -92,7 +96,7 @@ function mrcmd_plugins_docker_compose_method_exec() {
       mrcmd_plugins_call_function "docker-compose/command" start
       ;;
 
-    cli)
+    cmd)
       mrcmd_plugins_call_function "docker-compose/command" "$@"
       ;;
 
@@ -106,30 +110,30 @@ function mrcmd_plugins_docker_compose_method_exec() {
 function mrcmd_plugins_docker_compose_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  conf        docker-compose config"
-  echo -e "  build       docker-compose build --no-cache"
-  echo -e "  up          docker-compose up -d --remove-orphans"
-  echo -e "  ps          docker-compose ps"
-  echo -e "  im          docker-compose images"
-  echo -e "  logs        docker-compose logs --follow"
-  echo -e "  down        docker-compose down --remove-orphans"
-  echo -e "  dc-start    docker-compose start"
-  echo -e "  dc-stop     docker-compose stop"
-  echo -e "  dc-restart  docker-compose stop & docker-compose start"
+  echo -e "  conf        docker compose config"
+  echo -e "  up          docker compose up -d --remove-orphans"
+  echo -e "  ps          docker compose ps"
+  echo -e "  im          docker compose images"
+  echo -e "  logs        docker compose logs --follow"
+  echo -e "  down        docker compose down --remove-orphans"
+  echo -e "  dc-start    docker compose start"
+  echo -e "  dc-stop     docker compose stop"
+  echo -e "  dc-restart  docker compose stop & docker compose start"
   echo ""
   echo -e "${CC_YELLOW}Docker compose tool command:${CC_END}"
-  echo -e "  cli [arguments]     Run original tool 'docker compose' using project yaml config"
-  echo -e "  cli ${CC_BLUE}--help${CC_END}          More information about 'docker compose' commands"
+  echo -e "  cmd [arguments]     Run original tool 'docker compose [arguments]'"
+  echo -e "                      using project yaml config"
+  echo -e "  cmd ${CC_BLUE}--help${CC_END}          More information about tool 'docker compose'"
   echo ""
 }
 
-function mrcmd_plugins_docker_compose_general_network_var_init() {
-  if [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == NET_USE ]]; then
-    DOCKER_COMPOSE_GENERAL_NETWORK=true
-  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" == NET_CREATE ]]; then
-    DOCKER_COMPOSE_GENERAL_NETWORK=false
-  elif [[ "${DOCKER_COMPOSE_GENERAL_NETWORK}" != NET_OFF ]]; then
-    DOCKER_COMPOSE_GENERAL_NETWORK=NET_OFF
-    mrcore_echo_error "DOCKER_COMPOSE_GENERAL_NETWORK can have the following values: NET_OFF, NET_CREATE, NET_USE"
+# private
+function mrcmd_plugins_docker_compose_up() {
+  if [[ "${DOCKER_COMPOSE_USE_GENERAL_NETWORK}" == true ]]; then
+    if ! docker network ls | grep "${DOCKER_COMPOSE_GENERAL_NETWORK}" > /dev/null; then
+      DOCKER_COMPOSE_GENERAL_NETWORK_IS_EXTERNAL=false
+    fi
   fi
+
+  mrcmd_plugins_call_function "docker-compose/command" up "$@"
 }

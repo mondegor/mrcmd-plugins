@@ -2,20 +2,43 @@
 
 Все изменения в Mrcmd Plugins будут документироваться на этой странице.
 
-## 2023-05-12
+## 2023-05-21
 ### Added
-- Доавлено создание log директории в go плагине
-- Добавлена команда отображения логов запущенного go приложения logs
-- GO_DOCKER_APP_MAIN_FILE
+- Добавлен флаг project-directory для docker composer, чтобы возможно было использовать относительные пути при привязке внешних директорий к докерам;
+- Изменена логика подключения общей сети, добавлена переменная DOCKER_COMPOSE_USE_GENERAL_NETWORK для управления ею;
+- Добавлены новые плагины: mvn, java, keycloak, vendor;
+- Плагинам: go, java, php, nodejs добавлена возможность подключения собственного env-file.yaml;
 
 ### Changed
-- MRCMD_AVAILABLE_PLUGIN_METHODS_ARRAY -> MRCMD_PLUGIN_RESERVED_METHODS_ARRAY
+- Изменилась логика связанная с INSTALL_BASH после этого он был переименован в DEFAULT_SHELL;
+- Изменился параметр поднятия сервиса с unless-stopped на always;
+- APPX_NETWORK -> DOCKER_COMPOSE_LOCAL_NETWORK;
+- docker-cli.sh -> docker-run.sh;
+- Заменено у плагинов NAME -> CAPTION;
+- Обновлены разделы help у многих плагинов;
+- Внесено множество правок в существующие плагины, чтобы их управление было более похожим;
+- Переработан плагин web-php, теперь он заменён на следующие плагины: php-alpine, php-cli, php-fpm;  
+
+### Fixed
+- Добавлен отсутствующий оператор function у некоторых методов;
+
+### Removed
+phive-install-tool.sh;
+
+## 2023-05-12
+### Added
+- Доавлено создание log директории в go плагине;
+- Добавлена команда отображения логов запущенного go приложения logs;
+- GO_APP_MAIN_FILE;
+
+### Changed
+- MRCMD_AVAILABLE_PLUGIN_METHODS_ARRAY -> MRCMD_PLUGIN_RESERVED_METHODS_ARRAY;
 
 ## 2023-05-01
 ### Fixed
-- pl -> pm
+- pl -> pm;
 
 ## 2023-04-23
 ### Changed
-- Произведён рефакторинг кода
-- Отлажены плагины: docker, docker-compose, go, go-migrate, postgres, mysql, redis
+- Произведён рефакторинг кода;
+- Отлажены плагины: docker, docker-compose, go, go-migrate, postgres, mysql, redis;

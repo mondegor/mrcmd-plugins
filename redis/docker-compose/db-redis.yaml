@@ -3,15 +3,9 @@ version: "3.9"
 services:
   db-redis: # ${REDIS_DOCKER_SERVICE}
     image: ${REDIS_DOCKER_IMAGE}
-#    build:
-#      context: ${REDIS_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${REDIS_DOCKER_IMAGE_FROM}
-#        INSTALL_BASH: ${ALPINE_INSTALL_BASH}
-#        REDIS_PASSWORD: ${REDIS_ROOT_PASSWORD}
     container_name: ${REDIS_DOCKER_CONTAINER}
     privileged: true
-    restart: unless-stopped
+    restart: always
     ports:
       - ${REDIS_PUBLIC_PORT}:6379
     volumes:
@@ -19,7 +13,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
 volumes:
   db-redis-volume:

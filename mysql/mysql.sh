@@ -5,16 +5,15 @@ function mrcmd_plugins_mysql_method_depends() {
 }
 
 function mrcmd_plugins_mysql_method_init() {
-  readonly MYSQL_NAME="Mysql"
+  readonly MYSQL_CAPTION="Mysql"
+  readonly MYSQL_DOCKER_SERVICE="db-mysql"
 
   readonly MYSQL_VARS=(
     "MYSQL_DOCKER_CONTAINER"
-    "MYSQL_DOCKER_SERVICE"
     "MYSQL_DOCKER_CONFIG_DOCKERFILE"
     "MYSQL_DOCKER_COMPOSE_CONFIG_DIR"
     "MYSQL_DOCKER_IMAGE"
     "MYSQL_DOCKER_IMAGE_FROM"
-    "MYSQL_DOCKER_ADD_GENERAL_NETWORK"
 
     "MYSQL_DB_PUBLIC_PORT"
     "MYSQL_DB_ROOT_PASSWORD"
@@ -22,12 +21,10 @@ function mrcmd_plugins_mysql_method_init() {
 
   readonly MYSQL_VARS_DEFAULT=(
     "${APPX_ID}-db-mysql"
-    "db-mysql"
-    "${MRCMD_DIR}/plugins/mysql/docker"
-    "${MRCMD_DIR}/plugins/mysql/docker-compose"
-    "mysql:${APPX_ID}-8.0.32"
+    "${MRCMD_PLUGINS_DIR}/mysql/docker"
+    "${MRCMD_PLUGINS_DIR}/mysql/docker-compose"
+    "${DOCKER_PACKAGE_NAME}mysql:8.0.32-oracle"
     "mysql:8.0.32-oracle"
-    "false"
 
     "127.0.0.1:3306"
     "${APPX_DB_PASSWORD:-123456}"
@@ -37,10 +34,6 @@ function mrcmd_plugins_mysql_method_init() {
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql-init.yaml")
-
-  if [[ "${MYSQL_DOCKER_ADD_GENERAL_NETWORK}" == true ]]; then
-    DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/general-network.yaml")
-  fi
 }
 
 function mrcmd_plugins_mysql_method_config() {
@@ -59,10 +52,10 @@ function mrcmd_plugins_mysql_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     docker-build)
-      mrcore_dotenv_echo_var_array MYSQL_VARS[@]
+      mrcmd_plugins_mysql_method_config
       mrcmd_plugins_mysql_docker_build "$@"
       ;;
 
@@ -78,7 +71,17 @@ function mrcmd_plugins_mysql_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${MYSQL_DOCKER_SERVICE}" \
-        true # "${ALPINE_INSTALL_BASH}"
+        "bash" # "${DOCKER_DEFAULT_SHELL}"
+      ;;
+
+    logs)
+      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${MYSQL_DOCKER_SERVICE}"
+      ;;
+
+    restart)
+      mrcmd_plugins_call_function "docker-compose/command-restart" \
+        "${MYSQL_DOCKER_CONTAINER}" \
+        "${MYSQL_DOCKER_SERVICE}"
       ;;
 
     *)
@@ -90,10 +93,14 @@ function mrcmd_plugins_mysql_method_exec() {
 
 function mrcmd_plugins_mysql_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
-  echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  docker-build        Builds or rebuilds the image ${CC_GREEN}${MYSQL_DOCKER_IMAGE}${CC_END}"
-  echo -e "  cli                 Enters to database cli in the running container ${CC_GREEN}${MYSQL_DOCKER_CONTAINER}${CC_END}"
-  echo -e "  into                Enters to shell in the running container ${CC_GREEN}${MYSQL_DOCKER_CONTAINER}${CC_END}"
+  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${MYSQL_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
+  echo -e "  docker-build        Builds or rebuilds the image"
+  echo -e ""
+  echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${MYSQL_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
+  echo -e "  cli         Enters to mysql cli in a container of the image"
+  echo -e "  into        Enters to shell in the running container"
+  echo -e "  logs        View output from the running container"
+  echo -e "  restart     Restarts mysql containers"
 }
 
 # private

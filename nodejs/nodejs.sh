@@ -5,35 +5,44 @@ function mrcmd_plugins_nodejs_method_depends() {
 }
 
 function mrcmd_plugins_nodejs_method_init() {
-  readonly NODEJS_NAME="NodeJS"
+  readonly NODEJS_CAPTION="NodeJS"
+  readonly NODEJS_DOCKER_SERVICE="web-app"
 
   readonly NODEJS_VARS=(
     "NODEJS_DOCKER_CONTAINER"
-    "NODEJS_DOCKER_SERVICE"
     "NODEJS_DOCKER_CONFIG_DOCKERFILE"
     "NODEJS_DOCKER_COMPOSE_CONFIG_DIR"
+    "NODEJS_DOCKER_COMPOSE_CONFIG_FILE"
     "NODEJS_DOCKER_IMAGE"
     "NODEJS_DOCKER_IMAGE_FROM"
 
-    "NODEJS_PUBLIC_PORT"
-    "NODEJS_APPX_APP_DIR"
+    "NODEJS_WEBAPP_PUBLIC_PORT"
+    "NODEJS_WEBAPP_PORT"
+
+    "NODEJS_APP_ENV_FILE"
   )
 
   readonly NODEJS_VARS_DEFAULT=(
     "${APPX_ID}-web-app"
-    "web-app"
-    "${MRCMD_DIR}/plugins/nodejs/docker"
-    "${MRCMD_DIR}/plugins/nodejs/docker-compose"
-    "node:${APPX_ID}-19.9"
+    "${MRCMD_PLUGINS_DIR}/nodejs/docker"
+    "${MRCMD_PLUGINS_DIR}/nodejs/docker-compose"
+    "${APPX_DIR}/app.yaml"
+    "${DOCKER_PACKAGE_NAME}node:19.9.0"
     "node:19.9.0-alpine3.17"
 
     "127.0.0.1:3000"
-    "$(realpath "${APPX_DIR}")/app"
+    "3000"
+
+    "${APPX_DIR}/env.app"
   )
 
   mrcore_dotenv_init_var_array NODEJS_VARS[@] NODEJS_VARS_DEFAULT[@]
 
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
+  mrcmd_plugins_call_function "docker-compose/register" \
+    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
+    "${NODEJS_APP_ENV_FILE}" \
+    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml" \
+    "${NODEJS_DOCKER_COMPOSE_CONFIG_FILE}"
 }
 
 function mrcmd_plugins_nodejs_method_config() {
@@ -46,38 +55,58 @@ function mrcmd_plugins_nodejs_method_export_config() {
 
 function mrcmd_plugins_nodejs_method_install() {
   mrcmd_plugins_nodejs_docker_build --no-cache
-  mrcmd_plugins_call_function "nodejs/docker-cli" npm install
+  mrcmd_plugins_call_function "nodejs/docker-run" npm install
 }
 
 function mrcmd_plugins_nodejs_method_uninstall() {
-  mrcore_lib_rmdir "${NODEJS_APPX_APP_DIR}/node_modules"
+  mrcore_lib_rmdir "${APPX_WORK_DIR}/node_modules"
 }
 
 function mrcmd_plugins_nodejs_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     docker-build)
-      mrcore_dotenv_echo_var_array NODEJS_VARS[@]
+      mrcmd_plugins_nodejs_method_config
       mrcmd_plugins_nodejs_docker_build "$@"
       ;;
 
-    cli)
-      mrcmd_plugins_call_function "nodejs/docker-cli" "$@"
+    cmd)
+      mrcmd_plugins_call_function "nodejs/docker-run" node "$@"
+      ;;
+
+    shell)
+      mrcmd_plugins_call_function "nodejs/docker-run" "${DOCKER_DEFAULT_SHELL}" "$@"
+      ;;
+
+    npm)
+      currentCommand="${1-}"
+      local npmCommands=("build" "start" "test")
+
+      if mrcore_lib_in_array "${currentCommand}" npmCommands[@] ; then
+        mrcmd_plugins_call_function "nodejs/docker-run" npm run "$@"
+        return
+      fi
+
+      mrcmd_plugins_call_function "nodejs/docker-run" npm "$@"
+      ;;
+
+    into)
+      mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
+        "${NODEJS_DOCKER_SERVICE}" \
+        "${DOCKER_DEFAULT_SHELL}"
+      ;;
+
+    logs)
+      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${NODEJS_DOCKER_SERVICE}"
       ;;
 
     restart)
       mrcmd_plugins_call_function "docker-compose/command-restart" \
         "${NODEJS_DOCKER_CONTAINER}" \
         "${NODEJS_DOCKER_SERVICE}"
-      ;;
-
-    shell)
-      mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
-        "${NODEJS_DOCKER_SERVICE}" \
-        "${ALPINE_INSTALL_BASH}"
       ;;
 
     *)
@@ -89,11 +118,21 @@ function mrcmd_plugins_nodejs_method_exec() {
 
 function mrcmd_plugins_nodejs_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
-  echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  docker-build                Builds or rebuilds the image ${CC_GREEN}${NODEJS_DOCKER_IMAGE}${CC_END}"
-  echo -e "  cli                         Enters to node cli in a container of image ${CC_GREEN}${NODEJS_DOCKER_IMAGE}${CC_END}"
-  echo -e "  restart                     Restarts the container ${CC_GREEN}${NODEJS_DOCKER_CONTAINER}${CC_END}"
-  echo -e "  shell                       Enters to shell in the running container ${CC_GREEN}${NODEJS_DOCKER_CONTAINER}${CC_END}"
+  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${NODEJS_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
+  echo -e "  docker-build        Builds or rebuilds the image"
+  echo -e "  cmd [arguments]     Runs 'node [arguments]' in a container of the image"
+  echo -e "  shell               Exec shell in a container of the image"
+  echo -e "  npm [arguments]     Runs 'npm [arguments]' in a container of the image"
+  echo -e "    install           Installs the dependencies to the local 'node_modules' dir"
+  echo -e "    update            Updates the dependencies in the local 'node_modules' dir"
+  echo -e "    build             Creates a production build of your app"
+  echo -e "    start             Starts node server"
+  echo -e "    test              Runs test scripts"
+  echo -e ""
+  echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${NODEJS_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
+  echo -e "  into        Enters to shell in the running container"
+  echo -e "  logs        View output from the running container"
+  echo -e "  restart     Restarts the container"
 }
 
 # private

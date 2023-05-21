@@ -1,4 +1,8 @@
 
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_depends() {
+  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
+}
+
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_NAME="${MRVAR_PLUGIN_NAME}"
 
@@ -11,8 +15,8 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
 
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT=(
     "${APPX_ID}-${MRVAR_PLUGIN_NAME}"
-    "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker"
-    "$(realpath "${APPX_DIR}")/plugins/${MRVAR_PLUGIN_NAME}/docker-compose"
+    "${APPX_DIR}/plugins/${MRVAR_PLUGIN_NAME}/docker"
+    "${APPX_DIR}/plugins/${MRVAR_PLUGIN_NAME}/docker-compose"
     "docker-hub-image:${APPX_ID}-version"
   )
 
@@ -30,6 +34,14 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_export_config() {
 }
 
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_install() {
+  mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build --no-cache
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_start() {
+  mrcore_echo_notice "Need to implement the method ${FUNCNAME[0]}($@)"
+}
+
+function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_stop() {
   mrcore_echo_notice "Need to implement the method ${FUNCNAME[0]}($@)"
 }
 
@@ -41,11 +53,12 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     docker-build)
-     mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build "$@"
-    ;;
+      mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_config
+      mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build "$@"
+      ;;
 
     ${MRVAR_FUNC_FILE})
       mrcmd_plugins_call_function "${MRVAR_PLUGIN_FILE}/${MRVAR_FUNC_FILE}" "$@"

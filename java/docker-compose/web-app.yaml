@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  web-app: # ${JAVA_DOCKER_SERVICE}
+    image: ${JAVA_DOCKER_IMAGE}
+    container_name: ${JAVA_DOCKER_CONTAINER}
+    restart: always
+    command:
+      - java
+      - -jar
+      - ${JAVA_APP_JAR_PATH}
+    ports:
+      - ${JAVA_WEBAPP_PUBLIC_PORT}:${JAVA_WEBAPP_PORT}
+    volumes:
+      - ${APPX_WORK_DIR}:/opt/app
+    environment:
+      - TZ=${APPX_TZ}
+      - APP_BIND=${JAVA_WEBAPP_BIND}
+      - APP_PORT=${JAVA_WEBAPP_PORT}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}

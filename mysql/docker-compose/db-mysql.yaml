@@ -3,13 +3,9 @@ version: "3.9"
 services:
   db-mysql: # ${MYSQL_DOCKER_SERVICE}
     image: ${MYSQL_DOCKER_IMAGE}
-#    build:
-#      context: ${MYSQL_DOCKER_CONFIG_DOCKERFILE}
-#      args:
-#        DOCKER_IMAGE_FROM: ${MYSQL_DOCKER_IMAGE_FROM}
     platform: linux/x86_64
     container_name: ${MYSQL_DOCKER_CONTAINER}
-    restart: unless-stopped
+    restart: always
     ports:
       - ${MYSQL_DB_PUBLIC_PORT}:3306
     volumes:
@@ -17,7 +13,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${APPX_NETWORK}
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
 volumes:
   db-mysql-volume:

@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  db-mongo: # ${MONGO_DOCKER_SERVICE}
+    environment:
+      # created only at the first start:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_ROOT_PASSWORD}

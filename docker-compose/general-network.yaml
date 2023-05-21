@@ -1,7 +1,7 @@
 version: "3.9"
 
 networks:
-  general-network:
-    name: general-network
+  general-network: # ${DOCKER_COMPOSE_GENERAL_NETWORK}
+    name: ${DOCKER_COMPOSE_GENERAL_NETWORK}
     driver: bridge
-    external: ${DOCKER_COMPOSE_GENERAL_NETWORK}
+    external: ${DOCKER_COMPOSE_GENERAL_NETWORK_IS_EXTERNAL}

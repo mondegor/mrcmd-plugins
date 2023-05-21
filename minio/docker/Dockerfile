@@ -2,4 +2,4 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-COPY ./data /data/.minio.sys
+COPY data /data/.minio.sys

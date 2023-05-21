@@ -2,7 +2,7 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG INSTALL_BASH
+ARG DEFAULT_SHELL
 ARG HOST_USER_ID
 ARG HOST_GROUP_ID
 
@@ -12,8 +12,8 @@ ARG HOST_GROUP_ID
 
 RUN apk add --no-cache git
 
-RUN if [[ "${INSTALL_BASH}" == true ]]; then \
-      apk add --no-cache bash; \
+RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
+      apk add --no-cache ${DEFAULT_SHELL}; \
     fi;
 
 RUN addgroup -g 1000 golang && adduser -u 1000 -G golang -s /bin/sh -D golang

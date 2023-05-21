@@ -11,6 +11,7 @@ function mrcmd_func_pm_available_plugins() {
   local i=0
 
   echo -e "Current value of ${CC_YELLOW}MRCMD_SHARED_PLUGINS_ENABLED${CC_END}:"
+
   if [ -n "${MRCMD_SHARED_PLUGINS_ENABLED}" ]; then
     mrcore_echo_ok "${MRCMD_SHARED_PLUGINS_ENABLED}" "  "
     mrcore_echo_sample "Run '${MRCMD_INFO_NAME} config' for details" "  "

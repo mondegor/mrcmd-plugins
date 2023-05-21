@@ -5,7 +5,7 @@ function mrcmd_plugins_go_migrate_method_depends() {
 }
 
 function mrcmd_plugins_go_migrate_method_init() {
-  readonly GO_MIGRATE_NAME="DB migrate utility"
+  readonly GO_MIGRATE_CAPTION="DB migrate utility"
 
   readonly GO_MIGRATE_VARS=(
     "GO_MIGRATE_DOCKER_CONFIG_DOCKERFILE"
@@ -13,16 +13,20 @@ function mrcmd_plugins_go_migrate_method_init() {
     "GO_MIGRATE_DOCKER_IMAGE_FROM"
     "GO_MIGRATE_DOCKER_NETWORK"
 
+    "GO_MIGRATE_DB_URL"
+
     "GO_MIGRATE_DB_SRC_DIR"
   )
 
   readonly GO_MIGRATE_VARS_DEFAULT=(
-    "${MRCMD_DIR}/plugins/go-migrate/docker"
-    "go-migrate:${APPX_ID}-4.15.2"
+    "${MRCMD_PLUGINS_DIR}/go-migrate/docker"
+    "${DOCKER_PACKAGE_NAME}go-migrate:4.15.2"
     "migrate/migrate:v4.15.2"
-    "${APPX_ID}-${APPX_NETWORK}"
+    "${APPX_ID}-${DOCKER_COMPOSE_LOCAL_NETWORK}"
 
-    "$(realpath "${APPX_DIR}")/migrations"
+    "POSTGRES_DB_URL" # var with value
+
+    "${APPX_DIR}/migrations"
   )
 
   mrcore_dotenv_init_var_array GO_MIGRATE_VARS[@] GO_MIGRATE_VARS_DEFAULT[@]
@@ -40,35 +44,31 @@ function mrcmd_plugins_go_migrate_method_install() {
   mrcmd_plugins_go_migrate_docker_build --no-cache
 }
 
-function mrcmd_plugins_go_migrate_method_start() {
-  mrcmd_plugins_go_migrate_docker_build
-}
-
 function mrcmd_plugins_go_migrate_method_exec() {
   local currentCommand="${1:?}"
   shift
 
-  case ${currentCommand} in
+  case "${currentCommand}" in
 
     docker-build)
-      mrcore_dotenv_echo_var_array GO_MIGRATE_VARS[@]
+      mrcmd_plugins_go_migrate_method_config
       mrcmd_plugins_go_migrate_docker_build "$@"
       ;;
 
     up)
-      mrcmd_plugins_call_function "go-migrate/docker-cli" up
+      mrcmd_plugins_call_function "go-migrate/docker-run" up
       ;;
 
     down)
-      mrcmd_plugins_call_function "go-migrate/docker-cli" down 1
+      mrcmd_plugins_call_function "go-migrate/docker-run" down 1
       ;;
 
     init)
-      mrcmd_plugins_call_function "go-migrate/docker-cli" create -ext sql -seq init
+      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql -seq init
       ;;
 
     create)
-      mrcmd_plugins_call_function "go-migrate/docker-cli" create -ext sql "$@"
+      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql "$@"
       ;;
 
     *)
