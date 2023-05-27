@@ -16,7 +16,7 @@ function mrcmd_plugins_redis_method_init() {
     "REDIS_DOCKER_IMAGE_FROM"
 
     "REDIS_PUBLIC_PORT"
-    "REDIS_ROOT_PASSWORD"
+    "REDIS_PASSWORD"
   )
 
   readonly REDIS_VARS_DEFAULT=(
@@ -61,7 +61,7 @@ function mrcmd_plugins_redis_method_exec() {
     cli)
       mrcmd_plugins_call_function "docker-compose/command" exec \
         "${REDIS_DOCKER_SERVICE}" \
-        redis-cli -a "${REDIS_ROOT_PASSWORD}"
+        redis-cli -a "${REDIS_PASSWORD}"
       ;;
 
     into)
@@ -105,6 +105,6 @@ function mrcmd_plugins_redis_docker_build() {
     "${REDIS_DOCKER_CONFIG_DOCKERFILE}" \
     "${REDIS_DOCKER_IMAGE}" \
     "${REDIS_DOCKER_IMAGE_FROM}" \
-    --build-arg "REDIS_PASSWORD=${REDIS_ROOT_PASSWORD}" \
+    --build-arg "REDIS_PASSWORD=${REDIS_PASSWORD}" \
     "$@"
 }

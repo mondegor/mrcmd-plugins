@@ -34,7 +34,7 @@ function mrcmd_plugins_php_cli_method_init() {
     "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.1.19"
     "php:8.1.19-cli-alpine3.18"
 
-    "${APPX_DIR}/env.app"
+    "${APPX_DIR}/.env.app"
 
     "composer" # phive, composer
     "2.5.5"

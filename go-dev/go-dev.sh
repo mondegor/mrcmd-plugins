@@ -11,28 +11,24 @@ function mrcmd_plugins_go_dev_method_init() {
     "GO_DEV_GOPATH"
     "GO_DEV_APP_MAIN_FILE"
 
-    "GO_DEV_WEBAPP_PUBLIC_PORT"
-    "GO_DEV_APPX_HOST"
-    "GO_DEV_WEBAPP_PORT"
-
     "GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION"
     "GO_DEV_TOOLS_INSTALL_STATICCHECK_VERSION"
     "GO_DEV_TOOLS_INSTALL_ERRCHECK_VERSION"
     "GO_DEV_TOOLS_INSTALL_GOLINT_VERSION"
+    "GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION"
+    "GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION"
   )
 
   readonly GO_DEV_VARS_DEFAULT=(
     "$(mrcore_os_path_win_to_unix "${GOPATH-}")/bin"
     "./cmd/app/main.go"
 
-    "127.0.0.1:8090"
-    "0.0.0.0"
-    "8090"
-
     "v0.8.0"
     "v0.4.3"
     "v1.6.3"
     "v0.0.0-20210508222113-6edffad5e616"
+    "v1.28"
+    "v1.2"
   )
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
@@ -86,7 +82,7 @@ function mrcmd_plugins_go_dev_method_exec() {
       mrcmd_plugins_go_dev_install_tools
       ;;
 
-    goimports | staticcheck | errcheck | golint)
+    goimports | staticcheck | errcheck | golint | protoc-gen-go | protoc-gen-go-grpc)
       "${GO_DEV_GOPATH}/${currentCommand}" "$@"
       ;;
 
@@ -119,10 +115,12 @@ function mrcmd_plugins_go_dev_method_help() {
 # private
 function mrcmd_plugins_go_dev_install_tools() {
   local toolsArray=(
-    "golang.org/x/tools/cmd/goimports"   "${GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION}"
-    "honnef.co/go/tools/cmd/staticcheck" "${GO_DEV_TOOLS_INSTALL_STATICCHECK_VERSION}"
-    "github.com/kisielk/errcheck"        "${GO_DEV_TOOLS_INSTALL_ERRCHECK_VERSION}"
-    "golang.org/x/lint/golint"           "${GO_DEV_TOOLS_INSTALL_GOLINT_VERSION}"
+    "golang.org/x/tools/cmd/goimports"              "${GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION}"
+    "honnef.co/go/tools/cmd/staticcheck"            "${GO_DEV_TOOLS_INSTALL_STATICCHECK_VERSION}"
+    "github.com/kisielk/errcheck"                   "${GO_DEV_TOOLS_INSTALL_ERRCHECK_VERSION}"
+    "golang.org/x/lint/golint"                      "${GO_DEV_TOOLS_INSTALL_GOLINT_VERSION}"
+    "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
+    "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
   )
 
   mrcmd_plugins_call_function "go-dev/install-tools" toolsArray[@]

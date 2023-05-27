@@ -33,7 +33,7 @@ function mrcmd_plugins_nodejs_method_init() {
     "127.0.0.1:3000"
     "3000"
 
-    "${APPX_DIR}/env.app"
+    "${APPX_DIR}/.env.app"
   )
 
   mrcore_dotenv_init_var_array NODEJS_VARS[@] NODEJS_VARS_DEFAULT[@]

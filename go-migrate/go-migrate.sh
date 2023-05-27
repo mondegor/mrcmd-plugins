@@ -1,7 +1,7 @@
 # https://hub.docker.com/r/migrate/migrate
 
 function mrcmd_plugins_go_migrate_method_depends() {
-  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker")
+  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
 }
 
 function mrcmd_plugins_go_migrate_method_init() {

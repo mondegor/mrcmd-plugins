@@ -39,7 +39,7 @@ function mrcmd_plugins_go_method_init() {
     "golang:1.20.3-alpine3.17"
 
     "${APPX_DIR}/golang"
-    "${APPX_DIR}/env.app"
+    "${APPX_DIR}/.env.app"
     "./cmd/app/main.go"
 
     "127.0.0.1:8090"

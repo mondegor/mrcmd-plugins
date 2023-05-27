@@ -13,6 +13,8 @@ function mrcmd_plugins_docker_method_init() {
   )
 
   mrcore_dotenv_init_var_array DOCKER_VARS[@] DOCKER_DEFAULT[@]
+
+  DOCKER_DEFAULT_SHELL=$(mrcore_get_shell "${DOCKER_DEFAULT_SHELL}")
 }
 
 function mrcmd_plugins_docker_method_config() {

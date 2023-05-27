@@ -21,8 +21,6 @@ function mrcmd_plugins_global_method_init() {
   )
 
   mrcore_dotenv_init_var_array GLOBAL_VARS[@] GLOBAL_VARS_DEFAULT[@]
-
-  DOCKER_DEFAULT_SHELL=$(mrcore_get_shell "${DOCKER_DEFAULT_SHELL}")
 }
 
 function mrcmd_plugins_global_method_config() {

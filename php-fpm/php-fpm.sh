@@ -53,7 +53,7 @@ function mrcmd_plugins_php_fpm_method_init() {
     "127.0.0.1:8080"
     "web-app.local"
 
-    "${APPX_DIR}/env.app"
+    "${APPX_DIR}/.env.app"
 
 #    "${APPX_DB_HOST:-db-postgres}"
 #    "${APPX_DB_PORT:-5432}"

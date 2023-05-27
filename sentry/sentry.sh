@@ -68,8 +68,11 @@ function mrcmd_plugins_sentry_method_stop() {
 }
 
 function mrcmd_plugins_sentry_method_uninstall() {
-  mrcmd_plugins_sentry_docker_compose down -v --remove-orphans --rmi=all
-  mrcore_lib_rmdir "${APPX_WORK_DIR}"
+  if [ -d "${APPX_WORK_DIR}" ]; then
+    mrcmd_plugins_sentry_docker_compose down -v --remove-orphans --rmi=all
+    mrcore_lib_rmdir "${APPX_WORK_DIR}"
+    mrcore_lib_rm "${SENTRY_ENV_FILE}"
+  fi
 }
 
 function mrcmd_plugins_sentry_method_exec() {

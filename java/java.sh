@@ -36,7 +36,7 @@ function mrcmd_plugins_java_method_init() {
     "0.0.0.0"
     "8080"
 
-    "${APPX_DIR}/env.app"
+    "${APPX_DIR}/.env.app"
     "./app.jar"
   )
 

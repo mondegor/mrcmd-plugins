@@ -7,8 +7,8 @@ function mrcmd_func_java_docker_run() {
     --rm \
     -v "$(realpath "${APPX_WORK_DIR}"):/opt/app" \
     --env "TZ=${APPX_TZ}" \
-    --env "APP_BIND=${JAVA_WEBAPP_BIND}" \
-    --env "APP_PORT=${JAVA_WEBAPP_PORT}" \
+    --env "APPX_SERVICE_BIND=${JAVA_WEBAPP_BIND}" \
+    --env "APPX_SERVICE_PORT=${JAVA_WEBAPP_PORT}" \
     "${JAVA_DOCKER_IMAGE}" \
     "$@"
 }

@@ -2,6 +2,22 @@
 
 Все изменения в Mrcmd Plugins будут документироваться на этой странице.
 
+## 2023-05-27
+### Added
+- Добавлены плагины cassandra, plantuml;
+- Добавлены утилиты в go-dev для работы GRPC;
+- Добавлена в плагине sentry проверка существования рабочей директории перед его деинсталляции;
+
+### Changed
+- REDIS_ROOT_PASSWORD -> REDIS_PASSWORD
+- APP_BIND -> APPX_SERVICE_BIND
+- APP_PORT -> APPX_SERVICE_PORT
+
+### Fixed
+- DOCKER_DEFAULT_SHELL перенесён из global в docker;
+- добавлена зависимость docker-compose для плагина go-migrate (из-за общей сети);
+- env.app -> .env.app
+
 ## 2023-05-21
 ### Added
 - Добавлен флаг project-directory для docker composer, чтобы возможно было использовать относительные пути при привязке внешних директорий к докерам;

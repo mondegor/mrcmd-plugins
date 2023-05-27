@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  db-cassandra: # ${CASSANDRA_DOCKER_SERVICE}
+    environment:
+      # created only at the first start:
+      - CASSANDRA_INITDB_ROOT_USERNAME=${CASSANDRA_DB_USER}
+      - CASSANDRA_INITDB_ROOT_PASSWORD=${CASSANDRA_DB_PASSWORD}
