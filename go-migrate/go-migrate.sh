@@ -8,7 +8,8 @@ function mrcmd_plugins_go_migrate_method_init() {
   readonly GO_MIGRATE_CAPTION="DB migrate utility"
 
   readonly GO_MIGRATE_VARS=(
-    "GO_MIGRATE_DOCKER_CONFIG_DOCKERFILE"
+    "GO_MIGRATE_DOCKER_CONTEXT_DIR"
+    "GO_MIGRATE_DOCKER_DOCKERFILE"
     "GO_MIGRATE_DOCKER_IMAGE"
     "GO_MIGRATE_DOCKER_IMAGE_FROM"
     "GO_MIGRATE_DOCKER_NETWORK"
@@ -19,7 +20,8 @@ function mrcmd_plugins_go_migrate_method_init() {
   )
 
   readonly GO_MIGRATE_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/go-migrate/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
     "${DOCKER_PACKAGE_NAME}go-migrate:4.15.2"
     "migrate/migrate:v4.15.2"
     "${APPX_ID}-${DOCKER_COMPOSE_LOCAL_NETWORK}"
@@ -91,7 +93,8 @@ function mrcmd_plugins_go_migrate_method_help() {
 # private
 function mrcmd_plugins_go_migrate_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${GO_MIGRATE_DOCKER_CONFIG_DOCKERFILE}" \
+    "${GO_MIGRATE_DOCKER_CONTEXT_DIR}" \
+    "${GO_MIGRATE_DOCKER_DOCKERFILE}" \
     "${GO_MIGRATE_DOCKER_IMAGE}" \
     "${GO_MIGRATE_DOCKER_IMAGE_FROM}" \
     "$@"

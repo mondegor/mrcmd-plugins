@@ -8,7 +8,8 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
 
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS=(
     "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONTAINER"
-    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONFIG_DOCKERFILE"
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONTEXT_DIR"
+    "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_DOCKERFILE"
     "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_COMPOSE_CONFIG_DIR"
     "${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE"
   )
@@ -16,6 +17,7 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
   readonly ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT=(
     "${APPX_ID}-${MRVAR_PLUGIN_NAME}"
     "${APPX_DIR}/plugins/${MRVAR_PLUGIN_NAME}/docker"
+    ""
     "${APPX_DIR}/plugins/${MRVAR_PLUGIN_NAME}/docker-compose"
     "docker-hub-image:${APPX_ID}-version"
   )
@@ -81,7 +83,8 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_help() {
 # private
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONFIG_DOCKERFILE}" \
+    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_CONTEXT_DIR}" \
+    "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_DOCKERFILE}" \
     "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE}" \
     "${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE_FROM}" \
     "$@"

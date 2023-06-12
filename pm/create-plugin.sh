@@ -4,7 +4,7 @@ function mrcmd_func_pm_create_plugin() {
   local pluginName="${1-}"
   local funcName="first-function"
   local pluginDir="${APPX_PLUGINS_DIR}/${pluginName}"
-  local templateFile="${MRCMD_CURRENT_PLUGINS_DIR}/${MRCMD_CURRENT_PLUGIN_NAME}/templates/plugin.sh.template"
+  local templateFile="${MRCMD_CURRENT_PLUGIN_DIR}/templates/plugin.sh.template"
 
   mrcore_validate_value_required "Plugin name" "${pluginName}"
   mrcore_validate_value "Plugin name" "${REGEXP_PATTERN_FILE_PREFIX}" "${pluginName}"

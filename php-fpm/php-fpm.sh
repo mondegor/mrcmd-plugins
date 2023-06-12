@@ -10,9 +10,9 @@ function mrcmd_plugins_php_fpm_method_init() {
 
   readonly PHP_FPM_VARS=(
     "PHP_FPM_DOCKER_CONTAINER"
-    "PHP_FPM_DOCKER_CONFIG_DOCKERFILE"
+    "PHP_FPM_DOCKER_CONTEXT_DIR"
+    "PHP_FPM_DOCKER_DOCKERFILE"
     "PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR"
-    "PHP_FPM_DOCKER_COMPOSE_CONFIG_FILE"
     "PHP_FPM_DOCKER_IMAGE"
     "PHP_FPM_DOCKER_IMAGE_FROM"
     "PHP_FPM_ALPINE_DOCKER_IMAGE_FROM"
@@ -39,9 +39,9 @@ function mrcmd_plugins_php_fpm_method_init() {
 
   readonly PHP_FPM_VARS_DEFAULT=(
     "${APPX_ID}-web-app"
-    "${MRCMD_PLUGINS_DIR}/php-fpm/docker"
-    "${MRCMD_PLUGINS_DIR}/php-fpm/docker-compose"
-    "${APPX_DIR}/app.yaml"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}php-fpm:8.1.19"
     "${DOCKER_PACKAGE_NAME}php-fpm-alpine:8.1.19"
     "php:8.1.19-fpm-alpine3.18"
@@ -71,8 +71,7 @@ function mrcmd_plugins_php_fpm_method_init() {
   mrcmd_plugins_call_function "docker-compose/register" \
     "${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
     "${PHP_FPM_APP_ENV_FILE}" \
-    "${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml" \
-    "${PHP_FPM_DOCKER_COMPOSE_CONFIG_FILE}"
+    "${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
 }
 
 function mrcmd_plugins_php_fpm_method_config() {
@@ -148,7 +147,8 @@ function mrcmd_plugins_php_fpm_alpine_docker_build() {
 # private
 function mrcmd_plugins_php_fpm_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${PHP_FPM_DOCKER_CONFIG_DOCKERFILE}" \
+    "${PHP_FPM_DOCKER_CONTEXT_DIR}" \
+    "${PHP_FPM_DOCKER_DOCKERFILE}" \
     "${PHP_FPM_DOCKER_IMAGE}" \
     "${PHP_FPM_DOCKER_IMAGE_FROM}" \
     "$@"

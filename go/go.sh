@@ -10,9 +10,9 @@ function mrcmd_plugins_go_method_init() {
 
   readonly GO_VARS=(
     "GO_DOCKER_CONTAINER"
-    "GO_DOCKER_CONFIG_DOCKERFILE"
+    "GO_DOCKER_CONTEXT_DIR"
+    "GO_DOCKER_DOCKERFILE"
     "GO_DOCKER_COMPOSE_CONFIG_DIR"
-    "GO_DOCKER_COMPOSE_CONFIG_FILE"
     "GO_DOCKER_IMAGE"
     "GO_DOCKER_IMAGE_FROM"
 
@@ -32,9 +32,9 @@ function mrcmd_plugins_go_method_init() {
 
   readonly GO_VARS_DEFAULT=(
     "${APPX_ID}-web-app"
-    "${MRCMD_PLUGINS_DIR}/go/docker"
-    "${MRCMD_PLUGINS_DIR}/go/docker-compose"
-    "${APPX_DIR}/app.yaml"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}go:1.20.3"
     "golang:1.20.3-alpine3.17"
 
@@ -57,8 +57,7 @@ function mrcmd_plugins_go_method_init() {
   mrcmd_plugins_call_function "docker-compose/register" \
     "${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
     "${GO_APP_ENV_FILE}" \
-    "${GO_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml" \
-    "${GO_DOCKER_COMPOSE_CONFIG_FILE}"
+    "${GO_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
 }
 
 function mrcmd_plugins_go_method_config() {
@@ -177,7 +176,8 @@ function mrcmd_plugins_go_method_help() {
 # private
 function mrcmd_plugins_go_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${GO_DOCKER_CONFIG_DOCKERFILE}" \
+    "${GO_DOCKER_CONTEXT_DIR}" \
+    "${GO_DOCKER_DOCKERFILE}" \
     "${GO_DOCKER_IMAGE}" \
     "${GO_DOCKER_IMAGE_FROM}" \
     "$@"

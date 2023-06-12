@@ -11,7 +11,8 @@ function mrcmd_plugins_minio_method_init() {
 
   readonly MINIO_VARS=(
     "MINIO_DOCKER_CONTAINER"
-    "MINIO_DOCKER_CONFIG_DOCKERFILE"
+    "MINIO_DOCKER_CONTEXT_DIR"
+    "MINIO_DOCKER_DOCKERFILE"
     "MINIO_DOCKER_COMPOSE_CONFIG_DIR"
     "MINIO_DOCKER_IMAGE"
     "MINIO_DOCKER_IMAGE_FROM"
@@ -29,8 +30,9 @@ function mrcmd_plugins_minio_method_init() {
 
   readonly MINIO_VARS_DEFAULT=(
     "${APPX_ID}-s3-minio"
-    "${MRCMD_PLUGINS_DIR}/minio/docker"
-    "${MRCMD_PLUGINS_DIR}/minio/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}minio:2023-04-13"
     "minio/minio:RELEASE.2023-04-13T03-08-07Z.fips"
 
@@ -46,7 +48,7 @@ function mrcmd_plugins_minio_method_init() {
   )
 
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MINIO_DOCKER_COMPOSE_CONFIG_FILE}/s3-minio.yaml")
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MINIO_DOCKER_COMPOSE_CONFIG_DIR}/s3-minio.yaml")
 }
 
 function mrcmd_plugins_minio_method_config() {
@@ -122,7 +124,8 @@ function mrcmd_plugins_minio_method_help() {
 # private
 function mrcmd_plugins_minio_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${MINIO_DOCKER_CONFIG_DOCKERFILE}" \
+    "${MINIO_DOCKER_CONTEXT_DIR}" \
+    "${MINIO_DOCKER_DOCKERFILE}" \
     "${MINIO_DOCKER_IMAGE}" \
     "${MINIO_DOCKER_IMAGE_FROM}" \
     "$@"

@@ -10,9 +10,9 @@ function mrcmd_plugins_java_method_init() {
 
   readonly JAVA_VARS=(
     "JAVA_DOCKER_CONTAINER"
-    "JAVA_DOCKER_CONFIG_DOCKERFILE"
+    "JAVA_DOCKER_CONTEXT_DIR"
+    "JAVA_DOCKER_DOCKERFILE"
     "JAVA_DOCKER_COMPOSE_CONFIG_DIR"
-    "JAVA_DOCKER_COMPOSE_CONFIG_FILE"
     "JAVA_DOCKER_IMAGE"
     "JAVA_DOCKER_IMAGE_FROM"
 
@@ -26,9 +26,9 @@ function mrcmd_plugins_java_method_init() {
 
   readonly JAVA_VARS_DEFAULT=(
     "${APPX_ID}-web-app"
-    "${MRCMD_PLUGINS_DIR}/java/docker"
-    "${MRCMD_PLUGINS_DIR}/java/docker-compose"
-    "${APPX_DIR}/app.yaml"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}openjdk:17"
     "openjdk:17-alpine3.14"
 
@@ -45,8 +45,7 @@ function mrcmd_plugins_java_method_init() {
   mrcmd_plugins_call_function "docker-compose/register" \
     "${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
     "${JAVA_APP_ENV_FILE}" \
-    "${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml" \
-    "${JAVA_DOCKER_COMPOSE_CONFIG_FILE}"
+    "${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
 }
 
 function mrcmd_plugins_java_method_config() {
@@ -119,7 +118,8 @@ function mrcmd_plugins_java_method_help() {
 # private
 function mrcmd_plugins_java_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${JAVA_DOCKER_CONFIG_DOCKERFILE}" \
+    "${JAVA_DOCKER_CONTEXT_DIR}" \
+    "${JAVA_DOCKER_DOCKERFILE}" \
     "${JAVA_DOCKER_IMAGE}" \
     "${JAVA_DOCKER_IMAGE_FROM}" \
     "$@"

@@ -6,7 +6,8 @@ function mrcmd_func_php_alpine_build_image() {
   shift; shift
 
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${PHP_ALPINE_DOCKER_CONFIG_DOCKERFILE}" \
+    "${PHP_ALPINE_DOCKER_CONTEXT_DIR}" \
+    "${PHP_ALPINE_DOCKER_DOCKERFILE}" \
     "${dockerImage}" \
     "${dockerImageFrom}" \
     --build-arg "INSTALL_ZIP=${PHP_ALPINE_INSTALL_ZIP}" \

@@ -10,7 +10,8 @@ function mrcmd_plugins_redis_method_init() {
 
   readonly REDIS_VARS=(
     "REDIS_DOCKER_CONTAINER"
-    "REDIS_DOCKER_CONFIG_DOCKERFILE"
+    "REDIS_DOCKER_CONTEXT_DIR"
+    "REDIS_DOCKER_DOCKERFILE"
     "REDIS_DOCKER_COMPOSE_CONFIG_DIR"
     "REDIS_DOCKER_IMAGE"
     "REDIS_DOCKER_IMAGE_FROM"
@@ -21,8 +22,9 @@ function mrcmd_plugins_redis_method_init() {
 
   readonly REDIS_VARS_DEFAULT=(
     "${APPX_ID}-db-redis"
-    "${MRCMD_PLUGINS_DIR}/redis/docker"
-    "${MRCMD_PLUGINS_DIR}/redis/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}redis:7.0.10"
     "redis:7.0.10-alpine3.17"
 
@@ -102,7 +104,8 @@ function mrcmd_plugins_redis_method_help() {
 # private
 function mrcmd_plugins_redis_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${REDIS_DOCKER_CONFIG_DOCKERFILE}" \
+    "${REDIS_DOCKER_CONTEXT_DIR}" \
+    "${REDIS_DOCKER_DOCKERFILE}" \
     "${REDIS_DOCKER_IMAGE}" \
     "${REDIS_DOCKER_IMAGE_FROM}" \
     --build-arg "REDIS_PASSWORD=${REDIS_PASSWORD}" \

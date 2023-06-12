@@ -9,14 +9,15 @@ function mrcmd_plugins_php_cli_method_init() {
   readonly PHP_CLI_DOCKER_SERVICE="php-cli"
 
   readonly PHP_CLI_VARS=(
-    "PHP_CLI_DOCKER_CONFIG_DOCKERFILE"
+    "PHP_CLI_DOCKER_CONTEXT_DIR"
+    "PHP_CLI_DOCKER_DOCKERFILE"
     "PHP_CLI_DOCKER_IMAGE"
     "PHP_CLI_DOCKER_IMAGE_FROM"
     "PHP_CLI_ALPINE_DOCKER_IMAGE_FROM"
 
     "PHP_CLI_APP_ENV_FILE"
 
-    "PHP_CLI_TOOLS_INSTALL_BASE" # phive, composer
+    "PHP_CLI_TOOLS_INSTALL_BASE" # phive, composer, false
     "PHP_CLI_TOOLS_INSTALL_COMPOSER_VERSION"
     "PHP_CLI_TOOLS_INSTALL_PHPUNIT_VERSION"
     "PHP_CLI_TOOLS_INSTALL_PHAN_VERSION"
@@ -28,7 +29,8 @@ function mrcmd_plugins_php_cli_method_init() {
   )
 
   readonly PHP_CLI_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/php-cli/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
 
     "${DOCKER_PACKAGE_NAME}php-cli:8.1.19"
     "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.1.19"
@@ -36,15 +38,15 @@ function mrcmd_plugins_php_cli_method_init() {
 
     "${APPX_DIR}/.env.app"
 
-    "composer" # phive, composer
-    "2.5.5"
-    "9.6.5"
-    "5.4.2"
-    "5.9.0"
-    "1.10.13"
-    "3.7.2"
-    "3.7.2"
-    "3.16.0"
+    "composer" # phive, composer, false
+    "2.5.5" # !!!!!!!!!! not *
+    "false" # "9.6.5"
+    "false" # "5.4.2"
+    "false" # "5.9.0"
+    "false" # "1.10.13"
+    "false" # "3.7.2"
+    "false" # "3.7.2"
+    "false" # "3.16.0"
   )
 
   mrcore_dotenv_init_var_array PHP_CLI_VARS[@] PHP_CLI_VARS_DEFAULT[@]
@@ -60,8 +62,8 @@ function mrcmd_plugins_php_cli_method_export_config() {
 }
 
 function mrcmd_plugins_php_cli_method_install() {
-  mrcore_lib_mkdir "${APPX_WORK_DIR}/vendor"
-  mrcore_lib_mkdir "${APPX_WORK_DIR}/var"
+  #mrcore_lib_mkdir "${APPX_WORK_DIR}/vendor"
+  #mrcore_lib_mkdir "${APPX_WORK_DIR}/var"
 
   mrcmd_plugins_php_cli_alpine_docker_build --no-cache
   mrcmd_plugins_php_cli_docker_build --no-cache
@@ -148,7 +150,8 @@ function mrcmd_plugins_php_cli_alpine_docker_build() {
 # private
 function mrcmd_plugins_php_cli_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${PHP_CLI_DOCKER_CONFIG_DOCKERFILE}" \
+    "${PHP_CLI_DOCKER_CONTEXT_DIR}" \
+    "${PHP_CLI_DOCKER_DOCKERFILE}" \
     "${PHP_CLI_DOCKER_IMAGE}" \
     "${PHP_CLI_DOCKER_IMAGE_FROM}" \
     --build-arg "INSTALL_BASE_TOOL=${PHP_CLI_TOOLS_INSTALL_BASE}" \

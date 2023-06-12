@@ -10,7 +10,8 @@ function mrcmd_plugins_mongo_method_init() {
 
   readonly MONGO_VARS=(
     "MONGO_DOCKER_CONTAINER"
-    "MONGO_DOCKER_CONFIG_DOCKERFILE"
+    "MONGO_DOCKER_CONTEXT_DIR"
+    "MONGO_DOCKER_DOCKERFILE"
     "MONGO_DOCKER_COMPOSE_CONFIG_DIR"
     "MONGO_DOCKER_IMAGE"
     "MONGO_DOCKER_IMAGE_FROM"
@@ -22,8 +23,9 @@ function mrcmd_plugins_mongo_method_init() {
 
   readonly MONGO_VARS_DEFAULT=(
     "${APPX_ID}-db-mongo"
-    "${MRCMD_PLUGINS_DIR}/mongo/docker"
-    "${MRCMD_PLUGINS_DIR}/mongo/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}mongo:6.0.5-jammy"
     "mongo:6.0.5-jammy"
 
@@ -110,7 +112,8 @@ function mrcmd_plugins_mongo_method_help() {
 # private
 function mrcmd_plugins_mongo_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${MONGO_DOCKER_CONFIG_DOCKERFILE}" \
+    "${MONGO_DOCKER_CONTEXT_DIR}" \
+    "${MONGO_DOCKER_DOCKERFILE}" \
     "${MONGO_DOCKER_IMAGE}" \
     "${MONGO_DOCKER_IMAGE_FROM}" \
     "$@"

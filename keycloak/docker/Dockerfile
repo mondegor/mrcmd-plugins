@@ -14,6 +14,9 @@ ENV KC_DB_URL=${DB_URL}
 
 WORKDIR /opt/keycloak
 
+# COPY *.jar ./providers
+# RUN ./bin/kc.sh build
+
 # COPY keycloak.conf /opt/keykloack/conf/keycloak.conf
 
 #EXPOSE 8080

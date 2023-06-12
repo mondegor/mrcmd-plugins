@@ -4,11 +4,13 @@ function mrcmd_plugins_nginx_method_init() {
   readonly NGINX_CAPTION="Nginx"
 
   readonly NGINX_VARS=(
-    "NGINX_DOCKER_CONFIG_DOCKERFILE"
+    "NGINX_DOCKER_CONTEXT_DIR"
+    "NGINX_DOCKER_DOCKERFILE"
   )
 
   readonly NGINX_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/nginx/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
   )
 
   mrcore_dotenv_init_var_array NGINX_VARS[@] NGINX_VARS_DEFAULT[@]

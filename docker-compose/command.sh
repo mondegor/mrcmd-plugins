@@ -10,8 +10,15 @@ function mrcmd_func_docker_compose_command() {
 
   for configFile in "${DOCKER_COMPOSE_CONFIG_FILES_ARRAY[@]}"
   do
-    configFiles="${configFiles}${CMD_SEPARATOR}-f${CMD_SEPARATOR}${configFile}"
+    if [ "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" != "${configFile}" ]; then
+      configFiles="${configFiles}${CMD_SEPARATOR}-f${CMD_SEPARATOR}${configFile}"
+    fi
   done
+
+  # add file to last
+  if [ -f "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" ]; then
+    configFiles="${configFiles}${CMD_SEPARATOR}-f${CMD_SEPARATOR}${DOCKER_COMPOSE_CONFIG_FILE_LAST}"
+  fi
 
   if [[ "${currentCommand}" == "exec" ]]; then
     ttyInterface="${MRCORE_TTY_INTERFACE}"

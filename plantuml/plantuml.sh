@@ -9,7 +9,8 @@ function mrcmd_plugins_plantuml_method_init() {
   readonly PLANTUML_CAPTION="Plantuml"
 
   readonly PLANTUML_VARS=(
-    "PLANTUML_DOCKER_CONFIG_DOCKERFILE"
+    "PLANTUML_DOCKER_CONTEXT_DIR"
+    "PLANTUML_DOCKER_DOCKERFILE"
     "PLANTUML_DOCKER_IMAGE"
     "PLANTUML_DOCKER_IMAGE_FROM"
 
@@ -18,7 +19,8 @@ function mrcmd_plugins_plantuml_method_init() {
   )
 
   readonly PLANTUML_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/plantuml/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
     "${DOCKER_PACKAGE_NAME}plantuml:1.2023.8"
     "ghcr.io/plantuml/plantuml:1.2023.8"
 
@@ -82,7 +84,8 @@ function mrcmd_plugins_plantuml_method_help() {
 # private
 function mrcmd_plugins_plantuml_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${PLANTUML_DOCKER_CONFIG_DOCKERFILE}" \
+    "${PLANTUML_DOCKER_CONTEXT_DIR}" \
+    "${PLANTUML_DOCKER_DOCKERFILE}" \
     "${PLANTUML_DOCKER_IMAGE}" \
     "${PLANTUML_DOCKER_IMAGE_FROM}" \
     "$@"

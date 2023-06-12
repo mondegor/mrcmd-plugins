@@ -9,7 +9,8 @@ function mrcmd_plugins_php_alpine_method_init() {
   readonly PHP_ALPINE_DOCKER_SERVICE="php-alpine"
 
   readonly PHP_ALPINE_VARS=(
-    "PHP_ALPINE_DOCKER_CONFIG_DOCKERFILE"
+    "PHP_ALPINE_DOCKER_CONTEXT_DIR"
+    "PHP_ALPINE_DOCKER_DOCKERFILE"
 
     "PHP_ALPINE_INSTALL_ZIP"
     "PHP_ALPINE_INSTALL_SOCKETS"
@@ -25,7 +26,8 @@ function mrcmd_plugins_php_alpine_method_init() {
   )
 
   readonly PHP_ALPINE_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/php-alpine/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
 
     "false"
     "false"

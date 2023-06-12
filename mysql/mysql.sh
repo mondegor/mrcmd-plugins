@@ -10,7 +10,8 @@ function mrcmd_plugins_mysql_method_init() {
 
   readonly MYSQL_VARS=(
     "MYSQL_DOCKER_CONTAINER"
-    "MYSQL_DOCKER_CONFIG_DOCKERFILE"
+    "MYSQL_DOCKER_CONTEXT_DIR"
+    "MYSQL_DOCKER_DOCKERFILE"
     "MYSQL_DOCKER_COMPOSE_CONFIG_DIR"
     "MYSQL_DOCKER_IMAGE"
     "MYSQL_DOCKER_IMAGE_FROM"
@@ -21,8 +22,9 @@ function mrcmd_plugins_mysql_method_init() {
 
   readonly MYSQL_VARS_DEFAULT=(
     "${APPX_ID}-db-mysql"
-    "${MRCMD_PLUGINS_DIR}/mysql/docker"
-    "${MRCMD_PLUGINS_DIR}/mysql/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}mysql:8.0.32-oracle"
     "mysql:8.0.32-oracle"
 
@@ -106,7 +108,8 @@ function mrcmd_plugins_mysql_method_help() {
 # private
 function mrcmd_plugins_mysql_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${MYSQL_DOCKER_CONFIG_DOCKERFILE}" \
+    "${MYSQL_DOCKER_CONTEXT_DIR}" \
+    "${MYSQL_DOCKER_DOCKERFILE}" \
     "${MYSQL_DOCKER_IMAGE}" \
     "${MYSQL_DOCKER_IMAGE_FROM}" \
     "$@"

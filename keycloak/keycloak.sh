@@ -11,10 +11,13 @@ function mrcmd_plugins_keycloak_method_init() {
 
   readonly KEYCLOAK_VARS=(
     "KEYCLOAK_DOCKER_CONTAINER"
-    "KEYCLOAK_DOCKER_CONFIG_DOCKERFILE"
+    "KEYCLOAK_DOCKER_CONTEXT_DIR"
+    "KEYCLOAK_DOCKER_DOCKERFILE"
     "KEYCLOAK_DOCKER_COMPOSE_CONFIG_DIR"
     "KEYCLOAK_DOCKER_IMAGE"
     "KEYCLOAK_DOCKER_IMAGE_FROM"
+
+    "KEYCLOAK_REALM_NAME"
 
     "KEYCLOAK_DB_TYPE"
     "KEYCLOAK_DB_USER"
@@ -28,17 +31,20 @@ function mrcmd_plugins_keycloak_method_init() {
 
   readonly KEYCLOAK_VARS_DEFAULT=(
     "${APPX_ID}-auth-keycloak"
-    "${MRCMD_PLUGINS_DIR}/keycloak/docker"
-    "${MRCMD_PLUGINS_DIR}/keycloak/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}keycloak-postgres:21.0"
     "quay.io/keycloak/keycloak:21.0"
+
+    "master"
 
     "postgres"
     "POSTGRES_DB_USER" # var with value
     "POSTGRES_DB_PASSWORD" # var with value
     "POSTGRES_DB_URL_JDBC" # var with value
 
-    "3000"
+    "127.0.0.1:3000"
     "admin"
     "12345678"
   )
@@ -81,6 +87,41 @@ function mrcmd_plugins_keycloak_method_exec() {
       mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${KEYCLOAK_DOCKER_SERVICE}"
       ;;
 
+    conf)
+      mrcmd_plugins_call_function "docker-compose/command" exec \
+        "${KEYCLOAK_DOCKER_SERVICE}" \
+        ./bin/kc.sh \
+        show-config
+      ;;
+
+    certs)
+      curl -s \
+        "http://${KEYCLOAK_WEB_PUBLIC_PORT}/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/certs" \
+        -H "Accept: application/json" | \
+        json_pp -json_opt pretty,canonical
+      ;;
+
+    # https://www.keycloak.org/server/importExport
+    # Import problem: https://www.helikube.de/keycloak-18-export-and-import-feature/
+    realm-export)
+      mrcmd_plugins_call_function "docker-compose/command" exec \
+        "${KEYCLOAK_DOCKER_SERVICE}" \
+        ./bin/kc.sh \
+        export \
+        --file \
+        "./data/import/${KEYCLOAK_REALM_NAME}.json" \
+        --realm "${KEYCLOAK_REALM_NAME}"
+      ;;
+
+    realm-export-all)
+      mrcmd_plugins_call_function "docker-compose/command" exec \
+        "${KEYCLOAK_DOCKER_SERVICE}" \
+        ./bin/kc.sh \
+        export \
+        --dir \
+        "./data/import"
+      ;;
+
     restart)
       mrcmd_plugins_call_function "docker-compose/command-restart" \
         "${KEYCLOAK_DOCKER_CONTAINER}" \
@@ -100,15 +141,19 @@ function mrcmd_plugins_keycloak_method_help() {
   echo -e "  docker-build        Builds or rebuilds the image"
   echo -e ""
   echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${KEYCLOAK_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
-  echo -e "  into        Enters to shell in the running container"
-  echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts keycloak containers"
+  echo -e "  into                Enters to shell in the running container"
+  echo -e "  logs                View output from the running container"
+  echo -e "  restart             Restarts keycloak containers"
+  echo -e "  conf                ./bin/kc.sh show-config"
+  echo -e "  realm-export        Exports realm '${CC_CYAN}${KEYCLOAK_REALM_NAME}${CC_END}' to ${CC_BLUE}./data/import${CC_END} of the container"
+  echo -e "  realm-export-all    Exports all realms to ${CC_BLUE}./data/import${CC_END} of the container"
 }
 
 # private
 function mrcmd_plugins_keycloak_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${KEYCLOAK_DOCKER_CONFIG_DOCKERFILE}" \
+    "${KEYCLOAK_DOCKER_CONTEXT_DIR}" \
+    "${KEYCLOAK_DOCKER_DOCKERFILE}" \
     "${KEYCLOAK_DOCKER_IMAGE}" \
     "${KEYCLOAK_DOCKER_IMAGE_FROM}" \
     --build-arg "DB_TYPE=${KEYCLOAK_DB_TYPE}" \

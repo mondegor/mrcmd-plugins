@@ -1,12 +1,14 @@
 
 # run: mrcmd_plugins_call_function "docker/build-image-user"
 function mrcmd_func_docker_build_image_user() {
-  local dockerFilePath="${1:?}"
-  local dockerImageName="${2:?}"
-  local dockerImageFrom="${3:?}"
-  shift; shift; shift
+  local dockerContextDir="${1:?}"
+  local dockerFilePath="${2?}"
+  local dockerImageName="${3:?}"
+  local dockerImageFrom="${4:?}"
+  shift; shift; shift; shift
 
   mrcmd_plugins_call_function "docker/build-image" \
+    "${dockerContextDir}" \
     "${dockerFilePath}" \
     "${dockerImageName}" \
     "${dockerImageFrom}" \

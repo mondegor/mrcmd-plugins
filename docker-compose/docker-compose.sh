@@ -12,11 +12,13 @@ function mrcmd_plugins_docker_compose_method_init() {
 
   readonly DOCKER_COMPOSE_VARS=(
     "DOCKER_COMPOSE_CONFIG_DIR"
+    "DOCKER_COMPOSE_CONFIG_FILE_LAST"
     "DOCKER_COMPOSE_USE_GENERAL_NETWORK"
   )
 
   readonly DOCKER_COMPOSE_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}"
+    "${APPX_DIR}/docker-compose-app.yaml"
     "false"
   )
 
@@ -27,6 +29,10 @@ function mrcmd_plugins_docker_compose_method_init() {
 
   if [[ "${DOCKER_COMPOSE_USE_GENERAL_NETWORK}" == true ]]; then
     DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_GENERAL_NETWORK}.yaml")
+  fi
+
+  if [ -f "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" ]; then
+    DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_FILE_LAST}")
   fi
 }
 

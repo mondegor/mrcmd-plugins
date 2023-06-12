@@ -9,23 +9,27 @@ function mrcmd_plugins_mvn_method_init() {
   readonly MVN_DOCKER_SERVICE="web-app"
 
   readonly MVN_VARS=(
-    "MVN_DOCKER_CONFIG_DOCKERFILE"
+    "MVN_DOCKER_CONTEXT_DIR"
+    "MVN_DOCKER_DOCKERFILE"
     "MVN_DOCKER_IMAGE"
     "MVN_DOCKER_IMAGE_FROM"
 
     "MVN_CONFIG_DIR"
     "MVN_CONFIG_IN_DOCKER_DIR"
+    "MVN_SETTINGS_PATH"
 
     "MVN_PRIVATE_TOKEN" # sample: gitlab Personal Access Tokens
   )
 
   readonly MVN_VARS_DEFAULT=(
-    "${MRCMD_PLUGINS_DIR}/mvn/docker"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
     "${DOCKER_PACKAGE_NAME}mvn:3.8.5-openjdk-17-slim"
     "maven:3.8.5-openjdk-17-slim"
 
     "${APPX_DIR}/.m2"
     "/home/maven/.m2"
+    "${APPX_DIR}/mvn.settings.xml"
 
     ""
   )
@@ -42,15 +46,15 @@ function mrcmd_plugins_mvn_method_export_config() {
 }
 
 function mrcmd_plugins_mvn_method_install() {
-  if [[ ! -e "${MVN_CONFIG_DIR}" ]] && [[ -f "${APPX_DIR}/mvn.settings.xml" ]]; then
+  if [ ! -e "${MVN_CONFIG_DIR}" ] && [ -f "${MVN_SETTINGS_PATH}" ]; then
     mrcore_lib_mkdir "${MVN_CONFIG_DIR}"
-    cp "${APPX_DIR}/mvn.settings.xml" "${MVN_CONFIG_DIR}/settings.xml"
+    cp "${MVN_SETTINGS_PATH}" "${MVN_CONFIG_DIR}/settings.xml"
     sed -i "s/\${PRIVATE_TOKEN}/${MVN_PRIVATE_TOKEN}/" "${MVN_CONFIG_DIR}/settings.xml"
   fi
 
   mrcmd_plugins_call_function "mvn/docker-build" --no-cache
 
-  if [[ -f "${APPX_WORK_DIR}/pom.xml" ]]; then
+  if [ -f "${APPX_WORK_DIR}/pom.xml" ]; then
     mrcmd_plugins_call_function "mvn/docker-run" mvn package
   else
     mrcore_echo_warning "File '${APPX_WORK_DIR}/pom.xml' not found"
@@ -58,7 +62,7 @@ function mrcmd_plugins_mvn_method_install() {
 }
 
 function mrcmd_plugins_mvn_method_uninstall() {
-  if [[ -f "${APPX_DIR}/mvn.settings.xml" ]]; then
+  if [ -f "${MVN_SETTINGS_PATH}" ] && [[ "${MVN_CONFIG_DIR}" == "${APPX_DIR}/.m2" ]] ; then
     mrcore_lib_rmdir "${MVN_CONFIG_DIR}"
   fi
 }

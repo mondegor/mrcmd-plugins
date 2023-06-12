@@ -10,7 +10,8 @@ function mrcmd_plugins_postgres_method_init() {
 
   readonly POSTGRES_VARS=(
     "POSTGRES_DOCKER_CONTAINER"
-    "POSTGRES_DOCKER_CONFIG_DOCKERFILE"
+    "POSTGRES_DOCKER_CONTEXT_DIR"
+    "POSTGRES_DOCKER_DOCKERFILE"
     "POSTGRES_DOCKER_COMPOSE_CONFIG_DIR"
     "POSTGRES_DOCKER_IMAGE"
     "POSTGRES_DOCKER_IMAGE_FROM"
@@ -23,8 +24,9 @@ function mrcmd_plugins_postgres_method_init() {
 
   readonly POSTGRES_VARS_DEFAULT=(
     "${APPX_ID}-db-postgres"
-    "${MRCMD_PLUGINS_DIR}/postgres/docker"
-    "${MRCMD_PLUGINS_DIR}/postgres/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}postgres:14.7"
     "postgres:14.7-alpine3.17"
 
@@ -121,7 +123,8 @@ function mrcmd_plugins_postgres_db_url_init() {
 # private
 function mrcmd_plugins_postgres_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${POSTGRES_DOCKER_CONFIG_DOCKERFILE}" \
+    "${POSTGRES_DOCKER_CONTEXT_DIR}" \
+    "${POSTGRES_DOCKER_DOCKERFILE}" \
     "${POSTGRES_DOCKER_IMAGE}" \
     "${POSTGRES_DOCKER_IMAGE_FROM}" \
     "$@"

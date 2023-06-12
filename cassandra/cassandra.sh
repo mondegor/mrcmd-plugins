@@ -13,7 +13,8 @@ function mrcmd_plugins_cassandra_method_init() {
 
   readonly CASSANDRA_VARS=(
     "CASSANDRA_DOCKER_CONTAINER"
-    "CASSANDRA_DOCKER_CONFIG_DOCKERFILE"
+    "CASSANDRA_DOCKER_CONTEXT_DIR"
+    "CASSANDRA_DOCKER_DOCKERFILE"
     "CASSANDRA_DOCKER_COMPOSE_CONFIG_DIR"
     "CASSANDRA_DOCKER_IMAGE"
     "CASSANDRA_DOCKER_IMAGE_FROM"
@@ -37,8 +38,9 @@ function mrcmd_plugins_cassandra_method_init() {
 
   readonly CASSANDRA_VARS_DEFAULT=(
     "${APPX_ID}-db-cassandra"
-    "${MRCMD_PLUGINS_DIR}/cassandra/docker"
-    "${MRCMD_PLUGINS_DIR}/cassandra/docker-compose"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}cassandra:3.11.15"
     "cassandra:3.11.15"
 
@@ -147,7 +149,8 @@ function mrcmd_plugins_cassandra_db_url_init() {
 # private
 function mrcmd_plugins_cassandra_docker_build() {
   mrcmd_plugins_call_function "docker/build-image" \
-    "${CASSANDRA_DOCKER_CONFIG_DOCKERFILE}" \
+    "${CASSANDRA_DOCKER_CONTEXT_DIR}" \
+    "${CASSANDRA_DOCKER_DOCKERFILE}" \
     "${CASSANDRA_DOCKER_IMAGE}" \
     "${CASSANDRA_DOCKER_IMAGE_FROM}" \
     "$@"

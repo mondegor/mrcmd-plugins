@@ -20,7 +20,7 @@ function mrcmd_plugins_go_dev_method_init() {
   )
 
   readonly GO_DEV_VARS_DEFAULT=(
-    "$(mrcore_os_path_win_to_unix "${GOPATH-}")/bin"
+    ""
     "./cmd/app/main.go"
 
     "v0.8.0"
@@ -30,6 +30,12 @@ function mrcmd_plugins_go_dev_method_init() {
     "v1.28"
     "v1.2"
   )
+
+  if [ -n "${GOPATH-}" ] && [ -d "${GOPATH}" ]; then
+    GO_DEV_GOPATH="$(mrcore_os_path_win_to_unix "${GOPATH}")/bin"
+  else
+    mrcore_echo_warning "${GO_DEV_CAPTION}: \$GOPATH not found"
+  fi
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
 }

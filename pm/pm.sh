@@ -30,12 +30,6 @@ function mrcmd_plugins_pm_method_exec() {
       mrcmd_plugins_call_function "pm/create-func" "${pluginName}" "${funcName}"
       ;;
 
-    cp | copy)
-      local pluginName="${1-}"
-      local newPluginName="${2-}"
-      mrcmd_plugins_call_function "pm/copy-plugin" "${pluginName}" "${newPluginName}"
-      ;;
-
     *)
       ${RETURN_UNKNOWN_COMMAND}
       ;;
@@ -53,7 +47,4 @@ function mrcmd_plugins_pm_method_help() {
   echo -e "  create-func ${CC_CYAN}PLUGIN FUNC${CC_END}     Create a new function in the plugin of the project"
   echo -e "                              ${CC_CYAN}PLUGIN${CC_END} is a plugin name"
   echo -e "                              ${CC_CYAN}FUNC${CC_END} is a function name"
-  echo -e "  copy ${CC_CYAN}SOURCE DEST${CC_END}            Copy source-plugin-name to project as plugin-name"
-  echo -e "                              ${CC_CYAN}SOURCE${CC_END} is a plugin name"
-  echo -e "                              ${CC_CYAN}DEST${CC_END} is a function name"
 }

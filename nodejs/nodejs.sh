@@ -10,9 +10,9 @@ function mrcmd_plugins_nodejs_method_init() {
 
   readonly NODEJS_VARS=(
     "NODEJS_DOCKER_CONTAINER"
-    "NODEJS_DOCKER_CONFIG_DOCKERFILE"
+    "NODEJS_DOCKER_CONTEXT_DIR"
+    "NODEJS_DOCKER_DOCKERFILE"
     "NODEJS_DOCKER_COMPOSE_CONFIG_DIR"
-    "NODEJS_DOCKER_COMPOSE_CONFIG_FILE"
     "NODEJS_DOCKER_IMAGE"
     "NODEJS_DOCKER_IMAGE_FROM"
 
@@ -24,9 +24,9 @@ function mrcmd_plugins_nodejs_method_init() {
 
   readonly NODEJS_VARS_DEFAULT=(
     "${APPX_ID}-web-app"
-    "${MRCMD_PLUGINS_DIR}/nodejs/docker"
-    "${MRCMD_PLUGINS_DIR}/nodejs/docker-compose"
-    "${APPX_DIR}/app.yaml"
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
+    ""
+    "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}node:19.9.0"
     "node:19.9.0-alpine3.17"
 
@@ -41,8 +41,7 @@ function mrcmd_plugins_nodejs_method_init() {
   mrcmd_plugins_call_function "docker-compose/register" \
     "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
     "${NODEJS_APP_ENV_FILE}" \
-    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml" \
-    "${NODEJS_DOCKER_COMPOSE_CONFIG_FILE}"
+    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
 }
 
 function mrcmd_plugins_nodejs_method_config() {
@@ -138,7 +137,8 @@ function mrcmd_plugins_nodejs_method_help() {
 # private
 function mrcmd_plugins_nodejs_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
-    "${NODEJS_DOCKER_CONFIG_DOCKERFILE}" \
+    "${NODEJS_DOCKER_CONTEXT_DIR}" \
+    "${NODEJS_DOCKER_DOCKERFILE}" \
     "${NODEJS_DOCKER_IMAGE}" \
     "${NODEJS_DOCKER_IMAGE_FROM}" \
     "$@"

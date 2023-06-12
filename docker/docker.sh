@@ -67,6 +67,13 @@ function mrcmd_plugins_docker_method_exec() {
       docker network inspect "$@"
       ;;
 
+    c-ip)
+      local containerName="${1-}"
+      if ! mrcmd_plugins_call_function "docker/command-exec" "${containerName}" /sbin/ip route ; then
+        mrcore_echo_sample "Run '${MRCMD_INFO_NAME} docker ps' and see column NAMES"
+      fi
+      ;;
+
     vol)
       docker volume ls
       ;;
@@ -120,8 +127,9 @@ function mrcmd_plugins_docker_method_help() {
   echo -e "  im-rm               docker rmi \$(docker images -q)"
   echo -e "  im-rm-f             docker rmi -f \$(docker images -q)"
   echo -e "  net                 docker network ls"
-  echo -e "  net-i NETWORK       docker network inspect NETWORK"
+  echo -e "  net-i ${CC_CYAN}NETWORK${CC_END}       docker network inspect ${CC_CYAN}NETWORK${CC_END}"
   echo -e "  net-rm              docker network prune"
+  echo -e "  c-ip ${CC_CYAN}NAME${CC_END}           Show ip route list of container ${CC_CYAN}NAME${CC_END}"
   echo -e "  vol                 docker volume ls"
   echo -e "  vol-rm              docker volume prune"
   echo -e "  vol-rm-f            docker volume rm \$(docker volume ls -q)"
@@ -153,9 +161,8 @@ function mrcmd_plugins_docker_containers_remove() {
 
   items=$(docker ps -a -q)
 
-  if [ -n "${items}" ]; then
-    docker stop "${items}"
-    docker rm "${items}"
+  if [ -n "${items}" ] && docker stop ${items} ; then
+    docker rm ${items}
   fi
 }
 
@@ -168,9 +175,9 @@ function mrcmd_plugins_docker_images_remove() {
 
   if [ -n "${items}" ]; then
     if [[ "${force}" == true ]]; then
-      docker rmi -f "${items}"
+      docker rmi -f ${items}
     else
-      docker rmi "${items}"
+      docker rmi ${items}
     fi
   fi
 }
@@ -191,7 +198,7 @@ function mrcmd_plugins_docker_volumes_remove() {
     items=$(docker volume ls -q)
 
     if [ -n "${items}" ]; then
-      docker volume rm "${items}"
+      docker volume rm ${items}
     fi
   else
     docker volume prune -f

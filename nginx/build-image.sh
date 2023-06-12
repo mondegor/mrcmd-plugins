@@ -12,7 +12,8 @@ function mrcmd_func_nginx_build_image() {
   shift; shift; shift; shift
 
   mrcmd_plugins_call_function "docker/build-image" \
-    "${NGINX_DOCKER_CONFIG_DOCKERFILE}" \
+    "${NGINX_DOCKER_CONTEXT_DIR}" \
+    "${NGINX_DOCKER_DOCKERFILE}" \
     "${dockerImageName}" \
     "${dockerImageFrom}" \
     --build-arg "SERVICE_TYPE=${serviceType}" \
