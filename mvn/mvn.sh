@@ -46,6 +46,10 @@ function mrcmd_plugins_mvn_method_export_config() {
 }
 
 function mrcmd_plugins_mvn_method_install() {
+  if [ ! -f "${APPX_WORK_DIR}/pom.xml" ]; then
+    mrcore_validate_file_required "File" "${APPX_WORK_DIR}/pom.xml"
+  fi
+
   if [ ! -e "${MVN_CONFIG_DIR}" ] && [ -f "${MVN_SETTINGS_PATH}" ]; then
     mrcore_lib_mkdir "${MVN_CONFIG_DIR}"
     cp "${MVN_SETTINGS_PATH}" "${MVN_CONFIG_DIR}/settings.xml"
@@ -53,12 +57,7 @@ function mrcmd_plugins_mvn_method_install() {
   fi
 
   mrcmd_plugins_call_function "mvn/docker-build" --no-cache
-
-  if [ -f "${APPX_WORK_DIR}/pom.xml" ]; then
-    mrcmd_plugins_call_function "mvn/docker-run" mvn package
-  else
-    mrcore_echo_warning "File '${APPX_WORK_DIR}/pom.xml' not found"
-  fi
+  mrcmd_plugins_call_function "mvn/docker-run" mvn package
 }
 
 function mrcmd_plugins_mvn_method_uninstall() {
