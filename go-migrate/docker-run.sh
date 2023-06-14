@@ -8,7 +8,7 @@ function mrcmd_func_go_migrate_docker_run() {
   ${MRCORE_TTY_INTERFACE} docker run \
     -it \
     --rm \
-    -v "$(realpath "${GO_MIGRATE_DB_SRC_DIR}"):/migrations" \
+    -v "$(mrcmd_os_realpath "${GO_MIGRATE_DB_SRC_DIR}"):/migrations" \
     --env "TZ=${APPX_TZ}" \
     --network "${GO_MIGRATE_DOCKER_NETWORK}" \
     "${GO_MIGRATE_DOCKER_IMAGE}" \

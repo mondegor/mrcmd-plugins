@@ -5,6 +5,6 @@ function mrcmd_func_shellcheck_docker_run() {
   ${MRCORE_TTY_INTERFACE} docker run \
     -it \
     --rm \
-    -v "$(realpath "${APPX_WORK_DIR}"):/mnt" \
+    -v "$(mrcmd_os_realpath "${APPX_WORK_DIR}"):/mnt" \
     "${SHELLCHECK_DOCKER_IMAGE}" "$@"
 }

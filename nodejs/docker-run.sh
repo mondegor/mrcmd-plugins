@@ -5,7 +5,7 @@ function mrcmd_func_nodejs_docker_run() {
   ${MRCORE_TTY_INTERFACE} docker run \
     -it \
     --rm \
-    -v "$(realpath "${APPX_WORK_DIR}"):/opt/app" \
+    -v "$(mrcmd_os_realpath "${APPX_WORK_DIR}"):/opt/app" \
     --env "TZ=${APPX_TZ}" \
     "${NODEJS_DOCKER_IMAGE}" \
     "$@"

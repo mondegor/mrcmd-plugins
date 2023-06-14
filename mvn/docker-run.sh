@@ -7,9 +7,9 @@ function mrcmd_func_mvn_docker_run() {
   ${MRCORE_TTY_INTERFACE} docker run \
     -it \
     --rm \
-    -v "$(realpath "${MVN_CONFIG_DIR}"):${MVN_CONFIG_IN_DOCKER_DIR}" \
-    -v "$(realpath "${APPX_WORK_DIR}"):/opt/app" \
-    --env "MAVEN_CONFIG=${MVN_CONFIG_IN_DOCKER_DIR}" \
+    -v "$(mrcmd_os_realpath "${MVN_CONFIG_DIR}"):${MVN_CONFIG_IN_DOCKER_DIR}" \
+    -v "$(mrcmd_os_realpath "${APPX_WORK_DIR}"):/opt/app" \
+    --env "MAVEN_CONFIG=$(mrcmd_os_path "${MVN_CONFIG_IN_DOCKER_DIR}")" \
     --env "TZ=${APPX_TZ}" \
     "${MVN_DOCKER_IMAGE}" \
     "$@"

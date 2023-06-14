@@ -1,6 +1,13 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-06-14
+### Fixed
+- Исправлена ошибка монтирования директорий в Windows;
+
+### Removed
+- mvn/docker-run-workdir.sh
+
 ## 2023-06-13
 ### Fixed
 - В плагине mvn, если отсутствует файл pom.xml, то инсталляция прерывается;
