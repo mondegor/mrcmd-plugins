@@ -1,4 +1,4 @@
-# Plugins for Mrcmd Tool v0.6.3
+# Plugins for Mrcmd Tool v0.6.4
 Этот репозиторий содержит базовые плагины для Mrcmd Tool.
 
 ## Статус проекта
@@ -12,7 +12,6 @@
 ### Основные плагины
 - `global` - глобальные переменные в рамках проекта;
 - `pm` - менеджер установленных плагинов;
-- `vendor` - загрузчик данных из zip архивов и git репозиториев;
 
 ### Docker
 - `docker` - набор команд для работы с Docker (https://docs.docker.com/);
@@ -44,3 +43,4 @@
 - `plantuml` - PlantUML `Docker` (https://plantuml.com/starting);
 - `sentry` - Sentry - мониторинг ошибок `Docker` (https://github.com/getsentry/sentry#readme);
 - `shellcheck` - Статический анализатор shell скриптов `Docker` (https://www.shellcheck.net/);
+- `vendor` - загрузчик данных из zip архивов и git репозиториев;

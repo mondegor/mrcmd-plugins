@@ -1,6 +1,7 @@
 
 function mrcmd_plugins_docker_method_init() {
   readonly DOCKER_CAPTION="Docker"
+  DOCKER_DAEMON_IS_RUNNING=false
 
   readonly DOCKER_VARS=(
     "DOCKER_PACKAGE_NAME"
@@ -28,6 +29,18 @@ function mrcmd_plugins_docker_method_export_config() {
 function mrcmd_plugins_docker_method_exec() {
   local currentCommand="${1:?}"
   shift
+
+  case "${currentCommand}" in
+
+      d-start | d-restart | d-stop)
+        mrcore_validate_tool_required docker
+        sudo service docker "${currentCommand:2:${#currentCommand}}"
+        return
+        ;;
+
+  esac
+
+  mrcmd_plugins_docker_validate_daemon_required
 
   case "${currentCommand}" in
 
@@ -203,4 +216,21 @@ function mrcmd_plugins_docker_volumes_remove() {
   else
     docker volume prune -f
   fi
+}
+
+# public
+function mrcmd_plugins_docker_validate_daemon_required() {
+  if [[ "${DOCKER_DAEMON_IS_RUNNING}" == true ]]; then
+    return
+  fi
+
+  mrcore_validate_tool_required docker
+
+  if [[ $(docker ps 2>&1) =~ "Is the docker daemon running?" ]]; then
+    mrcore_echo_error "Cannot connect to the Docker daemon"
+    mrcore_echo_sample "Run '${MRCMD_INFO_NAME} docker d-start'"
+    ${EXIT_ERROR}
+  fi
+
+  DOCKER_DAEMON_IS_RUNNING=true
 }

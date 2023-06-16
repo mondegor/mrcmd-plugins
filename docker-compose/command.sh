@@ -5,6 +5,8 @@ function mrcmd_func_docker_compose_command() {
   local ttyInterface=""
   local configFiles=""
 
+  mrcmd_plugins_docker_validate_daemon_required
+
   local tmp="${DOCKER_COMPOSE_CONFIG_FILES_ARRAY[@]}"
   mrcore_debug_echo ${DEBUG_LEVEL_1} "${DEBUG_BLUE}" "DOCKER_COMPOSE_CONFIG_FILES_ARRAY=${tmp}"
 

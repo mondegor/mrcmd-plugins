@@ -103,9 +103,9 @@ function mrcmd_plugins_sentry_method_exec() {
 function mrcmd_plugins_sentry_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Docker compose commands:${CC_END}"
-  echo -e "  conf                docker-compose config"
-  echo -e "  ps                  docker-compose ps"
-  echo -e "  logs                docker-compose logs --follow"
+  echo -e "  conf                docker compose config"
+  echo -e "  ps                  docker compose ps"
+  echo -e "  logs                docker compose logs --follow"
   echo -e "  create-user         Create user for access to panel"
 }
 
@@ -123,5 +123,7 @@ REPORT_SELF_HOSTED_ISSUES=$(mrcore_lib_flag_to_int "${SENTRY_SEND_REPORTS}")" >>
 
 # private
 function mrcmd_plugins_sentry_docker_compose() {
+  mrcore_validate_tool_required docker
+
   docker compose -p "${APPX_ID}" --env-file "${SENTRY_ENV_FILE}" -f "${APPX_WORK_DIR}/docker-compose.yml" "$@"
 }

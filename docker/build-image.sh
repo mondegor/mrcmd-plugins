@@ -7,6 +7,8 @@ function mrcmd_func_docker_build_image() {
   local dockerImageFrom="${4:?}"
   shift; shift; shift; shift
 
+  mrcmd_plugins_docker_validate_daemon_required
+
   if [ -n "${dockerFilePath}" ]; then
     dockerFilePath="-f${CMD_SEPARATOR}${dockerFilePath}"
   fi

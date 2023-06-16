@@ -4,7 +4,7 @@ function mrcmd_plugins_docker_compose_method_depends() {
 }
 
 function mrcmd_plugins_docker_compose_method_init() {
-  readonly DOCKER_COMPOSE_CAPTION="Docker compose"
+  readonly DOCKER_COMPOSE_CAPTION="Docker Compose"
 
   export DOCKER_COMPOSE_LOCAL_NETWORK="local-network"
   export DOCKER_COMPOSE_GENERAL_NETWORK="general-network"

@@ -4,6 +4,8 @@ function mrcmd_func_docker_command_exec() {
   local containerName="${1-}"
   shift
 
+  mrcmd_plugins_docker_validate_daemon_required
+
   if [ -n "${containerName}" ]; then
     local containerHash
     containerHash=$(docker ps -q --filter="NAME=${containerName}")
