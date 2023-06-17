@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "docker-compose/command"
+# using example: mrcmd_plugins_call_function "docker-compose/command"
 function mrcmd_func_docker_compose_command() {
   local currentCommand="${1-}"
   local ttyInterface=""

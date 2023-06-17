@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "nginx/build-image"
+# using example: mrcmd_plugins_call_function "nginx/build-image"
 function mrcmd_func_nginx_build_image() {
   local dockerImageName="${1:?}"
   local dockerImageFrom="${2:?}"

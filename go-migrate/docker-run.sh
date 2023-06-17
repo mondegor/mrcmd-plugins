@@ -1,8 +1,9 @@
 
-# run: mrcmd_plugins_call_function "go-migrate/docker-run"
+# using example: mrcmd_plugins_call_function "go-migrate/docker-run"
 function mrcmd_func_go_migrate_docker_run() {
   mrcore_validate_dir_required "DB migrate dir" "${GO_MIGRATE_DB_SRC_DIR}"
   mrcore_validate_value_required "DB URL" "${GO_MIGRATE_DB_URL}"
+  mrcmd_plugins_docker_validate_daemon_required
 
   # --user root
   ${MRCORE_TTY_INTERFACE} docker run \

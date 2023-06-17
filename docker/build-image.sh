@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "docker/build-image"
+# using example: mrcmd_plugins_call_function "docker/build-image"
 function mrcmd_func_docker_build_image() {
   local dockerContextDir="${1:?}"
   local dockerFilePath="${2?}"

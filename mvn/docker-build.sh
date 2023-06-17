@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "mvn/docker-build"
+# using example: mrcmd_plugins_call_function "mvn/docker-build"
 function mrcmd_func_mvn_docker_build() {
   mrcmd_plugins_call_function "docker/build-image-user" \
     "${MVN_DOCKER_CONTEXT_DIR}" \

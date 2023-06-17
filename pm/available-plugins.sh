@@ -1,7 +1,7 @@
 
 readonly MRCMD_PLUGIN_RESERVED_METHODS_ARRAY=("init" "exec" "${MRCMD_PLUGIN_METHODS_ARRAY[@]}")
 
-# run: mrcmd_plugins_call_function "pm/available-plugins"
+# using example: mrcmd_plugins_call_function "pm/available-plugins"
 function mrcmd_func_pm_available_plugins() {
   local isShowMethods=${1:-false}
   local pluginName

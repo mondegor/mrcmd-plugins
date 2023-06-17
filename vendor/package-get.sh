@@ -7,7 +7,7 @@ function mrcmd_func_vendor_package_get() {
   shift; shift
 
   mrcore_validate_value_required "Source URL" "${packageUrl}"
-  #mrcore_validate_value "Source URL" "${REGEXP_PATTERN_URL}" "${packageUrl}"
+  # mrcore_validate_value "Source URL" "${REGEXP_PATTERN_URL}" "${packageUrl}"
 
   if ! mrcore_lib_in_array "${packageUrl##*.}" MRCMD_FUNC_VENDOR_PACKAGE_EXTS_ARRAY[@]; then
     mrcore_echo_error "Package '${packageUrl}' is not supported. Only packages like: $(mrcmd_lib_implode ", " MRCMD_FUNC_VENDOR_PACKAGE_EXTS_ARRAY[@])"

@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "pm/copy-plugin"
+# using example: mrcmd_plugins_call_function "pm/copy-plugin"
 function mrcmd_func_pm_copy_plugin() {
   local sourcePluginName="${1-}"
   local destPluginName="${2-}"

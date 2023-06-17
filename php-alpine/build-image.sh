@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "php-alpine/build-image"
+# using example: mrcmd_plugins_call_function "php-alpine/build-image"
 function mrcmd_func_php_alpine_build_image() {
   local dockerImage="${1:?}"
   local dockerImageFrom="${2:?}"

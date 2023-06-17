@@ -64,6 +64,8 @@ function mrcmd_plugins_mvn_method_uninstall() {
   if [ -f "${MVN_SETTINGS_PATH}" ] && [[ "${MVN_CONFIG_DIR}" == "${APPX_DIR}/.m2" ]] ; then
     mrcore_lib_rmdir "${MVN_CONFIG_DIR}"
   fi
+
+  mrcore_lib_rmdir "${APPX_DIR}/target"
 }
 
 function mrcmd_plugins_mvn_method_exec() {

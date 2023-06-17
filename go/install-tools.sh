@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "go/install-tools"
+# using example: mrcmd_plugins_call_function "go/install-tools"
 function mrcmd_func_go_install_tools() {
   local toolsArray=("${!1}")
   mrcmd_func_go_each_tool_install "${toolsArray[@]}"

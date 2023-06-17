@@ -1,7 +1,8 @@
 
-# run: mrcmd_plugins_call_function "mvn/docker-run"
+# using example: mrcmd_plugins_call_function "mvn/docker-run"
 function mrcmd_func_mvn_docker_run() {
   mrcore_validate_dir_required "Maven config dir" "${MVN_CONFIG_DIR}"
+  mrcmd_plugins_docker_validate_daemon_required
 
   # --user root
   ${MRCORE_TTY_INTERFACE} docker run \

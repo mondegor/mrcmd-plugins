@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "php-cli/install-tools"
+# using example: mrcmd_plugins_call_function "php-cli/install-tools"
 function mrcmd_func_php_cli_install_tools() {
   local toolsArray=("${!1}")
   mrcmd_func_php_cli_each_tool_install "${toolsArray[@]}"

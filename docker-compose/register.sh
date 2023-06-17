@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "docker-compose/register"
+# using example: mrcmd_plugins_call_function "docker-compose/register"
 function mrcmd_func_docker_compose_register() {
   local configYaml="${1:?}"
   local customEnvFile="${2:?}"

@@ -1,4 +1,4 @@
-# Plugins for Mrcmd Tool v0.6.4
+# Plugins for Mrcmd Tool v0.6.5
 Этот репозиторий содержит базовые плагины для Mrcmd Tool.
 
 ## Статус проекта
@@ -43,4 +43,5 @@
 - `plantuml` - PlantUML `Docker` (https://plantuml.com/starting);
 - `sentry` - Sentry - мониторинг ошибок `Docker` (https://github.com/getsentry/sentry#readme);
 - `shellcheck` - Статический анализатор shell скриптов `Docker` (https://www.shellcheck.net/);
-- `vendor` - загрузчик данных из zip архивов и git репозиториев;
+- `ssh` - Набор команд для генерации `SSH` ключей и регистрации их в `SSH Agent`;
+- `vendor` - Загрузчик данных из zip архивов и git репозиториев;

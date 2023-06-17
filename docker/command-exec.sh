@@ -1,5 +1,5 @@
 
-# run: mrcmd_plugins_call_function "docker/command-exec"
+# using example: mrcmd_plugins_call_function "docker/command-exec"
 function mrcmd_func_docker_command_exec() {
   local containerName="${1-}"
   shift
