@@ -41,6 +41,10 @@ function mrcmd_plugins_ssh_method_exec() {
       sudo apt-get install openssh-server
       ;;
 
+    keys-chmod)
+      chmod -R 600 "${SSH_KEYS_DIR}/*"
+      ;;
+
     agent-start)
       mrcore_echo_sample "Run 'eval \$(ssh-agent)' for start"
       ;;
@@ -83,6 +87,7 @@ function mrcmd_plugins_ssh_method_help() {
   #markup:"--|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
   echo -e "  openssh-install             apt-get install openssh-server"
+  echo -e "  keys-chmod                  chmod -R 600 ${SSH_KEYS_DIR}/*"
   echo -e "  agent-start                 Start SSH Agent daemon"
   echo -e "  agent-kill                  Kill SSH Agent daemon"
   echo -e "  add                         Add ssh keys from ${CC_BLUE}${SSH_KEYS_DIR}${CC_END}"
