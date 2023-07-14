@@ -6,7 +6,6 @@ function mrcmd_plugins_php_alpine_method_depends() {
 
 function mrcmd_plugins_php_alpine_method_init() {
   readonly PHP_ALPINE_CAPTION="PHP Abstract Alpine"
-  readonly PHP_ALPINE_DOCKER_SERVICE="php-alpine"
 
   readonly PHP_ALPINE_VARS=(
     "PHP_ALPINE_DOCKER_CONTEXT_DIR"

@@ -9,6 +9,7 @@ function mrcmd_plugins_java_method_init() {
   readonly JAVA_DOCKER_SERVICE="web-app"
 
   readonly JAVA_VARS=(
+    "READONLY_JAVA_DOCKER_HOST"
     "JAVA_DOCKER_CONTAINER"
     "JAVA_DOCKER_CONTEXT_DIR"
     "JAVA_DOCKER_DOCKERFILE"
@@ -25,7 +26,8 @@ function mrcmd_plugins_java_method_init() {
   )
 
   readonly JAVA_VARS_DEFAULT=(
-    "${APPX_ID}-web-app"
+    "${JAVA_DOCKER_SERVICE}"
+    "${APPX_ID}-${JAVA_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

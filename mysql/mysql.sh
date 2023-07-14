@@ -9,6 +9,7 @@ function mrcmd_plugins_mysql_method_init() {
   readonly MYSQL_DOCKER_SERVICE="db-mysql"
 
   readonly MYSQL_VARS=(
+    "READONLY_MYSQL_DOCKER_HOST"
     "MYSQL_DOCKER_CONTAINER"
     "MYSQL_DOCKER_CONTEXT_DIR"
     "MYSQL_DOCKER_DOCKERFILE"
@@ -21,7 +22,8 @@ function mrcmd_plugins_mysql_method_init() {
   )
 
   readonly MYSQL_VARS_DEFAULT=(
-    "${APPX_ID}-db-mysql"
+    "${MYSQL_DOCKER_SERVICE}"
+    "${APPX_ID}-${MYSQL_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

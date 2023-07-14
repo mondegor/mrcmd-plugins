@@ -1,4 +1,4 @@
-# Plugins for Mrcmd Tool v0.6.5
+# Plugins for Mrcmd Tool v0.6.6
 Этот репозиторий содержит базовые плагины для Mrcmd Tool.
 
 ## Статус проекта

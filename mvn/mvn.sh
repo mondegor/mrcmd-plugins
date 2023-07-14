@@ -6,7 +6,6 @@ function mrcmd_plugins_mvn_method_depends() {
 
 function mrcmd_plugins_mvn_method_init() {
   readonly MVN_CAPTION="Maven openjdk 17"
-  readonly MVN_DOCKER_SERVICE="web-app"
 
   readonly MVN_VARS=(
     "MVN_DOCKER_CONTEXT_DIR"

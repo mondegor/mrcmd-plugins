@@ -9,6 +9,7 @@ function mrcmd_plugins_php_fpm_method_init() {
   readonly PHP_FPM_DOCKER_SERVICE="web-app"
 
   readonly PHP_FPM_VARS=(
+    "READONLY_PHP_FPM_DOCKER_HOST"
     "PHP_FPM_DOCKER_CONTAINER"
     "PHP_FPM_DOCKER_CONTEXT_DIR"
     "PHP_FPM_DOCKER_DOCKERFILE"
@@ -38,7 +39,8 @@ function mrcmd_plugins_php_fpm_method_init() {
   )
 
   readonly PHP_FPM_VARS_DEFAULT=(
-    "${APPX_ID}-web-app"
+    "${PHP_FPM_DOCKER_SERVICE}"
+    "${APPX_ID}-${PHP_FPM_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

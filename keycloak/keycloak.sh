@@ -10,6 +10,7 @@ function mrcmd_plugins_keycloak_method_init() {
   readonly KEYCLOAK_DOCKER_SERVICE="auth-keycloak"
 
   readonly KEYCLOAK_VARS=(
+    "READONLY_KEYCLOAK_DOCKER_HOST"
     "KEYCLOAK_DOCKER_CONTAINER"
     "KEYCLOAK_DOCKER_CONTEXT_DIR"
     "KEYCLOAK_DOCKER_DOCKERFILE"
@@ -30,7 +31,8 @@ function mrcmd_plugins_keycloak_method_init() {
   )
 
   readonly KEYCLOAK_VARS_DEFAULT=(
-    "${APPX_ID}-auth-keycloak"
+    "${KEYCLOAK_DOCKER_SERVICE}"
+    "${APPX_ID}-${KEYCLOAK_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

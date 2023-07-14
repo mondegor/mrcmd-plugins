@@ -6,7 +6,6 @@ function mrcmd_plugins_php_cli_method_depends() {
 
 function mrcmd_plugins_php_cli_method_init() {
   readonly PHP_CLI_CAPTION="PHP Cli"
-  readonly PHP_CLI_DOCKER_SERVICE="php-cli"
 
   readonly PHP_CLI_VARS=(
     "PHP_CLI_DOCKER_CONTEXT_DIR"

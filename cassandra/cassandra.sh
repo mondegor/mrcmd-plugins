@@ -12,6 +12,7 @@ function mrcmd_plugins_cassandra_method_init() {
   readonly CASSANDRA_DOCKER_SERVICE="db-cassandra"
 
   readonly CASSANDRA_VARS=(
+    "READONLY_CASSANDRA_DOCKER_HOST"
     "CASSANDRA_DOCKER_CONTAINER"
     "CASSANDRA_DOCKER_CONTEXT_DIR"
     "CASSANDRA_DOCKER_DOCKERFILE"
@@ -37,7 +38,8 @@ function mrcmd_plugins_cassandra_method_init() {
   )
 
   readonly CASSANDRA_VARS_DEFAULT=(
-    "${APPX_ID}-db-cassandra"
+    "${CASSANDRA_DOCKER_SERVICE}"
+    "${APPX_ID}-${CASSANDRA_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

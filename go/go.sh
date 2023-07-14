@@ -9,6 +9,7 @@ function mrcmd_plugins_go_method_init() {
   readonly GO_DOCKER_SERVICE="web-app"
 
   readonly GO_VARS=(
+    "READONLY_GO_DOCKER_HOST"
     "GO_DOCKER_CONTAINER"
     "GO_DOCKER_CONTEXT_DIR"
     "GO_DOCKER_DOCKERFILE"
@@ -31,7 +32,8 @@ function mrcmd_plugins_go_method_init() {
   )
 
   readonly GO_VARS_DEFAULT=(
-    "${APPX_ID}-web-app"
+    "${GO_DOCKER_SERVICE}"
+    "${APPX_ID}-${GO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
@@ -74,6 +76,10 @@ function mrcmd_plugins_go_method_install() {
   mrcmd_plugins_go_docker_build --no-cache
   mrcmd_plugins_go_install_tools
   mrcmd_plugins_call_function "go/docker-run" go mod download
+}
+
+function mrcmd_plugins_go_method_start() {
+  mrcore_validate_dir_required "Go lib dir" "${GO_LIB_DIR}"
 }
 
 function mrcmd_plugins_go_method_uninstall() {

@@ -9,6 +9,7 @@ function mrcmd_plugins_mongo_method_init() {
   readonly MONGO_DOCKER_SERVICE="db-mongo"
 
   readonly MONGO_VARS=(
+    "READONLY_MONGO_DOCKER_HOST"
     "MONGO_DOCKER_CONTAINER"
     "MONGO_DOCKER_CONTEXT_DIR"
     "MONGO_DOCKER_DOCKERFILE"
@@ -22,7 +23,8 @@ function mrcmd_plugins_mongo_method_init() {
   )
 
   readonly MONGO_VARS_DEFAULT=(
-    "${APPX_ID}-db-mongo"
+    "${MONGO_DOCKER_SERVICE}"
+    "${APPX_ID}-${MONGO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

@@ -9,6 +9,7 @@ function mrcmd_plugins_nodejs_method_init() {
   readonly NODEJS_DOCKER_SERVICE="web-app"
 
   readonly NODEJS_VARS=(
+    "READONLY_NODEJS_DOCKER_HOST"
     "NODEJS_DOCKER_CONTAINER"
     "NODEJS_DOCKER_CONTEXT_DIR"
     "NODEJS_DOCKER_DOCKERFILE"
@@ -23,7 +24,8 @@ function mrcmd_plugins_nodejs_method_init() {
   )
 
   readonly NODEJS_VARS_DEFAULT=(
-    "${APPX_ID}-web-app"
+    "${NODEJS_DOCKER_SERVICE}"
+    "${APPX_ID}-${NODEJS_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

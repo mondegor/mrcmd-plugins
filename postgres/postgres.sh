@@ -9,6 +9,7 @@ function mrcmd_plugins_postgres_method_init() {
   readonly POSTGRES_DOCKER_SERVICE="db-postgres"
 
   readonly POSTGRES_VARS=(
+    "READONLY_POSTGRES_DOCKER_HOST"
     "POSTGRES_DOCKER_CONTAINER"
     "POSTGRES_DOCKER_CONTEXT_DIR"
     "POSTGRES_DOCKER_DOCKERFILE"
@@ -23,7 +24,8 @@ function mrcmd_plugins_postgres_method_init() {
   )
 
   readonly POSTGRES_VARS_DEFAULT=(
-    "${APPX_ID}-db-postgres"
+    "${POSTGRES_DOCKER_SERVICE}"
+    "${APPX_ID}-${POSTGRES_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"

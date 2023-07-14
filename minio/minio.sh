@@ -10,6 +10,7 @@ function mrcmd_plugins_minio_method_init() {
   readonly MINIO_NGINX_DOCKER_SERVICE="s3-minio-nginx"
 
   readonly MINIO_VARS=(
+    "READONLY_MINIO_DOCKER_HOST"
     "MINIO_DOCKER_CONTAINER"
     "MINIO_DOCKER_CONTEXT_DIR"
     "MINIO_DOCKER_DOCKERFILE"
@@ -17,6 +18,7 @@ function mrcmd_plugins_minio_method_init() {
     "MINIO_DOCKER_IMAGE"
     "MINIO_DOCKER_IMAGE_FROM"
 
+    "READONLY_MINIO_NGINX_DOCKER_HOST"
     "MINIO_NGINX_DOCKER_CONTAINER"
     "MINIO_NGINX_DOCKER_IMAGE"
     "MINIO_NGINX_DOCKER_IMAGE_FROM"
@@ -29,14 +31,16 @@ function mrcmd_plugins_minio_method_init() {
   )
 
   readonly MINIO_VARS_DEFAULT=(
-    "${APPX_ID}-s3-minio"
+    "${MINIO_DOCKER_SERVICE}"
+    "${APPX_ID}-${MINIO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}minio:2023-04-13"
     "minio/minio:RELEASE.2023-04-13T03-08-07Z.fips"
 
-    "${APPX_ID}-s3-minio-nginx"
+    "${MINIO_NGINX_DOCKER_SERVICE}"
+    "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-minio:1.23.4"
     "nginx:1.23.4-alpine3.17"
 

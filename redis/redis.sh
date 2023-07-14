@@ -9,6 +9,7 @@ function mrcmd_plugins_redis_method_init() {
   readonly REDIS_DOCKER_SERVICE="db-redis"
 
   readonly REDIS_VARS=(
+    "READONLY_REDIS_DOCKER_HOST"
     "REDIS_DOCKER_CONTAINER"
     "REDIS_DOCKER_CONTEXT_DIR"
     "REDIS_DOCKER_DOCKERFILE"
@@ -21,7 +22,8 @@ function mrcmd_plugins_redis_method_init() {
   )
 
   readonly REDIS_VARS_DEFAULT=(
-    "${APPX_ID}-db-redis"
+    "${REDIS_DOCKER_SERVICE}"
+    "${APPX_ID}-${REDIS_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
