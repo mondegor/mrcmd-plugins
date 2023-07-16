@@ -1,6 +1,11 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-07-16
+### Fixed
+- Теперь проверка, что `Docker Daemon` запущен работает и для Windows;
+- В плагине `go-migrate` исправлен меппинг `/migrations`, чтобы он работал в Windows;
+
 ## 2023-07-14
 ### Added
 - Добавлена глобальная переменная READONLY_*_DOCKER_HOST в которой хранится хост сервиса;

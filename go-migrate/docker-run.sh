@@ -13,7 +13,7 @@ function mrcmd_func_go_migrate_docker_run() {
     --env "TZ=${APPX_TZ}" \
     --network "${GO_MIGRATE_DOCKER_NETWORK}" \
     "${GO_MIGRATE_DOCKER_IMAGE}" \
-    -path=/migrations \
+    -path="$(mrcmd_os_realpath "/migrations")" \
     -database "$(mrcore_lib_get_var_value "${GO_MIGRATE_DB_URL}")" \
     "$@"
 }
