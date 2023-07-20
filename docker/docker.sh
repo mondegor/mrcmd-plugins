@@ -229,7 +229,7 @@ function mrcmd_plugins_docker_validate_daemon_required() {
   message=$(docker ps 2>&1)
 
   if [[ ${message} =~ "Is the docker daemon running?" ]] ||
-     [[ ${message} =~ "This error may indicate that the docker daemon is not running" ]]; then
+     [[ ${message} =~ "error may indicate that the docker daemon is not running" ]]; then
     mrcore_echo_error "${message}"
     mrcore_echo_sample "Run '${MRCMD_INFO_NAME} docker d-start'"
     ${EXIT_ERROR}
