@@ -92,6 +92,15 @@ function mrcmd_plugins_postgres_method_exec() {
         "${POSTGRES_DOCKER_SERVICE}"
       ;;
 
+    dump)
+      mrcmd_plugins_call_function "docker-compose/command" exec \
+        --env PGPASSWORD="${POSTGRES_DB_PASSWORD}" \
+        "${POSTGRES_DOCKER_SERVICE}" \
+        pg_dump --rows-per-insert=1024 \
+        -U "${POSTGRES_DB_USER}" \
+        -d "${POSTGRES_DB_NAME}" > "./migrations/${POSTGRES_DB_NAME}_$(date +'%Y-%m-%d-%H-%M-%S').dump.sql"
+      ;;
+
     create-db)
       mrcmd_plugins_postgres_create_db "$@"
       ;;
@@ -113,6 +122,7 @@ function mrcmd_plugins_postgres_method_help() {
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
   echo -e "  restart     Restarts postgres containers"
+  echo -e "  dump        Export db's dump to ${CC_BLUE}./migrations/${CC_END}"
   echo -e "  create-db   Create user and db"
 }
 

@@ -1,6 +1,10 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-07-22
+### Add
+- В плагин `postgres` добавлена команда экспорта БД в виде sql файла; 
+
 ## 2023-07-16
 ### Fixed
 - Теперь проверка, что `Docker Daemon` запущен работает и для Windows;
