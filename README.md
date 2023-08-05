@@ -37,6 +37,8 @@
 
 ### Другие плагины
 - `go-migrate` - Миграция БД `Docker` (https://github.com/golang-migrate/migrate#readme);
+- `kafka` - распределённый программный брокер сообщений Apache Kafka `Docker` (https://kafka.apache.org/);
+- `kafka-ui` - панель управления для Apache Kafka `Docker` (https://github.com/provectus/kafka-ui);
 - `keycloak` - Сервис аутентификации `Docker` (https://www.keycloak.org/documentation);
 - `minio` - S3 хранилище `Docker` (https://min.io/docs/);
 - `nginx` - сервер Nginx `Docker` (https://docs.nginx.com/);
@@ -45,3 +47,4 @@
 - `shellcheck` - Статический анализатор shell скриптов `Docker` (https://www.shellcheck.net/);
 - `ssh` - Набор команд для генерации `SSH` ключей и регистрации их в `SSH Agent`;
 - `vendor` - Загрузчик данных из zip архивов и git репозиториев;
+- `zookeeper` - открытая программная служба для координации распределённых систем Apache Zookeeper `Docker` (https://zookeeper.apache.org/);
