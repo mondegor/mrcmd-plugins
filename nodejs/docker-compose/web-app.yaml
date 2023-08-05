@@ -10,7 +10,7 @@ services:
       - run
       - start
     ports:
-      - ${NODEJS_WEBAPP_PUBLIC_PORT}:${NODEJS_WEBAPP_PORT}
+      - ${NODEJS_WEBAPP_PUBLIC_PORT}:3000
     volumes:
       - ${APPX_WORK_DIR}:/opt/app
     environment:

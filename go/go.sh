@@ -37,16 +37,16 @@ function mrcmd_plugins_go_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}go:1.20.3"
-    "golang:1.20.3-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}go:1.20.7"
+    "golang:1.20.7-alpine3.18"
 
     "${APPX_DIR}/golang"
     "${APPX_DIR}/.env.app"
     "./cmd/app/main.go"
 
-    "127.0.0.1:8090"
+    "127.0.0.1:8080"
     "0.0.0.0"
-    "8090"
+    "8080"
 
     "v0.8.0"
     "v0.4.3"

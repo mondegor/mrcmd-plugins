@@ -56,7 +56,7 @@ function mrcmd_plugins_mvn_method_install() {
   fi
 
   mrcmd_plugins_call_function "mvn/docker-build" --no-cache
-  mrcmd_plugins_call_function "mvn/docker-run" mvn package
+  mrcmd_plugins_call_function "mvn/docker-run" mvn clean package
 }
 
 function mrcmd_plugins_mvn_method_uninstall() {
@@ -87,7 +87,7 @@ function mrcmd_plugins_mvn_method_exec() {
       ;;
 
     package)
-      mrcmd_plugins_call_function "mvn/docker-run" mvn package
+      mrcmd_plugins_call_function "mvn/docker-run" mvn clean package
       ;;
 
     *)

@@ -1,5 +1,6 @@
 # https://quay.io/repository/keycloak/keycloak
 # https://www.keycloak.org/server/containers
+# https://www.keycloak.org/downloads
 
 function mrcmd_plugins_keycloak_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
@@ -36,8 +37,8 @@ function mrcmd_plugins_keycloak_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}keycloak-postgres:21.0"
-    "quay.io/keycloak/keycloak:21.0"
+    "${DOCKER_PACKAGE_NAME}keycloak-postgres:22.0.1"
+    "quay.io/keycloak/keycloak:22.0.1"
 
     "master"
 
@@ -46,7 +47,7 @@ function mrcmd_plugins_keycloak_method_init() {
     "POSTGRES_DB_PASSWORD" # var with value
     "POSTGRES_DB_URL_JDBC" # var with value
 
-    "127.0.0.1:3000"
+    "127.0.0.1:9986"
     "admin"
     "12345678"
   )
@@ -145,7 +146,7 @@ function mrcmd_plugins_keycloak_method_help() {
   echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${KEYCLOAK_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
   echo -e "  into                Enters to shell in the running container"
   echo -e "  logs                View output from the running container"
-  echo -e "  restart             Restarts keycloak containers"
+  echo -e "  restart             Restarts keycloak container"
   echo -e "  conf                ./bin/kc.sh show-config"
   echo -e "  realm-export        Exports realm '${CC_CYAN}${KEYCLOAK_REALM_NAME}${CC_END}' to ${CC_BLUE}./data/import${CC_END} of the container"
   echo -e "  realm-export-all    Exports all realms to ${CC_BLUE}./data/import${CC_END} of the container"

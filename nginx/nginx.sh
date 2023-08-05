@@ -1,4 +1,6 @@
 # https://hub.docker.com/_/nginx
+# https://nginx.org/en/docs/ngx_core_module.html
+# https://docs.nginx.com/nginx/admin-guide/web-server/web-server/
 
 function mrcmd_plugins_nginx_method_init() {
   readonly NGINX_CAPTION="Nginx"

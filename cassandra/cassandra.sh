@@ -1,7 +1,4 @@
 # https://hub.docker.com/_/cassandra
-# https://hub.docker.com/r/clickhouse/clickhouse-server
-# https://hub.docker.com/r/tarantool/tarantool
-# https://hub.docker.com/_/neo4j
 
 function mrcmd_plugins_cassandra_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
@@ -43,8 +40,8 @@ function mrcmd_plugins_cassandra_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}cassandra:3.11.15"
-    "cassandra:3.11.15"
+    "${DOCKER_PACKAGE_NAME}cassandra:4.1.3"
+    "cassandra:4.1.3"
 
     "127.0.0.1:9042"
     "cassandra" # user_cs
@@ -138,7 +135,7 @@ function mrcmd_plugins_cassandra_method_help() {
   echo -e "  cli         Enters to cassandra cli in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts cassandra containers"
+  echo -e "  restart     Restarts the container"
   echo -e "  create-db   Create user and db"
 }
 

@@ -27,8 +27,8 @@ function mrcmd_plugins_mysql_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}mysql:8.0.32-oracle"
-    "mysql:8.0.32-oracle"
+    "${DOCKER_PACKAGE_NAME}mysql:8.1.0-oracle"
+    "mysql:8.1.0-oracle"
 
     "127.0.0.1:3306"
     "${APPX_DB_PASSWORD:-123456}"
@@ -104,7 +104,7 @@ function mrcmd_plugins_mysql_method_help() {
   echo -e "  cli         Enters to mysql cli in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts mysql containers"
+  echo -e "  restart     Restarts the container"
 }
 
 # private

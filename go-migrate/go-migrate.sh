@@ -23,7 +23,7 @@ function mrcmd_plugins_go_migrate_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${DOCKER_PACKAGE_NAME}go-migrate:4.15.2"
-    "migrate/migrate:v4.15.2"
+    "migrate/migrate:v4.16.2"
     "${APPX_ID}-${DOCKER_COMPOSE_LOCAL_NETWORK}"
 
     "POSTGRES_DB_URL" # var with value

@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  broker-kafka-ui: # ${KAFKA_UI_DOCKER_SERVICE}
+    image: ${KAFKA_UI_DOCKER_IMAGE}
+    container_name: ${KAFKA_UI_DOCKER_CONTAINER}
+    restart: always
+    #ports:
+    #  - "${KAFKA_UI_PUBLIC_PORT}:${KAFKA_UI_WEB_PORT}"
+    environment:
+      - TZ=${APPX_TZ}
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=${KAFKA_UI_KAFKA_HOSTS_PORTS}
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=${KAFKA_UI_ZOOKEEPER_HOST_PORT}
+      - KAFKA_CLUSTERS_0_READONLY=false
+      - SERVER_PORT=${KAFKA_UI_WEB_PORT}
+      - DYNAMIC_CONFIG_ENABLED=false
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+
+  broker-kafka-ui-nginx: # ${KAFKA_UI_NGINX_DOCKER_SERVICE}
+    image: ${KAFKA_UI_NGINX_DOCKER_IMAGE}
+    container_name: ${KAFKA_UI_NGINX_DOCKER_CONTAINER}
+    restart: always
+    depends_on:
+      - broker-kafka-ui
+    ports:
+      - ${KAFKA_UI_WEB_PUBLIC_PORT}:80
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}

@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  db-zookeeper: # ${ZOOKEEPER_DOCKER_SERVICE}
+    image: ${ZOOKEEPER_DOCKER_IMAGE}
+    container_name: ${ZOOKEEPER_DOCKER_CONTAINER}
+    restart: always
+    ports:
+      - ${ZOOKEEPER_PUBLIC_PORT}:${ZOOKEEPER_CLIENT_PORT}
+    volumes:
+      - db-zookeeper-volume:/var/lib/zookeeper/data
+    environment:
+      - TZ=${APPX_TZ}
+      - ZOOKEEPER_CLIENT_PORT=${ZOOKEEPER_CLIENT_PORT}
+      - ZOOKEEPER_TICK_TIME=${ZOOKEEPER_TICK_TIME}
+      - ZOOKEEPER_SYNC_LIMIT=${ZOOKEEPER_SYNC_LIMIT}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+
+volumes:
+  db-zookeeper-volume:

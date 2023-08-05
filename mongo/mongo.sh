@@ -28,8 +28,8 @@ function mrcmd_plugins_mongo_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}mongo:6.0.5-jammy"
-    "mongo:6.0.5-jammy"
+    "${DOCKER_PACKAGE_NAME}mongo:6.0.8-jammy"
+    "mongo:6.0.8-jammy"
 
     "127.0.0.1:27017"
     "mongo"
@@ -108,7 +108,7 @@ function mrcmd_plugins_mongo_method_help() {
   echo -e "  cli         Enters to mongosh in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts mongo containers"
+  echo -e "  restart     Restarts the container"
 }
 
 # private

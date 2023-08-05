@@ -31,9 +31,9 @@ function mrcmd_plugins_php_cli_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
 
-    "${DOCKER_PACKAGE_NAME}php-cli:8.1.19"
-    "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.1.19"
-    "php:8.1.19-cli-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}php-cli:8.2.8"
+    "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.2.8"
+    "php:8.2.8-cli-alpine3.18"
 
     "${APPX_DIR}/.env.app"
 

@@ -21,8 +21,8 @@ function mrcmd_plugins_plantuml_method_init() {
   readonly PLANTUML_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}plantuml:1.2023.8"
-    "ghcr.io/plantuml/plantuml:1.2023.8"
+    "${DOCKER_PACKAGE_NAME}plantuml:1.2023.10"
+    "ghcr.io/plantuml/plantuml:1.2023.10"
 
     "${APPX_DIR}"
     ""

@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  broker-kafka: # ${KAFKA_DOCKER_SERVICE}
+    image: ${KAFKA_DOCKER_IMAGE}
+    container_name: ${KAFKA_DOCKER_CONTAINER}
+    restart: always
+    ports:
+      - ${KAFKA_PUBLIC_PORT}:9094
+    volumes:
+      - broker-kafka-volume:/var/lib/kafka/data
+    environment:
+      - TZ=${APPX_TZ}
+      - KAFKA_BROKER_ID=501
+      - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_HOST_PORT}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_INTERNAL://broker-kafka:9092,PLAINTEXT_EXTERNAL://localhost:9094
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT_INTERNAL
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+
+volumes:
+  broker-kafka-volume:

@@ -29,8 +29,8 @@ function mrcmd_plugins_postgres_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}postgres:14.7"
-    "postgres:14.7-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}postgres:15.3"
+    "postgres:15.3-alpine3.18"
 
     "127.0.0.1:5432"
     "user_pg"
@@ -121,7 +121,7 @@ function mrcmd_plugins_postgres_method_help() {
   echo -e "  cli         Enters to postgres cli in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts postgres containers"
+  echo -e "  restart     Restarts the container"
   echo -e "  dump        Export db's dump to ${CC_BLUE}./migrations/${CC_END}"
   echo -e "  create-db   Create user and db"
 }

@@ -1,4 +1,5 @@
 # https://hub.docker.com/r/minio/minio/
+# https://min.io/docs/minio/linux/index.html
 
 function mrcmd_plugins_minio_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose" "nginx")
@@ -36,15 +37,15 @@ function mrcmd_plugins_minio_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}minio:2023-04-13"
-    "minio/minio:RELEASE.2023-04-13T03-08-07Z.fips"
+    "${DOCKER_PACKAGE_NAME}minio:2023-08-04"
+    "minio/minio:RELEASE.2023-08-04T17-40-21Z.fips"
 
     "${MINIO_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-minio:1.23.4"
-    "nginx:1.23.4-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}nginx-minio:1.25.1"
+    "nginx:1.25.1-alpine3.17"
 
-    "127.0.0.1:8095"
+    "127.0.0.1:9984"
     "s3-panel.local"
     "9001"
     "admin"
@@ -52,6 +53,7 @@ function mrcmd_plugins_minio_method_init() {
   )
 
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]
+
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MINIO_DOCKER_COMPOSE_CONFIG_DIR}/s3-minio.yaml")
 }
 
@@ -106,6 +108,16 @@ function mrcmd_plugins_minio_method_exec() {
         "${MINIO_NGINX_DOCKER_SERVICE}"
       ;;
 
+    ng-into)
+      mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
+        "${MINIO_NGINX_DOCKER_SERVICE}" \
+        "${DOCKER_DEFAULT_SHELL}"
+      ;;
+
+    ng-logs)
+      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${MINIO_NGINX_DOCKER_SERVICE}"
+      ;;
+
     *)
       ${RETURN_UNKNOWN_COMMAND}
       ;;
@@ -122,7 +134,9 @@ function mrcmd_plugins_minio_method_help() {
   echo -e "  cli         Enters to minio cli in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts minio containers"
+  echo -e "  restart     Restart minio and nginx containers"
+  echo -e "  ng-into     Enters to shell in the running nginx container"
+  echo -e "  ng-logs     View output from the running nginx container"
 }
 
 # private

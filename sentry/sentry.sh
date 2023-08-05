@@ -1,4 +1,6 @@
 # https://github.com/getsentry/self-hosted/releases
+# https://docs.sentry.io/platforms/
+# https://www.youtube.com/watch?v=ywgZZIpea04
 
 function mrcmd_plugins_sentry_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "vendor")
@@ -19,10 +21,10 @@ function mrcmd_plugins_sentry_method_init() {
   )
 
   readonly SENTRY_VARS_DEFAULT=(
-    "https://github.com/getsentry/self-hosted/archive/refs/tags/23.4.0.zip"
+    "https://github.com/getsentry/self-hosted/archive/refs/tags/23.7.2.zip"
     "${APPX_WORK_DIR}/.env.custom"
 
-    "127.0.0.1:9050"
+    "127.0.0.1:9980"
 
     "90"
     "false"

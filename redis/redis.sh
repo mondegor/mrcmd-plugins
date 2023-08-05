@@ -27,8 +27,8 @@ function mrcmd_plugins_redis_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}redis:7.0.10"
-    "redis:7.0.10-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}redis:7.0.12"
+    "redis:7.0.12-alpine3.18"
 
     "127.0.0.1:6379"
     "123456"
@@ -100,7 +100,7 @@ function mrcmd_plugins_redis_method_help() {
   echo -e "  cli         Enters to redis-cli in a container of the image"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
-  echo -e "  restart     Restarts redis containers"
+  echo -e "  restart     Restarts the container"
 }
 
 # private
