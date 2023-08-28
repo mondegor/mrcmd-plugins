@@ -23,7 +23,7 @@ function mrcmd_plugins_mvn_method_init() {
   readonly MVN_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}mvn:3.8.5-openjdk-17-slim"
+    "${DOCKER_PACKAGE_NAME}mvn:3.8.5-17"
     "maven:3.8.5-openjdk-17-slim"
 
     "${APPX_DIR}/.m2"

@@ -120,5 +120,3 @@ RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
       && groupmod -o -g ${HOST_GROUP_ID} www-data \
       && usermod -o -u ${HOST_USER_ID} -g www-data www-data; \
     fi;
-
-#EXPOSE 9000

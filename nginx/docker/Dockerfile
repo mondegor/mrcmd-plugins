@@ -12,10 +12,10 @@ RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
       apk add --no-cache ${DEFAULT_SHELL}; \
     fi;
 
-COPY nginx.${SERVICE_TYPE}.template.conf /etc/nginx/nginx.template.conf
+COPY nginx.${SERVICE_TYPE}.template.conf /etc/nginx/nginx.conf.template
 
 RUN envsubst "\${SERVICE_DOMAIN},\${SERVICE_HOST},\${SERVICE_PORT}" \
-        < /etc/nginx/nginx.template.conf \
+        < /etc/nginx/nginx.conf.template \
         > /etc/nginx/nginx.conf
 
 WORKDIR /opt/app/public

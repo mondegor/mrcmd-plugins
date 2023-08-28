@@ -22,7 +22,7 @@ function mrcmd_plugins_go_migrate_method_init() {
   readonly GO_MIGRATE_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}go-migrate:4.15.2"
+    "${DOCKER_PACKAGE_NAME}go-migrate:4.16.2"
     "migrate/migrate:v4.16.2"
     "${APPX_ID}-${DOCKER_COMPOSE_LOCAL_NETWORK}"
 

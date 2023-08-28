@@ -8,4 +8,3 @@ https://github.com/golang-migrate/migrate/tree/master/database/mongodb
 https://github.com/golang-migrate/migrate/tree/master/database/clickhouse
 https://github.com/golang-migrate/migrate/tree/master/database/cassandra
 https://github.com/golang-migrate/migrate/tree/master/database/neo4j
-https://github.com/golang-migrate/migrate/tree/master/database/sqlite

@@ -14,10 +14,10 @@ RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
 
 WORKDIR /opt/redis
 
-COPY redis.template.conf /etc/redis/redis.template.conf
+COPY redis.template.conf /etc/redis/redis.conf.template
 
 RUN envsubst "\${REDIS_PASSWORD}" \
-        < /etc/redis/redis.template.conf \
+        < /etc/redis/redis.conf.template \
         > /etc/redis/redis.conf
 
 COPY run.sh ./

@@ -38,8 +38,8 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}kafka-ui:69ebd3"
-    "provectuslabs/kafka-ui:69ebd3d52b2065ef970063d92d36aa2684ecf289"
+    "${DOCKER_PACKAGE_NAME}kafka-ui:333eae"
+    "provectuslabs/kafka-ui:333eae24759aaa7b3fc14e5e7dea232200c13dcd"
 
     "broker-kafka:9092" # ${KAFKA_DOCKER_SERVICE} or broker-kafka1:9092,broker-kafka2:9092
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}

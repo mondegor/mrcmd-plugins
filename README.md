@@ -1,4 +1,4 @@
-# Plugins for Mrcmd Tool v0.7.0
+# Plugins for Mrcmd Tool v0.8.0
 Этот репозиторий содержит базовые плагины для [Mrcmd Tool](https://github.com/mondegor/mrcmd).
 
 ## Статус проекта
@@ -33,12 +33,16 @@
 - `mongo` - база данных MongoDB `Docker` (https://www.mongodb.com/docs/);
 - `mysql` - база данных Mysql `Docker` (https://dev.mysql.com/doc/);
 - `postgres` - база данных Postgres `Docker` (https://www.postgresql.org/docs/);
-- `redis` - хранилище данных Redis `Docker` (https://redis.io/docs/);
+- `redis` - хранилище данных типа ключ-значение Redis `Docker` (https://redis.io/docs/);
+
+### Брокеры сообщений
+- `kafka` - распределённый программный брокер сообщений Apache Kafka `Docker` (https://kafka.apache.org/);
+    - `kafka-ui` - панель управления для Apache Kafka `Docker` (https://github.com/provectus/kafka-ui);
+    - `zookeeper` - открытая программная служба для координации распределённых систем Apache Zookeeper `Docker` (https://zookeeper.apache.org/);
+- `rabbitmq` - программный брокер сообщений RabbitMQ на основе стандарта AMQP `Docker` (https://www.rabbitmq.com/);
 
 ### Другие плагины
 - `go-migrate` - Миграция БД `Docker` (https://github.com/golang-migrate/migrate#readme);
-- `kafka` - распределённый программный брокер сообщений Apache Kafka `Docker` (https://kafka.apache.org/);
-- `kafka-ui` - панель управления для Apache Kafka `Docker` (https://github.com/provectus/kafka-ui);
 - `keycloak` - Сервис аутентификации `Docker` (https://www.keycloak.org/documentation);
 - `minio` - S3 хранилище `Docker` (https://min.io/docs/);
 - `nginx` - сервер Nginx `Docker` (https://docs.nginx.com/);
@@ -47,4 +51,3 @@
 - `shellcheck` - Статический анализатор shell скриптов `Docker` (https://www.shellcheck.net/);
 - `ssh` - Набор команд для генерации `SSH` ключей и регистрации их в `SSH Agent`;
 - `vendor` - Загрузчик данных из zip архивов и git репозиториев;
-- `zookeeper` - открытая программная служба для координации распределённых систем Apache Zookeeper `Docker` (https://zookeeper.apache.org/);

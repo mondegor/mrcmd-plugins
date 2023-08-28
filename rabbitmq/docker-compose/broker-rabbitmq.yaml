@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  broker-rabbitmq: # ${RABBITMQ_DOCKER_SERVICE}
+    image: ${RABBITMQ_DOCKER_IMAGE}
+    container_name: ${RABBITMQ_DOCKER_CONTAINER}
+    hostname: ${READONLY_RABBITMQ_DOCKER_HOST} # ${RABBITMQ_DOCKER_SERVICE}
+    restart: always
+    ports:
+      - ${RABBITMQ_PUBLIC_PORT}:5672
+      - ${RABBITMQ_WEB_PUBLIC_PORT}:15672
+    volumes:
+      - broker-rabbitmq-volume:/var/lib/rabbitmq
+    environment:
+      - TZ=${APPX_TZ}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+
+volumes:
+  broker-rabbitmq-volume:
