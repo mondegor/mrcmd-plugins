@@ -12,7 +12,7 @@ services:
     restart: always
     #ports:
     #  - 127.0.0.1:9000:9000
-    #  - 127.0.0.1:9001:${MINIO_WEB_PORT}
+    #  - 127.0.0.1:${MINIO_WEB_PORT}:${MINIO_WEB_PORT}
     volumes:
       - s3-minio-volume:/data
     environment:
@@ -21,6 +21,11 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_WEB_ADMIN_PASSWORD}
     networks:
       - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
 
   s3-minio-nginx: # ${MINIO_NGINX_DOCKER_SERVICE}
     image: ${MINIO_NGINX_DOCKER_IMAGE}

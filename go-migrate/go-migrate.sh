@@ -57,6 +57,10 @@ function mrcmd_plugins_go_migrate_method_exec() {
       mrcmd_plugins_go_migrate_docker_build "$@"
       ;;
 
+    init)
+      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql -seq init
+      ;;
+
     up)
       mrcmd_plugins_call_function "go-migrate/docker-run" up
       ;;
@@ -65,8 +69,10 @@ function mrcmd_plugins_go_migrate_method_exec() {
       mrcmd_plugins_call_function "go-migrate/docker-run" down 1
       ;;
 
-    init)
-      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql -seq init
+    force)
+      local migrationVersion="${1-}"
+      mrcore_validate_value_required "Argument 'version'" "${migrationVersion}"
+      mrcmd_plugins_call_function "go-migrate/docker-run" force "${migrationVersion}"
       ;;
 
     create)
@@ -84,9 +90,10 @@ function mrcmd_plugins_go_migrate_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
   echo -e "  docker-build        Builds or rebuilds the image ${CC_GREEN}${GO_MIGRATE_DOCKER_IMAGE}${CC_END}"
-  echo -e "  up                  Run migrations UP"
   echo -e "  init                Run migrations INIT"
+  echo -e "  up                  Run migrations UP"
   echo -e "  down                Rollback migrations against non test DB"
+  echo -e "  force [version]     Set migration version"
   echo -e "  create              Create a DB migration files e.g 'make migrate-create name=migration-name'"
 }
 

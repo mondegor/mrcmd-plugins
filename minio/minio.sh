@@ -155,7 +155,7 @@ function mrcmd_plugins_minio_nginx_docker_build() {
   mrcmd_plugins_call_function "nginx/build-image" \
     "${MINIO_NGINX_DOCKER_IMAGE}" \
     "${MINIO_NGINX_DOCKER_IMAGE_FROM}" \
-    "web-app" \
+    "web-minio" \
     "${MINIO_WEB_DOMAIN}" \
     "${MINIO_DOCKER_SERVICE}" \
     "${MINIO_WEB_PORT}" \
