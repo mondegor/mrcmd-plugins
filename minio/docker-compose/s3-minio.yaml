@@ -10,15 +10,15 @@ services:
       - --console-address
       - ":${MINIO_WEB_PORT}"
     restart: always
-    #ports:
-    #  - 127.0.0.1:9000:9000
+    ports:
+      - ${MINIO_API_PUBLIC_PORT}:9000
     #  - 127.0.0.1:${MINIO_WEB_PORT}:${MINIO_WEB_PORT}
     volumes:
       - s3-minio-volume:/data
     environment:
       - TZ=${APPX_TZ}
-      - MINIO_ROOT_USER=${MINIO_WEB_ADMIN_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_WEB_ADMIN_PASSWORD}
+      - MINIO_ROOT_USER=${MINIO_API_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_API_PASSWORD}
     networks:
       - ${DOCKER_COMPOSE_LOCAL_NETWORK}
     healthcheck:

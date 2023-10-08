@@ -24,11 +24,13 @@ function mrcmd_plugins_minio_method_init() {
     "MINIO_NGINX_DOCKER_IMAGE"
     "MINIO_NGINX_DOCKER_IMAGE_FROM"
 
+    "MINIO_API_PUBLIC_PORT"
+    "MINIO_API_USER"
+    "MINIO_API_PASSWORD"
+
     "MINIO_WEB_PUBLIC_PORT"
     "MINIO_WEB_DOMAIN"
     "MINIO_WEB_PORT"
-    "MINIO_WEB_ADMIN_USER"
-    "MINIO_WEB_ADMIN_PASSWORD"
   )
 
   readonly MINIO_VARS_DEFAULT=(
@@ -45,11 +47,13 @@ function mrcmd_plugins_minio_method_init() {
     "${DOCKER_PACKAGE_NAME}nginx-minio:1.25.1"
     "nginx:1.25.1-alpine3.17"
 
+    "127.0.0.1:9000"
+    "admin"
+    "12345678"
+
     "127.0.0.1:9984"
     "s3-panel.local"
     "9001"
-    "admin"
-    "12345678"
   )
 
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]

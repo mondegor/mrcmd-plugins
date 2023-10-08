@@ -1,6 +1,17 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-10-09
+### Added
+- Добавлена `MINIO_API_PUBLIC_PORT` для задания внешнего порта API;
+
+### Changed
+- `MINIO_WEB_ADMIN_USER` -> `MINIO_API_USER`;
+- `MINIO_WEB_ADMIN_PASSWORD` -> `MINIO_API_PASSWORD`;
+
+### Fixed
+- Проброшен внешний порт `MINIO_API_PUBLIC_PORT` из порта 9000 в докере;
+
 ## 2023-09-20
 ### Added
 - Добавлены `proxy_set_header` в `nginx` шаблоны;
