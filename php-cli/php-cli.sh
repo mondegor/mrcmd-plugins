@@ -17,6 +17,7 @@ function mrcmd_plugins_php_cli_method_init() {
     "PHP_CLI_APP_ENV_FILE"
 
     "PHP_CLI_TOOLS_INSTALL_BASE" # phive, composer, false
+    "PHP_CLI_TOOLS_INSTALL_COMPOSER_SETUP_HASH"
     "PHP_CLI_TOOLS_INSTALL_COMPOSER_VERSION"
     "PHP_CLI_TOOLS_INSTALL_PHPUNIT_VERSION"
     "PHP_CLI_TOOLS_INSTALL_PHAN_VERSION"
@@ -38,6 +39,7 @@ function mrcmd_plugins_php_cli_method_init() {
     "${APPX_DIR}/.env.app"
 
     "composer" # phive, composer, false
+    "e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02" # composer setup hash
     "2.5.5" # !!!!!!!!!! not *
     "false" # "9.6.5"
     "false" # "5.4.2"
@@ -119,7 +121,7 @@ function mrcmd_plugins_php_cli_method_exec() {
 
 function mrcmd_plugins_php_cli_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
-  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${JAVA_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
+  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${PHP_CLI_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
   echo -e "  docker-build        Builds or rebuilds the image"
   echo -e "  cmd [arguments]     Runs 'php [arguments]' in a container of the image"
   echo -e "  shell               Exec shell in a container of the image"
@@ -154,6 +156,7 @@ function mrcmd_plugins_php_cli_docker_build() {
     "${PHP_CLI_DOCKER_IMAGE}" \
     "${PHP_CLI_DOCKER_IMAGE_FROM}" \
     --build-arg "INSTALL_BASE_TOOL=${PHP_CLI_TOOLS_INSTALL_BASE}" \
+    --build-arg "COMPOSER_SETUP_HASH=${PHP_CLI_TOOLS_INSTALL_COMPOSER_SETUP_HASH}" \
     --build-arg "COMPOSER_VERSION=${PHP_CLI_TOOLS_INSTALL_COMPOSER_VERSION}" \
     "$@"
 }

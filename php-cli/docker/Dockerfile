@@ -3,6 +3,7 @@ ARG DOCKER_IMAGE_FROM
 FROM ${DOCKER_IMAGE_FROM}
 
 ARG INSTALL_BASE_TOOL
+ARG COMPOSER_SETUP_HASH
 ARG COMPOSER_VERSION
 
 RUN apk add --no-cache git
@@ -20,7 +21,7 @@ RUN if [[ "${INSTALL_BASE_TOOL}" == "phive" ]]; then \
       && rm -R .phive; \
     elif [[ "${INSTALL_BASE_TOOL}" == "composer" ]]; then \
       php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-      && php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+      && php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_SETUP_HASH}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
       && php composer-setup.php --version=${COMPOSER_VERSION} \
       && php -r "unlink('composer-setup.php');" \
       && chmod +x composer.phar \

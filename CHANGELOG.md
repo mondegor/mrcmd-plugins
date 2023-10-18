@@ -1,6 +1,14 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-10-18
+### Added
+- Для плагина `php-cli` добавлена `COMPOSER_SETUP_HASH` в которой должна содержаться актуальная hash сумма `composer-setup.php`;
+
+### Fixed
+- В плагине `php-cli` переименована  `JAVA_DOCKER_IMAGE` -> `PHP_CLI_DOCKER_IMAGE` для задания внешнего порта API;
+- В плагине `php-cli` устранена ошибка возникающая при сборке образа: "Could not open input file: composer-setup.php", для этого добавлена `COMPOSER_SETUP_HASH` с актуальным hash;
+
 ## 2023-10-09
 ### Added
 - Добавлена `MINIO_API_PUBLIC_PORT` для задания внешнего порта API;
