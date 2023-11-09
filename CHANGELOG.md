@@ -1,6 +1,13 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-11-09
+### Added
+- Добавлена библиотека openapi-lib.sh для сборки OpenAPI документации из её фрагментов;
+
+### Fixed
+- Поправлено условие проверки индекса;
+
 ## 2023-10-18
 ### Added
 - Для плагина `php-cli` добавлена `COMPOSER_SETUP_HASH` в которой должна содержаться актуальная hash сумма `composer-setup.php`;

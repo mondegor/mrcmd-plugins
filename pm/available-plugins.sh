@@ -22,7 +22,7 @@ function mrcmd_func_pm_available_plugins() {
     dirIndex=${MRCMD_PLUGINS_AVAILABLE_DIRS_ARRAY[${i}]}
     pluginsDir="${MRCMD_PLUGINS_DIR_ARRAY[${dirIndex}]}"
 
-    if [[ ${i} -eq 0 ]] && [[ ${MRCMD_PLUGINS_DIR_INDEX_SHARED} -eq ${dirIndex} ]]; then
+    if [ ${i} -eq 0 ] && [ ${MRCMD_PLUGINS_DIR_INDEX_SHARED} -eq ${dirIndex} ]; then
       echo -e "${CC_YELLOW}Available shared plugins:${CC_END}"
       echo ""
     fi
