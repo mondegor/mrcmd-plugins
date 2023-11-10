@@ -12,7 +12,7 @@ function openapi_lib_build_apidoc() {
   mrcore_validate_dir_required "Yaml source dir" "${srcDir}"
 
   if [ -n "${moduleName}" ]; then
-    fileNamePostfix="${moduleName//[\/_]/-}${fileNamePostfix}"
+    fileNamePostfix="${moduleName//[\/_]/-}-${fileNamePostfix}"
     moduleName="/${moduleName}"
   fi
 
