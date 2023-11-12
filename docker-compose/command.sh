@@ -12,7 +12,7 @@ function mrcmd_func_docker_compose_command() {
 
   for configFile in "${DOCKER_COMPOSE_CONFIG_FILES_ARRAY[@]}"
   do
-    if [ "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" != "${configFile}" ]; then
+    if [[ "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" != "${configFile}" ]]; then
       configFiles="${configFiles}${CMD_SEPARATOR}-f${CMD_SEPARATOR}${configFile}"
     fi
   done

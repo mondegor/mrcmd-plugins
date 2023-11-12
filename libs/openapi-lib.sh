@@ -5,44 +5,39 @@ function openapi_lib_build_apidoc() {
   local sharedDir="${3:?}"
   local assemblyDir="${4:?}"
   local sectionName="${5:?}"
-  local moduleName="${6:-}"
-  local fileNamePrefix="${7:-}"
-  local fileNamePostfix="${8:-}"
+  local fileNamePrefix="${6:-}"
+  local fileNamePostfix="${7:-}"
 
-  mrcore_validate_dir_required "Yaml source dir" "${srcDir}"
-
-  if [ -n "${moduleName}" ]; then
-    fileNamePostfix="${moduleName//[\/_]/-}-${fileNamePostfix}"
-    moduleName="/${moduleName}"
-  fi
+  mrcore_validate_dir_required "OpenAPI source dir" "${srcDir}"
 
   if [ -z "${fileNamePostfix}" ]; then
     fileNamePostfix="full"
   fi
 
-  openapi_lib_create_yaml_file \
+  openapi_lib_build_apidoc_file \
     "${functionName}" \
-    "${srcDir}/${sectionName}${moduleName}" \
+    "${srcDir}/${sectionName}" \
     "${sharedDir}" \
     "${assemblyDir}" \
     "${sectionName}/${fileNamePrefix}${fileNamePostfix}.yaml"
 }
 
-function openapi_lib_create_yaml_file() {
+function openapi_lib_build_apidoc_file() {
   local functionName="${1:?}"
   local sectionDir="${2:?}"
   local sharedDir="${3:?}"
   local assemblyDir="${4:?}"
   local destFilePath="${5:?}"
 
-  mrcore_validate_dir_required "Yaml section dir" "${sectionDir}"
-  mrcore_validate_dir_required "Yaml shared dir" "${sharedDir}"
-  mrcore_validate_dir_required "Yaml assembly dir" "${assemblyDir}"
+  mrcore_validate_dir_required "OpenAPI section dir" "${sectionDir}"
+  mrcore_validate_dir_required "OpenAPI shared dir" "${sharedDir}"
+  mrcore_validate_dir_required "OpenAPI assembly dir" "${assemblyDir}"
 
   OPENAPI_HEAD_PATH=""
   OPENAPI_SERVERS=()
   OPENAPI_TAGS=()
   OPENAPI_PATHS=()
+  OPENAPI_COMPONENTS_HEADERS=()
   OPENAPI_COMPONENTS_PARAMETERS=()
   OPENAPI_COMPONENTS_SCHEMAS=()
   OPENAPI_COMPONENTS_RESPONSES=()
@@ -51,30 +46,32 @@ function openapi_lib_create_yaml_file() {
   mrcore_lib_mkdir "$(dirname "${assemblyDir}/${destFilePath}")"
   mrcmd_plugins_call_function "${functionName}" "${sectionDir}" "${sharedDir}"
 
-  openapi_lib_render_yaml_file \
+  openapi_lib_render_apidoc_file \
     "${functionName}" \
     "${assemblyDir}/${destFilePath}" \
     "${OPENAPI_HEAD_PATH}" \
     OPENAPI_SERVERS[@] \
     OPENAPI_TAGS[@] \
     OPENAPI_PATHS[@] \
+    OPENAPI_COMPONENTS_HEADERS[@] \
     OPENAPI_COMPONENTS_PARAMETERS[@] \
     OPENAPI_COMPONENTS_SCHEMAS[@] \
     OPENAPI_COMPONENTS_RESPONSES[@] \
     OPENAPI_SECURITY_SCHEMES[@]
 }
 
-function openapi_lib_render_yaml_file() {
+function openapi_lib_render_apidoc_file() {
   local functionName="${1:?}"
   local destFilePath="${2:?}"
   local headPath="${3:?}"
   local servers=("${!4-}")
   local tags=("${!5-}")
   local paths=("${!6-}")
-  local componentsParameters=("${!7-}")
-  local componentsSchemas=("${!8-}")
-  local componentsResponses=("${!9-}")
-  local securitySchemes=("${!10-}")
+  local componentsHeaders=("${!7-}")
+  local componentsParameters=("${!8-}")
+  local componentsSchemas=("${!9-}")
+  local componentsResponses=("${!10-}")
+  local securitySchemes=("${!11-}")
 
   mrcore_echo_sample "Run: ${functionName}.sh -> ${destFilePath}"
 
@@ -99,6 +96,11 @@ function openapi_lib_render_yaml_file() {
   fi
 
   echo -e "\n\ncomponents:" >> "${destFilePath}"
+
+  if ! mrcore_lib_is_array_empty componentsHeaders[@] ; then
+    echo -e "\n  headers:" >> "${destFilePath}"
+    openapi_lib_render_file_list componentsHeaders[@] "${destFilePath}" 4;
+  fi
 
   if ! mrcore_lib_is_array_empty componentsParameters[@] ; then
     echo -e "\n  parameters:" >> "${destFilePath}"

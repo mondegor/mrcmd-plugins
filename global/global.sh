@@ -66,22 +66,3 @@ function mrcmd_plugins_global_method_help() {
   echo -e "              https://man7.org/linux/man-pages/man7/capabilities.7.html"
   echo -e "  chown       sudo chown -R ${HOST_USER_ID}:${HOST_GROUP_ID} ${APPX_DIR}"
 }
-
-#
-#function mrcmd_plugins_global_db_url_init() {
-#  case "${APPX_DB_TYPE}" in
-#
-#    postgres)
-#      APPX_DB_URL="postgres://${APPX_DB_USER}:${APPX_DB_PASSWORD}@${APPX_DB_HOST}:${APPX_DB_PORT}/${APPX_DB_NAME}?sslmode=disable"
-#      ;;
-#
-#    mysql)
-#      APPX_DB_URL="mysql://${APPX_DB_USER}:${APPX_DB_PASSWORD}@tcp(${APPX_DB_HOST}:${APPX_DB_PORT})/${APPX_DB_NAME}"
-#      ;;
-#
-#    mongodb)
-#      APPX_DB_URL="mongodb://${APPX_DB_USER}:${APPX_DB_PASSWORD}@${APPX_DB_HOST}:${APPX_DB_PORT}/${APPX_DB_NAME}"
-#      ;;
-#
-#  esac
-#}

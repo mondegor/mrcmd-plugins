@@ -37,6 +37,7 @@ function mrcmd_plugins_mongo_method_init() {
   )
 
   mrcore_dotenv_init_var_array MONGO_VARS[@] MONGO_VARS_DEFAULT[@]
+  mrcmd_plugins_mongo_db_url_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MONGO_DOCKER_COMPOSE_CONFIG_DIR}/db-mongo.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MONGO_DOCKER_COMPOSE_CONFIG_DIR}/db-mongo-init.yaml")
@@ -109,6 +110,11 @@ function mrcmd_plugins_mongo_method_help() {
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
   echo -e "  restart     Restarts the container"
+}
+
+function mrcmd_plugins_mongo_db_url_init() {
+  readonly MONGO_DB_URL="mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DOCKER_SERVICE}:27017/${MONGO_DB_NAME}"
+  readonly MONGO_DB_URL_JDBC="jdbc:mongo://${MONGO_DOCKER_SERVICE}:27017/${MONGO_DB_NAME}"
 }
 
 # private

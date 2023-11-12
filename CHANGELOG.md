@@ -1,6 +1,14 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-11-12
+### Added
+- Добавлены переменные `MYSQL_DB_URL`, `MYSQL_DB_URL_JDBC`, `MONGO_DB_URL`, `MONGO_DB_URL_JDBC`;
+
+### Changed
+- Доработана библиотека `openapi-lib.sh` (добавлена поддержка headers, удалено понятие module);
+- Условия if приведены к единому стилю;
+
 ## 2023-11-10
 ### Changed
 - В `openapi-lib.sh` при формировании имени файла добавлено "-" после имени модуля;

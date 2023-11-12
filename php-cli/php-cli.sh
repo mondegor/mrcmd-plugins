@@ -40,7 +40,7 @@ function mrcmd_plugins_php_cli_method_init() {
 
     "composer" # phive, composer, false
     "e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02" # composer setup hash
-    "2.5.5" # !!!!!!!!!! not *
+    "2.5.5" # WARNING: not *
     "false" # "9.6.5"
     "false" # "5.4.2"
     "false" # "5.9.0"
@@ -63,6 +63,7 @@ function mrcmd_plugins_php_cli_method_export_config() {
 }
 
 function mrcmd_plugins_php_cli_method_install() {
+  mrcore_lib_mkdir "${APPX_WORK_DIR}/logs"
   #mrcore_lib_mkdir "${APPX_WORK_DIR}/vendor"
   #mrcore_lib_mkdir "${APPX_WORK_DIR}/var"
 
@@ -127,7 +128,7 @@ function mrcmd_plugins_php_cli_method_help() {
   echo -e "  shell               Exec shell in a container of the image"
   echo -e "  install-tools       Downloads and installs the selected tools to ${CC_BLUE}${APPX_WORK_DIR}/vendor/bin${CC_END}"
   echo -e ""
-  echo -e "${CC_YELLOW}PHP tools:${CC_END}"
+  echo -e "${CC_YELLOW}PHP tools (${CC_RED}only if installed${CC_YELLOW}):${CC_END}"
   echo -e "  composer            Tool for dependency management in PHP"
   echo -e "  phan                Static analyzer that prefers to minimize false-positives"
   echo -e "  php-cs-fixer        Designed to automatically fix PHP coding standards issues"

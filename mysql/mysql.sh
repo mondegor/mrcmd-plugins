@@ -35,6 +35,7 @@ function mrcmd_plugins_mysql_method_init() {
   )
 
   mrcore_dotenv_init_var_array MYSQL_VARS[@] MYSQL_VARS_DEFAULT[@]
+  mrcmd_plugins_mysql_db_url_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql-init.yaml")
@@ -105,6 +106,12 @@ function mrcmd_plugins_mysql_method_help() {
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
   echo -e "  restart     Restarts the container"
+}
+
+# private
+function mrcmd_plugins_mysql_db_url_init() {
+  readonly MYSQL_DB_URL="mysql://${MYSQL_DB_USER}:${MYSQL_DB_PASSWORD}@tcp${MYSQL_DOCKER_SERVICE}:3306/${MYSQL_DB_NAME}"
+  readonly MYSQL_DB_URL_JDBC="jdbc:mysql://${MYSQL_DOCKER_SERVICE}:3306/${MYSQL_DB_NAME}"
 }
 
 # private
