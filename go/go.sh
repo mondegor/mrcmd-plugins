@@ -37,8 +37,8 @@ function mrcmd_plugins_go_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}go:1.20.7"
-    "golang:1.20.7-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}go:1.21.4"
+    "golang:1.21.4-alpine3.18"
 
     "${APPX_DIR}/golang"
     "${APPX_DIR}/.env.app"
@@ -176,6 +176,7 @@ function mrcmd_plugins_go_method_help() {
   echo -e "                      and removing unreferenced ones"
   echo -e "  staticcheck         Contains analyzes that find bugs and performance issues"
   echo -e "  errcheck            Program for checking for unchecked errors in Go code"
+  echo -e "  gofmt               Formatter for Go source code"
   echo -e "  golint              Linter for Go source code"
 }
 

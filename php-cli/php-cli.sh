@@ -32,22 +32,22 @@ function mrcmd_plugins_php_cli_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
 
-    "${DOCKER_PACKAGE_NAME}php-cli:8.2.8"
-    "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.2.8"
-    "php:8.2.8-cli-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}php-cli:8.2.11"
+    "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.2.11"
+    "php:8.2.11-cli-alpine3.18"
 
     "${APPX_DIR}/.env.app"
 
     "composer" # phive, composer, false
     "e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02" # composer setup hash
     "2.5.5" # WARNING: not *
-    "false" # "9.6.5"
+    "false" # "10.4.2"
     "false" # "5.4.2"
-    "false" # "5.9.0"
-    "false" # "1.10.13"
+    "false" # "5.15.0"
+    "false" # "1.10.42"
     "false" # "3.7.2"
     "false" # "3.7.2"
-    "false" # "3.16.0"
+    "false" # "3.38.2"
   )
 
   mrcore_dotenv_init_var_array PHP_CLI_VARS[@] PHP_CLI_VARS_DEFAULT[@]

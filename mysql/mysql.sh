@@ -27,8 +27,8 @@ function mrcmd_plugins_mysql_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}mysql:8.1.0"
-    "mysql:8.1.0-oracle"
+    "${DOCKER_PACKAGE_NAME}mysql:8.2.0"
+    "mysql:8.2.0-oracle"
 
     "127.0.0.1:3306"
     "${APPX_DB_PASSWORD:-123456}"

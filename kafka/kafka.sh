@@ -30,8 +30,8 @@ function mrcmd_plugins_kafka_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}kafka:7.4.1"
-    "confluentinc/cp-kafka:7.4.1"
+    "${DOCKER_PACKAGE_NAME}kafka:7.4.3"
+    "confluentinc/cp-kafka:7.4.3"
 
     "127.0.0.1:9094"
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}

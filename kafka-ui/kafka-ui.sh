@@ -38,16 +38,16 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}kafka-ui:333eae"
-    "provectuslabs/kafka-ui:333eae24759aaa7b3fc14e5e7dea232200c13dcd"
+    "${DOCKER_PACKAGE_NAME}kafka-ui:53a655"
+    "provectuslabs/kafka-ui:53a6553765a806eda9905c43bfcfe09da6812035"
 
     "broker-kafka:9092" # ${KAFKA_DOCKER_SERVICE} or broker-kafka1:9092,broker-kafka2:9092
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}
 
     "${KAFKA_UI_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${KAFKA_UI_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-kafka-ui:1.25.1"
-    "nginx:1.25.1-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}nginx-kafka-ui:1.25.3"
+    "nginx:1.25.3-alpine3.18"
 
     "127.0.0.1:9982"
     "kafka-panel.local"

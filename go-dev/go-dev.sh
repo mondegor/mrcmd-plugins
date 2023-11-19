@@ -23,12 +23,12 @@ function mrcmd_plugins_go_dev_method_init() {
     ""
     "./cmd/app/main.go"
 
-    "v0.8.0"
-    "v0.4.3"
+    "v0.15.0"
+    "v0.4.6"
     "v1.6.3"
     "v0.0.0-20210508222113-6edffad5e616"
-    "v1.28"
-    "v1.2"
+    "v1.31"
+    "v1.3"
   )
 
   if [ -n "${GOPATH-}" ] && [ -d "${GOPATH}" ]; then
@@ -115,6 +115,7 @@ function mrcmd_plugins_go_dev_method_help() {
   echo -e "                      and removing unreferenced ones."
   echo -e "  staticcheck         Contains analyzes that find bugs and performance issues."
   echo -e "  errcheck            Program for checking for unchecked errors in Go code."
+  echo -e "  gofmt               Formatter for Go source code"
   echo -e "  golint              Linter for Go source code."
 }
 

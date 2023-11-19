@@ -30,8 +30,8 @@ function mrcmd_plugins_zookeeper_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}zookeeper:7.4.1"
-    "confluentinc/cp-zookeeper:7.4.1"
+    "${DOCKER_PACKAGE_NAME}zookeeper:7.4.3"
+    "confluentinc/cp-zookeeper:7.4.3"
 
     "127.0.0.1:2181"
     "2181"

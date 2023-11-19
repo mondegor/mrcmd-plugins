@@ -28,8 +28,8 @@ function mrcmd_plugins_mongo_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}mongo:6.0.8"
-    "mongo:6.0.8-jammy"
+    "${DOCKER_PACKAGE_NAME}mongo:6.0.11"
+    "mongo:6.0.11-jammy"
 
     "127.0.0.1:27017"
     "mongo"

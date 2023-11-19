@@ -30,8 +30,8 @@ function mrcmd_plugins_rabbitmq_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}rabbitmq:3.9.29"
-    "rabbitmq:3.9.29-management-alpine"
+    "${DOCKER_PACKAGE_NAME}rabbitmq:3.12.9"
+    "rabbitmq:3.12.9-management-alpine"
 
     "127.0.0.1:5672"
     "admin"

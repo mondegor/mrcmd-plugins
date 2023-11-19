@@ -28,8 +28,8 @@ function mrcmd_plugins_nodejs_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}node:20.5.0"
-    "node:20.5.0-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}node:21.2.0"
+    "node:21.2.0-alpine3.18"
 
     "127.0.0.1:3000"
 

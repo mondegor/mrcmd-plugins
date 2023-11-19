@@ -1,6 +1,11 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2023-11-19
+### Changed
+- Обновлены версии докер образов и zip архивов для большинства плагинов;
+- Обновлён `.editorconfig`;
+
 ## 2023-11-12
 ### Added
 - Добавлены переменные `MYSQL_DB_URL`, `MYSQL_DB_URL_JDBC`, `MONGO_DB_URL`, `MONGO_DB_URL_JDBC`;

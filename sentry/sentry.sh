@@ -21,7 +21,7 @@ function mrcmd_plugins_sentry_method_init() {
   )
 
   readonly SENTRY_VARS_DEFAULT=(
-    "https://github.com/getsentry/self-hosted/archive/refs/tags/23.7.2.zip"
+    "https://github.com/getsentry/self-hosted/archive/refs/tags/23.11.0.zip"
     "${APPX_WORK_DIR}/.env.custom"
 
     "127.0.0.1:9980"

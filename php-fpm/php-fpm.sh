@@ -44,13 +44,13 @@ function mrcmd_plugins_php_fpm_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}php-fpm:8.2.8"
-    "${DOCKER_PACKAGE_NAME}php-fpm-alpine:8.2.8"
-    "php:8.2.8-fpm-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}php-fpm:8.2.11"
+    "${DOCKER_PACKAGE_NAME}php-fpm-alpine:8.2.11"
+    "php:8.2.11-fpm-alpine3.18"
 
     "${APPX_ID}-web-app-nginx"
-    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.25.1"
-    "nginx:1.25.1-alpine3.17"
+    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.25.3"
+    "nginx:1.25.3-alpine3.18"
 
     "127.0.0.1:8080"
     "web-app.local"
