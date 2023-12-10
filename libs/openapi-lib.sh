@@ -33,7 +33,8 @@ function openapi_lib_build_apidoc_file() {
   mrcore_validate_dir_required "OpenAPI shared dir" "${sharedDir}"
   mrcore_validate_dir_required "OpenAPI assembly dir" "${assemblyDir}"
 
-  OPENAPI_HEAD_PATH=""
+  OPENAPI_VERSION="3.0.3"
+  OPENAPI_HEADERS=()
   OPENAPI_SERVERS=()
   OPENAPI_TAGS=()
   OPENAPI_PATHS=()
@@ -49,7 +50,8 @@ function openapi_lib_build_apidoc_file() {
   openapi_lib_render_apidoc_file \
     "${functionName}" \
     "${assemblyDir}/${destFilePath}" \
-    "${OPENAPI_HEAD_PATH}" \
+    "${OPENAPI_VERSION}" \
+    OPENAPI_HEADERS[@] \
     OPENAPI_SERVERS[@] \
     OPENAPI_TAGS[@] \
     OPENAPI_PATHS[@] \
@@ -63,21 +65,23 @@ function openapi_lib_build_apidoc_file() {
 function openapi_lib_render_apidoc_file() {
   local functionName="${1:?}"
   local destFilePath="${2:?}"
-  local headPath="${3:?}"
-  local servers=("${!4-}")
-  local tags=("${!5-}")
-  local paths=("${!6-}")
-  local componentsHeaders=("${!7-}")
-  local componentsParameters=("${!8-}")
-  local componentsSchemas=("${!9-}")
-  local componentsResponses=("${!10-}")
-  local securitySchemes=("${!11-}")
+  local openapiVersion="${3:?}"
+  local headers=("${!4-}")
+  local servers=("${!5-}")
+  local tags=("${!6-}")
+  local paths=("${!7-}")
+  local componentsHeaders=("${!8-}")
+  local componentsParameters=("${!9-}")
+  local componentsSchemas=("${!10-}")
+  local componentsResponses=("${!11-}")
+  local securitySchemes=("${!12-}")
 
   mrcore_echo_sample "Run: ${functionName}.sh -> ${destFilePath}"
 
-  if [ -n "${headPath}" ]; then
-    mrcore_validate_file_required "Head file" "${headPath}"
-    cat "${headPath}" > "${destFilePath}"
+  echo -e "---\nopenapi: ${openapiVersion}\ninfo:" > "${destFilePath}"
+
+  if ! mrcore_lib_is_array_empty headers[@] ; then
+    openapi_lib_render_file_list headers[@] "${destFilePath}" 2;
   fi
 
   if ! mrcore_lib_is_array_empty servers[@] ; then
