@@ -17,8 +17,8 @@ RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
     fi;
 
 WORKDIR /opt/app
-# RUN chown -R node:node /opt/app
+RUN chown -R node:node /opt/app
 
-USER node
+#USER node
 
 CMD ["/bin/${DEFAULT_SHELL}"]

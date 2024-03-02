@@ -76,66 +76,80 @@ function openapi_lib_render_apidoc_file() {
   local componentsResponses=("${!11-}")
   local securitySchemes=("${!12-}")
 
+  local tmpFilePath
+  local tmpDestFilePath
+
+  tmpFilePath="$(mktemp)"
+  tmpDestFilePath="$(mktemp)"
+
   mrcore_echo_sample "Run: ${functionName}.sh -> ${destFilePath}"
 
-  echo -e "---\nopenapi: ${openapiVersion}\ninfo:" > "${destFilePath}"
+  echo -e "---\nopenapi: ${openapiVersion}\ninfo:" > "${tmpDestFilePath}"
 
   if ! mrcore_lib_is_array_empty headers[@] ; then
-    openapi_lib_render_file_list headers[@] "${destFilePath}" 2;
+    openapi_lib_render_file_list headers[@] "${tmpFilePath}" "${tmpDestFilePath}" 2;
   fi
 
   if ! mrcore_lib_is_array_empty servers[@] ; then
-    echo -e "\nservers:" >> "${destFilePath}"
-    openapi_lib_render_file_list servers[@] "${destFilePath}" 2;
+    echo -e "\nservers:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list servers[@] "${tmpFilePath}" "${tmpDestFilePath}" 2;
   fi
 
   if ! mrcore_lib_is_array_empty tags[@] ; then
-    echo -e "\ntags:" >> "${destFilePath}"
-    openapi_lib_render_file_list tags[@] "${destFilePath}" 2;
+    echo -e "\ntags:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list tags[@] "${tmpFilePath}" "${tmpDestFilePath}" 2;
   fi
 
   if ! mrcore_lib_is_array_empty paths[@] ; then
-    echo -e "\n\npaths:" >> "${destFilePath}"
-    openapi_lib_render_file_list paths[@] "${destFilePath}" 2;
+    echo -e "\n\npaths:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list paths[@] "${tmpFilePath}" "${tmpDestFilePath}" 2;
   fi
 
-  echo -e "\n\ncomponents:" >> "${destFilePath}"
+  echo -e "\n\ncomponents:" >> "${tmpDestFilePath}"
 
   if ! mrcore_lib_is_array_empty componentsHeaders[@] ; then
-    echo -e "\n  headers:" >> "${destFilePath}"
-    openapi_lib_render_file_list componentsHeaders[@] "${destFilePath}" 4;
+    echo -e "\n  headers:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list componentsHeaders[@] "${tmpFilePath}" "${tmpDestFilePath}" 4;
   fi
 
   if ! mrcore_lib_is_array_empty componentsParameters[@] ; then
-    echo -e "\n  parameters:" >> "${destFilePath}"
-    openapi_lib_render_file_list componentsParameters[@] "${destFilePath}" 4;
+    echo -e "\n  parameters:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list componentsParameters[@] "${tmpFilePath}" "${tmpDestFilePath}" 4;
   fi
 
   if ! mrcore_lib_is_array_empty componentsSchemas[@] ; then
-    echo -e "\n\n  schemas:" >> "${destFilePath}"
-    openapi_lib_render_file_list componentsSchemas[@] "${destFilePath}" 4;
+    echo -e "\n\n  schemas:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list componentsSchemas[@] "${tmpFilePath}" "${tmpDestFilePath}" 4;
   fi
 
   if ! mrcore_lib_is_array_empty componentsResponses[@] ; then
-    echo -e "\n\n  responses:" >> "${destFilePath}"
-    openapi_lib_render_file_list componentsResponses[@] "${destFilePath}" 4;
+    echo -e "\n\n  responses:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list componentsResponses[@] "${tmpFilePath}" "${tmpDestFilePath}" 4;
   fi
 
   if ! mrcore_lib_is_array_empty securitySchemes[@] ; then
-    echo -e "\n\n  securitySchemes:" >> "${destFilePath}"
-    openapi_lib_render_file_list securitySchemes[@] "${destFilePath}" 4;
+    echo -e "\n\n  securitySchemes:" >> "${tmpDestFilePath}"
+    openapi_lib_render_file_list securitySchemes[@] "${tmpFilePath}" "${tmpDestFilePath}" 4;
   fi
 
-  openapi_lib_remove_spaces "${destFilePath}"
+  openapi_lib_file_remove_spaces "${tmpDestFilePath}"
+
+  rm "${tmpFilePath}"
+
+  if ! mv "${tmpDestFilePath}" "${destFilePath}"; then
+    ${EXIT_ERROR}
+  fi
 
   mrcore_echo_ok "File ${destFilePath} created"
 }
 
 function openapi_lib_render_file_list() {
   local array=("${!1-}")
-  local destFilePath="${2:?}"
-  local indent=${3}
-  local curDir
+  local tmpFilePath="${2:?}"
+  local destFilePath="${3:?}"
+  local indent=${4}
+
+  local curPath
   local i=0
 
   for curPath in "${array[@]}"
@@ -146,43 +160,42 @@ function openapi_lib_render_file_list() {
       echo -e "\n" >> "${destFilePath}"
     fi
 
-    openapi_lib_add_string_to_end_file "${curPath}" "${destFilePath}" ${indent}
+    openapi_lib_add_string_to_end_file "${curPath}" "${tmpFilePath}" "${destFilePath}" ${indent}
 
     i=$((i + 1))
   done
 }
 
 function openapi_lib_add_string_to_end_file() {
-  local sourceFilePath=${1:?}
-  local destFilePath=${2:?}
-  local indent=${3}
+  local sourceFilePath="${1:?}"
+  local tmpFilePath="${2:?}"
+  local destFilePath="${3:?}"
+  local indent=${4}
 
   mrcore_validate_file_required "${FUNCNAME[0]}::FROM" "${sourceFilePath}"
   mrcore_validate_file_required "${FUNCNAME[0]}::TO" "${destFilePath}"
 
   if [[ ${indent} -ge 1 ]]; then
     local indentStr
-    local tmpFilePath
 
     indentStr=$(mrcore_lib_repeat_string " " ${indent})
-    tmpFilePath="./$(date +%s%N | xargs printf %x)"
 
-    if ! cat "${sourceFilePath}" >"${tmpFilePath}" ||
+    if ! cat "${sourceFilePath}" > "${tmpFilePath}" ||
       ! sed -i "s/^/${indentStr}/" "${tmpFilePath}" ||
-      ! cat "${tmpFilePath}" >>"${destFilePath}" ||
-      ! rm "${tmpFilePath}"; then
+      ! cat "${tmpFilePath}" >> "${destFilePath}"; then
       ${EXIT_ERROR}
     fi
   else
-    if ! cat "${sourceFilePath}" >"${destFilePath}"; then
+    if ! cat "${sourceFilePath}" > "${destFilePath}"; then
       ${EXIT_ERROR}
     fi
   fi
 }
 
-function openapi_lib_remove_spaces() {
-  local destFilePath=${1:?}
+function openapi_lib_file_remove_spaces() {
+  local filePath="${1:?}"
 
-  sed -i 's/[[:space:]]*$//' "${destFilePath}"
-  sed -i '/^$/N;/\n$/D' "${destFilePath}"
+  sed -i \
+      -e "s/[[:space:]]*$//" \
+      -e "/^$/N;/\n$/D" "${filePath}"
 }

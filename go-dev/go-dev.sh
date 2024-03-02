@@ -34,7 +34,7 @@ function mrcmd_plugins_go_dev_method_init() {
   if [ -n "${GOPATH-}" ] && [ -d "${GOPATH}" ]; then
     GO_DEV_GOPATH="$(mrcore_os_path_win_to_unix "${GOPATH}")/bin"
   else
-    mrcore_echo_warning "${GO_DEV_CAPTION}: \$GOPATH not found"
+    mrcore_debug_echo ${DEBUG_LEVEL_1} "${DEBUG_RED}" "${GO_DEV_CAPTION}: \$GOPATH not found"
   fi
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
