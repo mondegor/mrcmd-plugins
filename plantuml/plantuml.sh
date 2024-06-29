@@ -1,3 +1,4 @@
+# https://hub.docker.com/r/plantuml/plantuml
 # https://plantuml.com/command-line
 # https://github.com/plantuml/plantuml/pkgs/container/plantuml
 
@@ -15,17 +16,21 @@ function mrcmd_plugins_plantuml_method_init() {
     "PLANTUML_DOCKER_IMAGE_FROM"
 
     "PLANTUML_SOURCE_DIR"
-    "PLANTUML_DEST_DIR"
+    "PLANTUML_SOURCE_IN_DOCKER_DIR" # relative path from /data
+    "PLANTUML_OUTPUT_IN_DOCKER_DIR" # ----//----
+    "PLANTUML_OUTPUT_FORMAT"
   )
 
   readonly PLANTUML_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}plantuml:1.2023.12"
-    "ghcr.io/plantuml/plantuml:1.2023.12"
+    "${DOCKER_PACKAGE_NAME}plantuml:1.2024.4"
+    "plantuml/plantuml:1.2024.4"
 
     "${APPX_DIR}"
-    ""
+    "."
+    "./resources"
+    "png" # svg
   )
 
   mrcore_dotenv_init_var_array PLANTUML_VARS[@] PLANTUML_VARS_DEFAULT[@]
@@ -58,12 +63,17 @@ function mrcmd_plugins_plantuml_method_exec() {
       mrcmd_plugins_call_function "plantuml/docker-run" "$@"
       ;;
 
-    gen-all)
-      local dirs
-      dirs=($(cd "${PLANTUML_SOURCE_DIR}" && find . -type d))
-      mrcore_debug_echo ${DEBUG_LEVEL_1} "${DEBUG_BLUE}" "PLANTUML_SOURCE_DIR(S)=$(mrcmd_lib_implode ", " dirs[@])"
-      mrcmd_plugins_call_function "plantuml/docker-run" "${dirs[@]}"
-      mrcmd_plugins_plantuml_move_completed
+    cmd-help)
+      mrcmd_plugins_call_function "plantuml/docker-run" "-help"
+      ;;
+
+    build-all)
+      mrcore_validate_dir_required "Output dir" "${APPX_DIR_REAL}/${PLANTUML_OUTPUT_IN_DOCKER_DIR}"
+      mrcmd_plugins_call_function "plantuml/docker-run" \
+        "-x" "${PLANTUML_OUTPUT_IN_DOCKER_DIR}/**" \
+        "-o" "${PLANTUML_OUTPUT_IN_DOCKER_DIR}/$" \
+        "-t${PLANTUML_OUTPUT_FORMAT}" \
+        "${PLANTUML_SOURCE_IN_DOCKER_DIR}/**.puml"
       ;;
 
     *)
@@ -78,7 +88,8 @@ function mrcmd_plugins_plantuml_method_help() {
   echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${PLANTUML_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
   echo -e "  docker-build        Builds or rebuilds the image"
   echo -e "  cmd [files]         Runs 'plantuml [files]' in a container of the image"
-  echo -e "  gen-all             Runs 'plantuml ./' in a container of the image"
+  echo -e "  cmd-help            Display plantuml help text"
+  echo -e "  build-all           Builds all files with *.puml in the source dir"
 }
 
 # private
@@ -89,12 +100,4 @@ function mrcmd_plugins_plantuml_docker_build() {
     "${PLANTUML_DOCKER_IMAGE}" \
     "${PLANTUML_DOCKER_IMAGE_FROM}" \
     "$@"
-}
-
-# private
-function mrcmd_plugins_plantuml_move_completed() {
-  if [ -n "${PLANTUML_DEST_DIR}" ] &&
-    [[ "$(realpath "${PLANTUML_SOURCE_DIR}")" != "$(realpath "${PLANTUML_DEST_DIR}")" ]]; then
-    find "${PLANTUML_SOURCE_DIR}" -type f -name "*.png" -exec mv -f {} "${PLANTUML_DEST_DIR}" \;
-  fi
 }

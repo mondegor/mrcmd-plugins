@@ -7,6 +7,7 @@ function mrcmd_plugins_php_fpm_method_depends() {
 function mrcmd_plugins_php_fpm_method_init() {
   readonly PHP_FPM_CAPTION="PHP FPM"
   readonly PHP_FPM_DOCKER_SERVICE="web-app"
+  readonly PHP_FPM_NGINX_DOCKER_SERVICE="web-app-nginx"
 
   readonly PHP_FPM_VARS=(
     "READONLY_PHP_FPM_DOCKER_HOST"
@@ -18,12 +19,13 @@ function mrcmd_plugins_php_fpm_method_init() {
     "PHP_FPM_DOCKER_IMAGE_FROM"
     "PHP_FPM_ALPINE_DOCKER_IMAGE_FROM"
 
+    "READONLY_PHP_FPM_NGINX_DOCKER_HOST"
     "PHP_FPM_NGINX_DOCKER_CONTAINER"
     "PHP_FPM_NGINX_DOCKER_IMAGE"
     "PHP_FPM_NGINX_DOCKER_IMAGE_FROM"
 
     "PHP_FPM_WEBAPP_PUBLIC_PORT"
-    "PHP_FPM_WEBAPP_HOST"
+    "PHP_FPM_WEBAPP_DOMAIN"
 
     "PHP_FPM_APP_ENV_FILE"
 
@@ -48,7 +50,8 @@ function mrcmd_plugins_php_fpm_method_init() {
     "${DOCKER_PACKAGE_NAME}php-fpm-alpine:8.2.11"
     "php:8.2.11-fpm-alpine3.18"
 
-    "${APPX_ID}-web-app-nginx"
+    "${PHP_FPM_NGINX_DOCKER_SERVICE}"
+    "${APPX_ID}-${PHP_FPM_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.25.3"
     "nginx:1.25.3-alpine3.18"
 
@@ -120,6 +123,16 @@ function mrcmd_plugins_php_fpm_method_exec() {
         "${PHP_FPM_DOCKER_SERVICE}"
       ;;
 
+    ng-into)
+      mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
+        "${PHP_FPM_NGINX_DOCKER_SERVICE}" \
+        "${DOCKER_DEFAULT_SHELL}"
+      ;;
+
+    ng-logs)
+      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${PHP_FPM_NGINX_DOCKER_SERVICE}"
+      ;;
+
     *)
       ${RETURN_UNKNOWN_COMMAND}
       ;;
@@ -136,6 +149,8 @@ function mrcmd_plugins_php_fpm_method_help() {
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
   echo -e "  restart     Restarts the container"
+  echo -e "  ng-into     Enters to shell in the running nginx container"
+  echo -e "  ng-logs     View output from the running nginx container"
 }
 
 # private
@@ -163,7 +178,6 @@ function mrcmd_plugins_php_fpm_nginx_docker_build() {
     "${PHP_FPM_NGINX_DOCKER_IMAGE}" \
     "${PHP_FPM_NGINX_DOCKER_IMAGE_FROM}" \
     "web-php" \
-    "${PHP_FPM_WEBAPP_HOST}" \
     "${PHP_FPM_DOCKER_SERVICE}" \
     "9000" \
     "$@"

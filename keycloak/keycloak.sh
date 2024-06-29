@@ -43,9 +43,9 @@ function mrcmd_plugins_keycloak_method_init() {
     "master"
 
     "postgres"
-    "POSTGRES_DB_USER" # var with value
-    "POSTGRES_DB_PASSWORD" # var with value
-    "POSTGRES_DB_URL_JDBC" # var with value
+    "POSTGRES_DB_USER" # var with value or value
+    "POSTGRES_DB_PASSWORD" # var with value or value
+    "POSTGRES_DB_URL_JDBC" # var with value or value
 
     "127.0.0.1:9986"
     "admin"

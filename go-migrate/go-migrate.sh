@@ -15,6 +15,7 @@ function mrcmd_plugins_go_migrate_method_init() {
     "GO_MIGRATE_DOCKER_NETWORK"
 
     "GO_MIGRATE_DB_URL"
+    "GO_MIGRATE_DB_TABLE"
 
     "GO_MIGRATE_DB_SRC_DIR"
   )
@@ -26,7 +27,8 @@ function mrcmd_plugins_go_migrate_method_init() {
     "migrate/migrate:v4.16.2"
     "${APPX_ID}-${DOCKER_COMPOSE_LOCAL_NETWORK}"
 
-    "POSTGRES_DB_URL" # var with value
+    "POSTGRES_DB_URL" # var with value or value
+    "schema_migrations"
 
     "${APPX_DIR}/migrations"
   )
@@ -61,22 +63,22 @@ function mrcmd_plugins_go_migrate_method_exec() {
       mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql -seq init
       ;;
 
-    up)
-      mrcmd_plugins_call_function "go-migrate/docker-run" up
-      ;;
-
-    down)
-      mrcmd_plugins_call_function "go-migrate/docker-run" down 1
+    up | down)
+      local migrationLimit="${1:-}"
+      mrcmd_plugins_call_function "go-migrate/docker-run" "${currentCommand}" ${migrationLimit}
       ;;
 
     force)
       local migrationVersion="${1-}"
-      mrcore_validate_value_required "Argument 'version'" "${migrationVersion}"
-      mrcmd_plugins_call_function "go-migrate/docker-run" force "${migrationVersion}"
+      mrcore_validate_value_required "Argument 'version'" ${migrationVersion}
+      mrcmd_plugins_call_function "go-migrate/docker-run" force ${migrationVersion}
       ;;
 
     create)
-      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql "$@"
+      local migrationName="${1-}"
+      mrcore_validate_value_required "Name" "${migrationName}"
+      mrcore_validate_value "Name" "${REGEXP_PATTERN_FILE_NAME}" "${migrationName}"
+      mrcmd_plugins_call_function "go-migrate/docker-run" create -ext sql "${migrationName}"
       ;;
 
     *)
@@ -89,12 +91,12 @@ function mrcmd_plugins_go_migrate_method_exec() {
 function mrcmd_plugins_go_migrate_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  docker-build        Builds or rebuilds the image ${CC_GREEN}${GO_MIGRATE_DOCKER_IMAGE}${CC_END}"
+  echo -e "  docker-build        Builds or rebuilds the image"
   echo -e "  init                Run migrations INIT"
-  echo -e "  up                  Run migrations UP"
-  echo -e "  down                Rollback migrations against non test DB"
+  echo -e "  up [limit=max]      Run migrations UP"
+  echo -e "  down [limit=min]    Rollback migrations against non test DB"
   echo -e "  force [version]     Set migration version"
-  echo -e "  create              Create a DB migration files e.g 'make migrate-create name=migration-name'"
+  echo -e "  create [name]       Create a DB migration files e.g 'make migrate-create name=migration-name'"
 }
 
 # private

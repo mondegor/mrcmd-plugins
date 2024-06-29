@@ -69,6 +69,8 @@ function mrcmd_plugins_cassandra_method_init() {
 
 function mrcmd_plugins_cassandra_method_config() {
   mrcore_dotenv_echo_var_array CASSANDRA_VARS[@]
+  mrcore_echo_var "CASSANDRA_DB_URL" "${CASSANDRA_DB_URL}"
+  mrcore_echo_var "CASSANDRA_DB_URL_JDBC" "${CASSANDRA_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_cassandra_method_export_config() {

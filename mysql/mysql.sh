@@ -43,6 +43,8 @@ function mrcmd_plugins_mysql_method_init() {
 
 function mrcmd_plugins_mysql_method_config() {
   mrcore_dotenv_echo_var_array MYSQL_VARS[@]
+  mrcore_echo_var "MYSQL_DB_URL" "${MYSQL_DB_URL}"
+  mrcore_echo_var "MYSQL_DB_URL_JDBC" "${MYSQL_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_mysql_method_export_config() {

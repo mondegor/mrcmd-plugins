@@ -1,10 +1,10 @@
-# https://hub.docker.com/r/confluentinc/cp-kafka/
+# https://hub.docker.com/r/confluentinc/cp-kafka
 
 # To learn about configuring Kafka for access across networks see
-# https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+# https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc
 
 function mrcmd_plugins_kafka_method_depends() {
-  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
+  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose" "zookeeper")
 }
 
 function mrcmd_plugins_kafka_method_init() {
@@ -52,11 +52,6 @@ function mrcmd_plugins_kafka_method_export_config() {
 
 function mrcmd_plugins_kafka_method_install() {
   mrcmd_plugins_kafka_docker_build --no-cache
-
-#  docker exec ${SERVICE_ID}-broker-kafka1 bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic user-registrations --bootstrap-server broker-kafka1:9092"
-#  docker exec ${SERVICE_ID}-broker-kafka1 bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic file-uploads --bootstrap-server broker-kafka1:9092"
-#  docker exec ${SERVICE_ID}-broker-kafka2 bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic file-downloads --bootstrap-server broker-kafka2:9092"
-#  docker exec ${SERVICE_ID}-broker-kafka2 bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic user-mailing --bootstrap-server broker-kafka2:9092"
 }
 
 function mrcmd_plugins_kafka_method_exec() {

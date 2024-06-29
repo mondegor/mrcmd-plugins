@@ -76,7 +76,7 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_exec() {
 function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  docker-build                Builds or rebuilds the image ${CC_GREEN}${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_IMAGE}${CC_END}"
+  echo -e "  docker-build                Builds or rebuilds the image"
   echo -e "  ${MRVAR_FUNC_FILE}          It is description about this function of the plugin"
 }
 

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  mn-prometheus: # ${PROMETHEUS_DOCKER_SERVICE}
+    image: ${PROMETHEUS_DOCKER_IMAGE}
+    container_name: ${PROMETHEUS_DOCKER_CONTAINER}
+    restart: always
+    command:
+      - --config.file=/etc/prometheus/config.yaml
+      # - --storage.tsdb.path=/prometheus
+      # - --web.console.libraries=/etc/prometheus/console_libraries
+      # - --web.console.templates=/etc/prometheus/consoles
+      # - --storage.tsdb.retention.time=200h
+      # - --web.enable-lifecycle
+    ports:
+      - ${PROMETHEUS_PUBLIC_PORT}:9090
+    volumes:
+      - mn-prometheus-volume:/prometheus
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${READONLY_PROMETHEUS_DOCKER_HOST}.rule=Host(`${PROMETHEUS_WEB_DOMAIN}`)
+      - traefik.http.routers.${READONLY_PROMETHEUS_DOCKER_HOST}.entrypoints=web
+      - traefik.http.services.${READONLY_PROMETHEUS_DOCKER_HOST}.loadbalancer.server.port=9090
+
+volumes:
+  mn-prometheus-volume:

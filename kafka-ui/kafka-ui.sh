@@ -2,13 +2,12 @@
 # https://github.com/provectus/kafka-ui
 
 function mrcmd_plugins_kafka_ui_method_depends() {
-  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose" "nginx")
+  MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose" "traefik")
 }
 
 function mrcmd_plugins_kafka_ui_method_init() {
   readonly KAFKA_UI_CAPTION="UI for Apache Kafka"
   readonly KAFKA_UI_DOCKER_SERVICE="broker-kafka-ui"
-  readonly KAFKA_UI_NGINX_DOCKER_SERVICE="broker-kafka-ui-nginx"
 
   readonly KAFKA_UI_VARS=(
     "READONLY_KAFKA_UI_DOCKER_HOST"
@@ -22,14 +21,8 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "KAFKA_UI_KAFKA_HOSTS_PORTS"
     "KAFKA_UI_ZOOKEEPER_HOST_PORT"
 
-    "READONLY_KAFKA_UI_NGINX_DOCKER_HOST"
-    "KAFKA_UI_NGINX_DOCKER_CONTAINER"
-    "KAFKA_UI_NGINX_DOCKER_IMAGE"
-    "KAFKA_UI_NGINX_DOCKER_IMAGE_FROM"
-
-    "KAFKA_UI_WEB_PUBLIC_PORT"
     "KAFKA_UI_WEB_DOMAIN"
-    "KAFKA_UI_WEB_PORT"
+    "KAFKA_UI_WEB_INTERNAL_PORT"
   )
 
   readonly KAFKA_UI_VARS_DEFAULT=(
@@ -44,13 +37,7 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "broker-kafka:9092" # ${KAFKA_DOCKER_SERVICE} or broker-kafka1:9092,broker-kafka2:9092
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}
 
-    "${KAFKA_UI_NGINX_DOCKER_SERVICE}"
-    "${APPX_ID}-${KAFKA_UI_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-kafka-ui:1.25.3"
-    "nginx:1.25.3-alpine3.18"
-
-    "127.0.0.1:9982"
-    "kafka-panel.local"
+    "kafka.local"
     "8080"
   )
 
@@ -69,7 +56,6 @@ function mrcmd_plugins_kafka_ui_method_export_config() {
 
 function mrcmd_plugins_kafka_ui_method_install() {
   mrcmd_plugins_kafka_ui_docker_build --no-cache
-  mrcmd_plugins_kafka_ui_nginx_docker_build --no-cache
 }
 
 function mrcmd_plugins_kafka_ui_method_exec() {
@@ -81,7 +67,6 @@ function mrcmd_plugins_kafka_ui_method_exec() {
     docker-build)
       mrcmd_plugins_kafka_ui_method_config
       mrcmd_plugins_kafka_ui_docker_build "$@"
-      mrcmd_plugins_kafka_ui_nginx_docker_build "$@"
       ;;
 
     into)
@@ -104,16 +89,6 @@ function mrcmd_plugins_kafka_ui_method_exec() {
         "${KAFKA_UI_NGINX_DOCKER_SERVICE}"
       ;;
 
-    ng-into)
-      mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
-        "${KAFKA_UI_NGINX_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
-      ;;
-
-    ng-logs)
-      mrcmd_plugins_call_function "docker-compose/command" logs --no-log-prefix --follow "${KAFKA_UI_NGINX_DOCKER_SERVICE}"
-      ;;
-
     *)
       ${RETURN_UNKNOWN_COMMAND}
       ;;
@@ -130,8 +105,6 @@ function mrcmd_plugins_kafka_ui_method_help() {
   echo -e "  into        Enters to shell in the running kafka-ui container"
   echo -e "  logs        View output from the running kafka-ui container"
   echo -e "  restart     Restart kafka-ui and nginx containers"
-  echo -e "  ng-into     Enters to shell in the running nginx container"
-  echo -e "  ng-logs     View output from the running nginx container"
 }
 
 # private
@@ -141,18 +114,5 @@ function mrcmd_plugins_kafka_ui_docker_build() {
     "${KAFKA_UI_DOCKER_DOCKERFILE}" \
     "${KAFKA_UI_DOCKER_IMAGE}" \
     "${KAFKA_UI_DOCKER_IMAGE_FROM}" \
-    "$@"
-}
-
-# private
-# web-app - nginx SERVICE_TYPE
-function mrcmd_plugins_kafka_ui_nginx_docker_build() {
-  mrcmd_plugins_call_function "nginx/build-image" \
-    "${KAFKA_UI_NGINX_DOCKER_IMAGE}" \
-    "${KAFKA_UI_NGINX_DOCKER_IMAGE_FROM}" \
-    "web-app" \
-    "${KAFKA_UI_WEB_DOMAIN}" \
-    "${KAFKA_UI_DOCKER_SERVICE}" \
-    "${KAFKA_UI_WEB_PORT}" \
     "$@"
 }

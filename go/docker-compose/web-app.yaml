@@ -12,7 +12,7 @@ services:
     ports:
       - ${GO_WEBAPP_PUBLIC_PORT}:${GO_WEBAPP_PORT}
     volumes:
-      - ${GO_LIB_DIR}:/go
+      - ${GO_GOPATH_DIR}:/go
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}

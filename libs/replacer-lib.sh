@@ -41,7 +41,7 @@ function replacer_lib_copy_files() {
   for path in "${sourceDir}"/*
   do
     # excludes path=*
-    if [ ! -e "${path}" ] ; then
+    if [ ! -e "${path}" ]; then
       continue
     fi
 

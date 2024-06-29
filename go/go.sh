@@ -17,7 +17,7 @@ function mrcmd_plugins_go_method_init() {
     "GO_DOCKER_IMAGE"
     "GO_DOCKER_IMAGE_FROM"
 
-    "GO_LIB_DIR"
+    "GO_GOPATH_DIR"
     "GO_APP_ENV_FILE"
     "GO_APP_MAIN_FILE"
 
@@ -71,7 +71,7 @@ function mrcmd_plugins_go_method_export_config() {
 }
 
 function mrcmd_plugins_go_method_install() {
-  mrcore_lib_mkdir "${GO_LIB_DIR}"
+  mrcore_lib_mkdir "${GO_GOPATH_DIR}"
   mrcore_lib_mkdir "${APPX_WORK_DIR}/logs"
   mrcmd_plugins_go_docker_build --no-cache
   mrcmd_plugins_go_install_tools
@@ -79,11 +79,11 @@ function mrcmd_plugins_go_method_install() {
 }
 
 function mrcmd_plugins_go_method_start() {
-  mrcore_validate_dir_required "Go lib dir" "${GO_LIB_DIR}"
+  mrcore_validate_dir_required "GOPATH dir" "${GO_GOPATH_DIR}"
 }
 
 function mrcmd_plugins_go_method_uninstall() {
-  mrcore_lib_rmdir "${GO_LIB_DIR}"
+  mrcore_lib_rmdir "${GO_GOPATH_DIR}"
   mrcore_lib_rmdir "${APPX_WORK_DIR}/logs"
 }
 

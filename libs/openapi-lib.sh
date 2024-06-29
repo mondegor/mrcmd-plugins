@@ -156,7 +156,7 @@ function openapi_lib_render_file_list() {
   do
     mrcore_validate_file_required "File" "${curPath}"
 
-    if [ ${i} -gt 0 ]; then
+    if [[ ${i} -gt 0 ]]; then
       echo -e "\n" >> "${destFilePath}"
     fi
 

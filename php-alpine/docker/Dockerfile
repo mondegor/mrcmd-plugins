@@ -60,7 +60,7 @@ RUN if [[ "${INSTALL_GD}" == true ]]; then \
     fi;
 
 # install imagick lib
-#RUN if [ ${INSTALL_IMAGICK} = true ]; then \
+#RUN if [[ "${INSTALL_IMAGICK}" = true ]]; then \
 #      apk add --no-cache ${PHPIZE_DEPS} imagemagick-dev imagemagick \
 #      && pecl install imagick \
 #      && docker-php-ext-enable imagick \

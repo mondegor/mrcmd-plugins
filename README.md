@@ -1,11 +1,14 @@
-# Plugins for Mrcmd Tool v0.8.10
+# Plugins for Mrcmd Tool v0.9.0
 Этот репозиторий содержит базовые плагины для [Mrcmd Tool](https://github.com/mondegor/mrcmd).
 
 ## Статус проекта
 Проект находится на стадии бета-тестирования и активно применяется при разработке.
 
-## Установка плагинов
-Инструкция по установке плагинов находится [здесь](https://github.com/mondegor/mrcmd#readme).
+## Инсталляция плагинов
+- Выбрать рабочую директорию, содержащую директорию `mrcmd`;
+- `curl -fsSL -o mrcmd-plugins.zip https://github.com/mondegor/mrcmd-plugins/archive/refs/tags/v0.9.0.zip --ssl-no-revoke`
+- `unzip mrcmd-plugins.zip && rm mrcmd-plugins.zip && mv mrcmd-plugins-0.9.0 mrcmd/plugins`
+- `mrcmd state` // проверить, что плагины утилиты были установлены (см. Shared plugins path)
 
 ## Краткое описание плагинов
 
@@ -43,14 +46,18 @@
 
 ### Другие плагины
 - `go-migrate` - Миграция БД `Docker` (https://github.com/golang-migrate/migrate#readme);
+- `golangci-lint` - Линтеры для GO `Docker` (https://github.com/golangci/golangci-lint);
 - `keycloak` - Сервис аутентификации `Docker` (https://www.keycloak.org/documentation);
 - `minio` - S3 хранилище `Docker` (https://min.io/docs/);
 - `nginx` - сервер Nginx `Docker` (https://docs.nginx.com/);
+- `traefik` - сервер Traefik `Docker` (https://doc.traefik.io/);
 - `plantuml` - PlantUML `Docker` (https://plantuml.com/starting);
+- `prometheus` - Prometheus `Docker` (https://prometheus.io/docs);
 - `sentry` - Sentry - мониторинг ошибок `Docker` (https://github.com/getsentry/sentry#readme);
 - `shellcheck` - Статический анализатор shell скриптов `Docker` (https://www.shellcheck.net/);
 - `ssh` - Набор команд для генерации `SSH` ключей и регистрации их в `SSH Agent`;
 - `vendor` - Загрузчик данных из zip архивов и git репозиториев;
 
 ### Библиотеки
-- `openapi-lib` - Библиотека для сборки API документации как общей, так и по модулям из заранее заготовленных частей документации, хранящихся в виде файлов;
+- `openapi-lib` - Библиотека для сборки API документации как общей, так и по модулям
+  из заранее заготовленных частей документации, хранящихся в виде файлов;

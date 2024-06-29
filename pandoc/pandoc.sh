@@ -1,8 +1,8 @@
-# https://pandoc.org/
+# https://pandoc.org
 # https://hub.docker.com/_/ubuntu
 # https://hub.docker.com/r/pandoc/latex
 # https://pandoc.org/MANUAL.html#templates
-# https://ru.wikibooks.org/wiki/LaTeX/
+# https://ru.wikibooks.org/wiki/LaTeX
 
 function mrcmd_plugins_pandoc_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker")

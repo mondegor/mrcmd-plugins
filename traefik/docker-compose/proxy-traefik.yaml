@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  proxy-traefik: # ${TRAEFIK_DOCKER_SERVICE}
+    image: ${TRAEFIK_DOCKER_IMAGE}
+    container_name: ${TRAEFIK_DOCKER_CONTAINER}
+    restart: always
+    command:
+      # api
+      - --api.dashboard=true
+      - --api.insecure=true
+      # providers
+      - --providers.docker
+      - --providers.docker.network=${TRAEFIK_NETWORK}
+      - --providers.docker.exposedByDefault=false
+      # entryPoints
+      # * web
+      - --entryPoints.web.address=:80
+      # change api port
+      - --entryPoints.traefik.address=:${TRAEFIK_API_INTERNAL_PORT}
+    ports:
+      - ${TRAEFIK_PROXY_PUBLIC_PORT}:80
+      # - 127.0.0.1:443:443
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik-api.rule=Host(`${TRAEFIK_WEB_DOMAIN}`)
+      - traefik.http.routers.traefik-api.entrypoints=web
+      - traefik.http.routers.traefik-api.service=api@internal
+      - traefik.http.services.traefik-api.loadbalancer.server.port=${TRAEFIK_API_INTERNAL_PORT}

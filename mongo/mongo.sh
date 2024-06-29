@@ -45,6 +45,8 @@ function mrcmd_plugins_mongo_method_init() {
 
 function mrcmd_plugins_mongo_method_config() {
   mrcore_dotenv_echo_var_array MONGO_VARS[@]
+  mrcore_echo_var "MONGO_DB_URL" "${MONGO_DB_URL}"
+  mrcore_echo_var "MONGO_DB_URL_JDBC" "${MONGO_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_mongo_method_export_config() {

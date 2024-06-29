@@ -1,4 +1,4 @@
-# https://hub.docker.com/r/minio/minio/
+# https://hub.docker.com/r/minio/minio
 # https://min.io/docs/minio/linux/index.html
 
 function mrcmd_plugins_minio_method_depends() {
@@ -23,14 +23,15 @@ function mrcmd_plugins_minio_method_init() {
     "MINIO_NGINX_DOCKER_CONTAINER"
     "MINIO_NGINX_DOCKER_IMAGE"
     "MINIO_NGINX_DOCKER_IMAGE_FROM"
+    "MINIO_NGINX_PUBLIC_PORT"
 
     "MINIO_API_PUBLIC_PORT"
+    "MINIO_API_INTERNAL_PORT"
     "MINIO_API_USER"
     "MINIO_API_PASSWORD"
 
-    "MINIO_WEB_PUBLIC_PORT"
+    "MINIO_WEB_INTERNAL_PORT"
     "MINIO_WEB_DOMAIN"
-    "MINIO_WEB_PORT"
   )
 
   readonly MINIO_VARS_DEFAULT=(
@@ -46,14 +47,15 @@ function mrcmd_plugins_minio_method_init() {
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-minio:1.25.3"
     "nginx:1.25.3-alpine3.18"
+    "127.0.0.1:9984"
 
     "127.0.0.1:9000"
+    "9000"
     "admin"
     "12345678"
 
-    "127.0.0.1:9984"
-    "s3-panel.local"
     "9001"
+    "minio.local"
   )
 
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]
@@ -160,8 +162,7 @@ function mrcmd_plugins_minio_nginx_docker_build() {
     "${MINIO_NGINX_DOCKER_IMAGE}" \
     "${MINIO_NGINX_DOCKER_IMAGE_FROM}" \
     "web-minio" \
-    "${MINIO_WEB_DOMAIN}" \
     "${MINIO_DOCKER_SERVICE}" \
-    "${MINIO_WEB_PORT}" \
+    "${MINIO_WEB_INTERNAL_PORT}" \
     "$@"
 }

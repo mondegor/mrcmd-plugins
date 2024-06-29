@@ -22,7 +22,7 @@ function mrcmd_func_pm_available_plugins() {
     dirIndex=${MRCMD_PLUGINS_AVAILABLE_DIRS_ARRAY[${i}]}
     pluginsDir="${MRCMD_PLUGINS_DIR_ARRAY[${dirIndex}]}"
 
-    if [ ${i} -eq 0 ] && [ ${MRCMD_PLUGINS_DIR_INDEX_SHARED} -eq ${dirIndex} ]; then
+    if [[ ${i} -eq 0 ]] && [[ ${MRCMD_PLUGINS_DIR_INDEX_SHARED} -eq ${dirIndex} ]]; then
       echo -e "${CC_YELLOW}Available shared plugins:${CC_END}"
       echo ""
     fi
@@ -77,13 +77,13 @@ function pm_available_plugins_echo_plugin() {
 
   echo -e "    ${CC_GREEN}${pluginName}${CC_END}${pluginProperties} [${statusColor}${pluginStatus}${CC_END}]"
 
-  if [ "${#pluginSupported[@]}" -gt 0 ]; then
+  if [[ "${#pluginSupported[@]}" -gt 0 ]]; then
     echo -e "      ${CC_YELLOW}supported:${CC_END} $(mrcmd_lib_implode ", " pluginSupported[@])"
   fi
 
   mrcmd_plugins_depends_plugin_load_depends "${pluginName}"
 
-  if [ "${#MRCMD_PLUGIN_DEPENDS_ARRAY[@]}" -gt 0 ]; then
+  if [[ "${#MRCMD_PLUGIN_DEPENDS_ARRAY[@]}" -gt 0 ]]; then
     echo -e "      ${CC_YELLOW}depends:${CC_END} ${CC_GREEN}$(mrcmd_lib_implode ", " MRCMD_PLUGIN_DEPENDS_ARRAY[@])${CC_END}"
   fi
 

@@ -23,7 +23,7 @@ services:
     networks:
       - ${DOCKER_COMPOSE_LOCAL_NETWORK}
 
-  web-app-nginx:
+  web-app-nginx: # ${PHP_FPM_NGINX_DOCKER_SERVICE}
     image: ${PHP_FPM_NGINX_DOCKER_IMAGE}
     container_name: ${PHP_FPM_NGINX_DOCKER_CONTAINER}
     restart: always
@@ -35,3 +35,8 @@ services:
       - TZ=${APPX_TZ}
     networks:
       - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${READONLY_PHP_FPM_DOCKER_HOST}.rule=Host(`${PHP_FPM_WEBAPP_DOMAIN}`)
+      - traefik.http.routers.${READONLY_PHP_FPM_DOCKER_HOST}.entrypoints=web
+      - traefik.http.services.${READONLY_PHP_FPM_DOCKER_HOST}.loadbalancer.server.port=80

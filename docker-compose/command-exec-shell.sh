@@ -5,6 +5,7 @@ function mrcmd_func_docker_compose_command_exec_shell() {
   local shellName="${2-}"
   shift; shift
 
+  # --user root
   mrcmd_plugins_call_function "docker-compose/command" \
     exec \
     "${serviceName}" \

@@ -8,11 +8,10 @@ services:
       - server
       - /data
       - --console-address
-      - ":${MINIO_WEB_PORT}"
+      - ":${MINIO_WEB_INTERNAL_PORT}"
     restart: always
     ports:
-      - ${MINIO_API_PUBLIC_PORT}:9000
-    #  - 127.0.0.1:${MINIO_WEB_PORT}:${MINIO_WEB_PORT}
+      - ${MINIO_API_PUBLIC_PORT}:${MINIO_API_INTERNAL_PORT}
     volumes:
       - s3-minio-volume:/data
     environment:
@@ -34,11 +33,16 @@ services:
     depends_on:
       - s3-minio
     ports:
-      - ${MINIO_WEB_PUBLIC_PORT}:80
+      - ${MINIO_NGINX_PUBLIC_PORT}:80
     environment:
       - TZ=${APPX_TZ}
     networks:
       - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${READONLY_MINIO_NGINX_DOCKER_HOST}.rule=Host(`${MINIO_WEB_DOMAIN}`)
+      - traefik.http.routers.${READONLY_MINIO_NGINX_DOCKER_HOST}.entrypoints=web
+      - traefik.http.services.${READONLY_MINIO_NGINX_DOCKER_HOST}.loadbalancer.server.port=80
 
 volumes:
   s3-minio-volume:
