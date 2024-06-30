@@ -22,7 +22,7 @@ function mrcmd_func_docker_compose_command() {
     configFiles="${configFiles}${CMD_SEPARATOR}-f${CMD_SEPARATOR}${DOCKER_COMPOSE_CONFIG_FILE_LAST}"
   fi
 
-  if [[ "${currentCommand}" == "exec" ]]; then
+  if [[ "${currentCommand}" == "${MRCMD_PLUGIN_METHOD_EXECUTE}" ]]; then
     ttyInterface="${MRCORE_TTY_INTERFACE}"
   fi
 

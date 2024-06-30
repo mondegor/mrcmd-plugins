@@ -43,6 +43,17 @@ function mrcmd_plugins_go_dev_method_init() {
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
 
+  if mrcore_command_exists "go${CMD_SEPARATOR}version" ; then
+    readonly GO_DEV_IS_ENABLED=true
+  else
+    readonly GO_DEV_IS_ENABLED=false
+  fi
+
+  if [[ "${GO_DEV_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'go' not installed, so plugin '${GO_DEV_CAPTION}' was deactivated"
+    return
+  fi
+
   if [ -z "${GO_DEV_TOOLS_BIN_DIR}" ]; then
     if [ -n "${GOPATH-}" ] && [ -d "${GOPATH}" ]; then
       GO_DEV_TOOLS_BIN_DIR="$(mrcore_os_path_win_to_unix "${GOPATH}")/bin"
@@ -50,6 +61,20 @@ function mrcmd_plugins_go_dev_method_init() {
       mrcore_debug_echo ${DEBUG_LEVEL_1} "${DEBUG_RED}" "${GO_DEV_CAPTION}: \$GOPATH not found"
     fi
   fi
+}
+
+function mrcmd_plugins_go_dev_method_canexec() {
+  if [[ "${GO_DEV_IS_ENABLED}" == true ]]; then
+    ${RETURN_TRUE}
+  fi
+
+  local pluginMethod="${1:?}"
+
+  if mrcore_lib_in_array "${pluginMethod}" MRCMD_PLUGIN_METHODS_EXECUTE_COMMANDS_ARRAY[@] ; then
+    ${RETURN_FALSE}
+  fi
+
+  ${RETURN_TRUE}
 }
 
 function mrcmd_plugins_go_dev_method_config() {
@@ -61,16 +86,19 @@ function mrcmd_plugins_go_dev_method_export_config() {
 }
 
 function mrcmd_plugins_go_dev_method_install() {
-  mrcore_lib_mkdir "${APPX_WORK_DIR}/logs"
+  if [[ "${GO_DEV_IS_ENABLED}" == false ]]; then
+    return
+  fi
+
   mrcmd_plugins_go_dev_install_tools
   mrcmd_plugins_go_dev_workdir go mod download
 }
 
-function mrcmd_plugins_go_dev_method_uninstall() {
-  mrcore_lib_rmdir "${APPX_WORK_DIR}/logs"
-}
-
 function mrcmd_plugins_go_dev_method_exec() {
+  if [[ "${GO_DEV_IS_ENABLED}" == false ]]; then
+    return
+  fi
+
   local currentCommand="${1:?}"
   shift
 
@@ -237,6 +265,7 @@ function mrcmd_plugins_go_dev_install_tools() {
   mrcmd_plugins_call_function "go-dev/install-tools" toolsArray[@]
 }
 
+# private
 function mrcmd_plugins_go_dev_workdir() {
   local currentCommand="${1:?}"
   shift

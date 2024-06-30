@@ -34,6 +34,14 @@ function mrcmd_plugins_go_migrate_method_init() {
   )
 
   mrcore_dotenv_init_var_array GO_MIGRATE_VARS[@] GO_MIGRATE_VARS_DEFAULT[@]
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${GO_MIGRATE_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_go_migrate_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_go_migrate_method_config() {

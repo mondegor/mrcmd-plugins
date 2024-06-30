@@ -7,6 +7,7 @@ function mrcmd_plugins_golangci_lint_method_depends() {
 
 function mrcmd_plugins_golangci_lint_method_init() {
   readonly GOLANGCI_LINT_CAPTION="GolangCI Lint"
+  readonly GOLANGCI_LINT_TMP_DIR="${APPX_DIR}/.cache"
 
   readonly GOLANGCI_LINT_VARS=(
     "GOLANGCI_LINT_DOCKER_CONTEXT_DIR"
@@ -14,6 +15,8 @@ function mrcmd_plugins_golangci_lint_method_init() {
     "GOLANGCI_LINT_DOCKER_IMAGE"
     "GOLANGCI_LINT_DOCKER_IMAGE_FROM"
 
+    # в GOLANGCI_GOPATH_DIR желательно установить путь совпадающий с GOPATH,
+    # если оставить пустым, то подставится GOPATH, если такая переменная существует
     "GOLANGCI_GOPATH_DIR"
     "GOLANGCI_LINT_CACHE_DIR"
   )
@@ -24,18 +27,25 @@ function mrcmd_plugins_golangci_lint_method_init() {
     "${DOCKER_PACKAGE_NAME}golangci-lint:v1.59.0"
     "golangci/golangci-lint:v1.59.0-alpine"
 
-    "${APPX_DIR}/../golang" # todo: временно
-    "${APPX_DIR}/.cache/golangci-lint"
+    "${GOLANGCI_LINT_TMP_DIR}/golang"
+    "${GOLANGCI_LINT_TMP_DIR}/golangci-lint"
   )
 
   mrcore_dotenv_init_var_array GOLANGCI_LINT_VARS[@] GOLANGCI_LINT_VARS_DEFAULT[@]
 
-  if [ -z "${GOLANGCI_GOPATH_DIR}" ]; then
-    mrcore_validate_dir_required "System GOPATH" "${GOPATH-}"
-    GOLANGCI_GOPATH_DIR="$(mrcore_os_path_win_to_unix "${GOPATH}")"
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${GOLANGCI_LINT_CAPTION}' was deactivated"
+    return
   fi
 
-  mrcore_validate_dir_required "GOPATH" "${GOLANGCI_GOPATH_DIR}"
+  if [ -z "${GOLANGCI_GOPATH_DIR}" ]; then
+    mrcore_validate_dir_required "GOPATH dir" "${GOPATH-}"
+    GOLANGCI_GOPATH_DIR="$(mrcore_os_path_win_to_unix "${GOPATH}")"
+  fi
+}
+
+function mrcmd_plugins_golangci_lint_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_golangci_lint_method_config() {
@@ -47,12 +57,17 @@ function mrcmd_plugins_golangci_lint_method_export_config() {
 }
 
 function mrcmd_plugins_golangci_lint_method_install() {
-  mrcore_lib_mkdir "${GOLANGCI_LINT_CACHE_DIR}"
+  if [ ! -d "${GOLANGCI_LINT_TMP_DIR}" ]; then
+    mrcore_lib_mkdir "${GOLANGCI_LINT_TMP_DIR}"
+    mrcore_lib_mkdir "${GOLANGCI_GOPATH_DIR}"
+    mrcore_lib_mkdir "${GOLANGCI_LINT_CACHE_DIR}"
+  fi
+
   mrcmd_plugins_golangci_lint_docker_build --no-cache
 }
 
-function mrcmd_plugins_go_method_uninstall() {
-  mrcore_lib_rmdir "${GOLANGCI_LINT_CACHE_DIR}"
+function mrcmd_plugins_golangci_lint_method_uninstall() {
+  mrcore_lib_rmdir "${GOLANGCI_LINT_TMP_DIR}"
 }
 
 function mrcmd_plugins_golangci_lint_method_exec() {

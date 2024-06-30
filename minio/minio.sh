@@ -61,6 +61,14 @@ function mrcmd_plugins_minio_method_init() {
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MINIO_DOCKER_COMPOSE_CONFIG_DIR}/s3-minio.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${MINIO_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_minio_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_minio_method_config() {

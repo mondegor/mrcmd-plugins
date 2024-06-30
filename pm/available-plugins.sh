@@ -1,5 +1,10 @@
 
-readonly MRCMD_PLUGIN_RESERVED_METHODS_ARRAY=("init" "exec" "${MRCMD_PLUGIN_METHODS_ARRAY[@]}")
+readonly MRCMD_PLUGIN_RESERVED_METHODS_ARRAY=(
+    "init"
+    "${MRCMD_PLUGIN_METHOD_EXECUTE}"
+    "${MRCMD_PLUGIN_METHOD_CAN_EXECUTE}"
+    "${MRCMD_PLUGIN_METHODS_ARRAY[@]}"
+  )
 
 # using example: mrcmd_plugins_call_function "pm/available-plugins"
 function mrcmd_func_pm_available_plugins() {
@@ -120,10 +125,10 @@ function pm_available_plugins_echo_plugin_methods() {
     fi
   done
 
-  if [[ "${isAnyMethodExists}" != true ]]; then
-    mrcore_echo_error "Plugin '${pluginName}' doesn't have any methods" "      "
-  else
+  if [[ "${isAnyMethodExists}" == true ]]; then
     echo ""
+  else
+    mrcore_echo_error "Plugin '${pluginName}' doesn't have any methods" "      "
   fi
 }
 

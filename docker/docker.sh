@@ -15,7 +15,31 @@ function mrcmd_plugins_docker_method_init() {
 
   mrcore_dotenv_init_var_array DOCKER_VARS[@] DOCKER_DEFAULT[@]
 
+  if mrcore_command_exists "docker${CMD_SEPARATOR}-v" ; then
+    readonly DOCKER_IS_ENABLED=true
+  else
+    readonly DOCKER_IS_ENABLED=false
+  fi
+
   DOCKER_DEFAULT_SHELL=$(mrcore_get_shell "${DOCKER_DEFAULT_SHELL}")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${DOCKER_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_docker_method_canexec() {
+  if [[ "${DOCKER_IS_ENABLED}" == true ]]; then
+    ${RETURN_TRUE}
+  fi
+
+  local pluginMethod="${1:?}"
+
+  if mrcore_lib_in_array "${pluginMethod}" MRCMD_PLUGIN_METHODS_EXECUTE_COMMANDS_ARRAY[@] ; then
+    ${RETURN_FALSE}
+  fi
+
+  ${RETURN_TRUE}
 }
 
 function mrcmd_plugins_docker_method_config() {
@@ -27,6 +51,10 @@ function mrcmd_plugins_docker_method_export_config() {
 }
 
 function mrcmd_plugins_docker_method_exec() {
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    return
+  fi
+
   local currentCommand="${1:?}"
   shift
 

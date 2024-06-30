@@ -43,6 +43,14 @@ function mrcmd_plugins_rabbitmq_method_init() {
   mrcore_dotenv_init_var_array RABBITMQ_VARS[@] RABBITMQ_VARS_DEFAULT[@]
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${RABBITMQ_DOCKER_COMPOSE_CONFIG_DIR}/broker-rabbitmq.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${RABBITMQ_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_rabbitmq_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_rabbitmq_method_config() {

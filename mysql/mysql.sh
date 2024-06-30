@@ -39,6 +39,14 @@ function mrcmd_plugins_mysql_method_init() {
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql-init.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${MYSQL_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_mysql_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_mysql_method_config() {

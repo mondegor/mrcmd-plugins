@@ -45,6 +45,14 @@ function mrcmd_plugins_traefik_method_init() {
   mrcore_dotenv_init_var_array TRAEFIK_VARS[@] TRAEFIK_VARS_DEFAULT[@]
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${TRAEFIK_DOCKER_COMPOSE_CONFIG_DIR}/proxy-traefik.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${TRAEFIK_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_traefik_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_traefik_method_config() {

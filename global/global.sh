@@ -7,6 +7,7 @@ function mrcmd_plugins_global_method_init() {
     "APPX_VER"
     "APPX_ENV"
     "APPX_WORK_DIR"
+
     "HOST_USER_ID"
     "HOST_GROUP_ID"
     "APPX_TZ"
@@ -82,7 +83,12 @@ function mrcmd_plugins_global_method_help() {
 # using example: $(mrcmd_plugins_global_git_version)
 function mrcmd_plugins_global_git_version() {
   local branch
-  branch="$(git rev-parse --abbrev-ref HEAD 2>&1)"
+  branch=$(git rev-parse --abbrev-ref HEAD 2>&1)
+
+  if [[ ${branch} =~ "fatal: not a git repository" ]]; then
+    echo ""
+    return
+  fi
 
   if [[ "${branch}" == "master" ]] || [[ "${branch}" == "main" ]]; then
     branch="$(git describe --long --always --dirty)"

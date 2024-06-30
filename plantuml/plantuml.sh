@@ -16,8 +16,7 @@ function mrcmd_plugins_plantuml_method_init() {
     "PLANTUML_DOCKER_IMAGE_FROM"
 
     "PLANTUML_SOURCE_DIR"
-    "PLANTUML_SOURCE_IN_DOCKER_DIR" # relative path from /data
-    "PLANTUML_OUTPUT_IN_DOCKER_DIR" # ----//----
+    "PLANTUML_OUTPUT_IN_DOCKER_DIR" # relative path from /data in docker and ${PLANTUML_SOURCE_DIR}
     "PLANTUML_OUTPUT_FORMAT"
   )
 
@@ -28,12 +27,19 @@ function mrcmd_plugins_plantuml_method_init() {
     "plantuml/plantuml:1.2024.4"
 
     "${APPX_DIR}"
-    "."
     "./resources"
     "png" # svg
   )
 
   mrcore_dotenv_init_var_array PLANTUML_VARS[@] PLANTUML_VARS_DEFAULT[@]
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${PLANTUML_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_plantuml_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_plantuml_method_config() {
@@ -68,12 +74,12 @@ function mrcmd_plugins_plantuml_method_exec() {
       ;;
 
     build-all)
-      mrcore_validate_dir_required "Output dir" "${APPX_DIR_REAL}/${PLANTUML_OUTPUT_IN_DOCKER_DIR}"
+      mrcore_validate_dir_required "Output dir" "${PLANTUML_SOURCE_DIR}/${PLANTUML_OUTPUT_IN_DOCKER_DIR}"
       mrcmd_plugins_call_function "plantuml/docker-run" \
         "-x" "${PLANTUML_OUTPUT_IN_DOCKER_DIR}/**" \
         "-o" "${PLANTUML_OUTPUT_IN_DOCKER_DIR}/$" \
         "-t${PLANTUML_OUTPUT_FORMAT}" \
-        "${PLANTUML_SOURCE_IN_DOCKER_DIR}/**.puml"
+        "./**.puml"
       ;;
 
     *)

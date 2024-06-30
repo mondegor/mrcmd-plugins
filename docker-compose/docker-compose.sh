@@ -34,6 +34,14 @@ function mrcmd_plugins_docker_compose_method_init() {
   if [ -f "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" ]; then
     DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_FILE_LAST}")
   fi
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${DOCKER_COMPOSE_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_docker_compose_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_docker_compose_method_config() {

@@ -65,6 +65,14 @@ function mrcmd_plugins_cassandra_method_init() {
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${CASSANDRA_DOCKER_COMPOSE_CONFIG_DIR}/db-cassandra.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${CASSANDRA_DOCKER_COMPOSE_CONFIG_DIR}/db-cassandra-init.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${CASSANDRA_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_cassandra_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_cassandra_method_config() {

@@ -51,6 +51,14 @@ function mrcmd_plugins_php_cli_method_init() {
   )
 
   mrcore_dotenv_init_var_array PHP_CLI_VARS[@] PHP_CLI_VARS_DEFAULT[@]
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${PHP_CLI_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_php_cli_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_php_cli_method_config() {

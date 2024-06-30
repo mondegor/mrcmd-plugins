@@ -42,6 +42,14 @@ function mrcmd_plugins_php_alpine_method_init() {
   )
 
   mrcore_dotenv_init_var_array PHP_ALPINE_VARS[@] PHP_ALPINE_VARS_DEFAULT[@]
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${PHP_ALPINE_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_php_alpine_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_php_alpine_method_config() {

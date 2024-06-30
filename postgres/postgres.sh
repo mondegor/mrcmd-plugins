@@ -43,6 +43,14 @@ function mrcmd_plugins_postgres_method_init() {
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${POSTGRES_DOCKER_COMPOSE_CONFIG_DIR}/db-postgres.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${POSTGRES_DOCKER_COMPOSE_CONFIG_DIR}/db-postgres-init.yaml")
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${POSTGRES_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_postgres_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_postgres_method_config() {

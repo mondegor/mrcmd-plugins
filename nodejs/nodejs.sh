@@ -42,6 +42,14 @@ function mrcmd_plugins_nodejs_method_init() {
     "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
     "${NODEJS_APP_ENV_FILE}" \
     "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
+
+  if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
+    mrcore_echo_warning "Command 'docker' not installed, so plugin '${NODEJS_CAPTION}' was deactivated"
+  fi
+}
+
+function mrcmd_plugins_nodejs_method_canexec() {
+  mrcmd_plugins_docker_method_canexec "${1:?}"
 }
 
 function mrcmd_plugins_nodejs_method_config() {
