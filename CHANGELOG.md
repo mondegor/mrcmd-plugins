@@ -1,6 +1,10 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2024-07-06
+### Added
+- Добавлена документация по использованию плагина `PlantUML`;
+
 ## 2024-06-30
 ### Added
 - Добавлены плагины: `traefik`, `prometheus`, `golangci-lint`;
