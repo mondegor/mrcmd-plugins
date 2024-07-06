@@ -41,7 +41,7 @@ File -> Preferences -> Settings -> Extensions -> PlantUML configuration -> Edit 
 - `Ctrl + Shift + V` - предварительный просмотр документа при нахождении в Markdown (в `.md` файле);
 
 ### Сборка изображений для их подключения в Markdown
-`make plantuml build-all`
+`mrcmd plantuml build-all`
 Данная команда ищет в директории `{PLANTUML_SOURCE_DIR}` все файлы с расширением `.puml`,
 из них генерирует файлы изображений (png, svg) и складывает их
 в директорию `{PROJECT_DOC_DIR1}/{PLANTUML_OUTPUT_IN_DOCKER_DIR}` с теми же названиями и относительными путями.
