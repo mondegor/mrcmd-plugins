@@ -15,7 +15,5 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
-      - APPX_SERVICE_BIND=${JAVA_WEBAPP_BIND}
-      - APPX_SERVICE_PORT=${JAVA_WEBAPP_PORT}
     networks:
       - local-network

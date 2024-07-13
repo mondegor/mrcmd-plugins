@@ -12,14 +12,6 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
-#      - APPX_DB_HOST=${PHP_FPM_DB_HOST}
-#      - APPX_DB_PORT=${PHP_FPM_DB_PORT}
-#      - APPX_DB_NAME=${PHP_FPM_DB_NAME}
-#      - APPX_DB_USER=${PHP_FPM_DB_USER}
-#      - APPX_DB_PASSWORD=${PHP_FPM_DB_PASSWORD}
-#      - APPX_REDIS_HOST=${PHP_FPM_REDIS_HOST}
-#      - APPX_REDIS_PORT=${PHP_FPM_REDIS_PORT}
-#      - APPX_REDIS_PASSWORD=${PHP_FPM_REDIS_PASSWORD}
     networks:
       - local-network
 

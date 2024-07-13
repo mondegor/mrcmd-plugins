@@ -16,7 +16,5 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
-      - APPX_SERVICE_BIND=${GO_WEBAPP_BIND}
-      - APPX_SERVICE_PORT=${GO_WEBAPP_PORT}
     networks:
       - local-network

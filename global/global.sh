@@ -1,6 +1,7 @@
 
 function mrcmd_plugins_global_method_init() {
   readonly GLOBAL_CAPTION="Global vars"
+  readonly GLOBAL_DETECT_VERSION="v0.0.0"
 
   readonly GLOBAL_VARS=(
     "APPX_ID"
@@ -15,7 +16,7 @@ function mrcmd_plugins_global_method_init() {
 
   readonly GLOBAL_VARS_DEFAULT=(
     "sx"
-    "v0.0.0"
+    "${GLOBAL_DETECT_VERSION}"
     "local" # dev, prod
     "${APPX_DIR}/app"
 
@@ -27,12 +28,8 @@ function mrcmd_plugins_global_method_init() {
   mrcore_dotenv_init_var_array GLOBAL_VARS[@] GLOBAL_VARS_DEFAULT[@]
 
   # try to set version from git
-  if [[ "${APPX_VER}" == "v0.0.0" ]]; then
+  if [[ "${APPX_VER}" == "${GLOBAL_DETECT_VERSION}" ]]; then
     APPX_VER=$(mrcmd_plugins_global_git_version)
-  fi
-
-  if [ -z "${APPX_VER}" ]; then
-    unset APPX_VER
   fi
 }
 
@@ -86,11 +83,11 @@ function mrcmd_plugins_global_git_version() {
   branch=$(git rev-parse --abbrev-ref HEAD 2>&1)
 
   if [[ ${branch} =~ "fatal: not a git repository" ]]; then
-    echo ""
+    echo "${GLOBAL_DETECT_VERSION}"
     return
   fi
 
-  if [[ "${branch}" == "master" ]] || [[ "${branch}" == "main" ]]; then
+  if [[ "${branch}" == "master" ]] || [[ "${branch}" == "main" ]] || [[ "${branch}" == "HEAD" ]]; then
     branch="$(git describe --long --always --dirty)"
   fi
 
