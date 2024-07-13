@@ -12,7 +12,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
 
 volumes:
   db-mongo-volume:

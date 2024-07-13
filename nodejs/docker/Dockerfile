@@ -2,13 +2,8 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG DEFAULT_SHELL
 ARG HOST_USER_ID
 ARG HOST_GROUP_ID
-
-RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
-      apk add --no-cache ${DEFAULT_SHELL}; \
-    fi;
 
 RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
       apk add --no-cache shadow \
@@ -21,4 +16,5 @@ RUN chown -R node:node /opt/app
 
 #USER node
 
-CMD ["/bin/${DEFAULT_SHELL}"]
+# sh - shell name
+CMD ["/bin/sh"]

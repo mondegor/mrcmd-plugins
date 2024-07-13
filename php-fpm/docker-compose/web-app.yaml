@@ -21,7 +21,7 @@ services:
 #      - APPX_REDIS_PORT=${PHP_FPM_REDIS_PORT}
 #      - APPX_REDIS_PASSWORD=${PHP_FPM_REDIS_PASSWORD}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
 
   web-app-nginx: # ${PHP_FPM_NGINX_DOCKER_SERVICE}
     image: ${PHP_FPM_NGINX_DOCKER_IMAGE}
@@ -34,7 +34,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.${READONLY_PHP_FPM_DOCKER_HOST}.rule=Host(`${PHP_FPM_WEBAPP_DOMAIN}`)

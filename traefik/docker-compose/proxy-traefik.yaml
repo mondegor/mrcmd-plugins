@@ -11,7 +11,7 @@ services:
       - --api.insecure=true
       # providers
       - --providers.docker
-      - --providers.docker.network=${TRAEFIK_NETWORK}
+      - --providers.docker.network=${TRAEFIK_DOCKER_NETWORK}
       - --providers.docker.exposedByDefault=false
       # entryPoints
       # * web
@@ -26,7 +26,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-api.rule=Host(`${TRAEFIK_WEB_DOMAIN}`)

@@ -19,7 +19,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_API_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_API_PASSWORD}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 60s
@@ -37,7 +37,7 @@ services:
     environment:
       - TZ=${APPX_TZ}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.${READONLY_MINIO_NGINX_DOCKER_HOST}.rule=Host(`${MINIO_WEB_DOMAIN}`)

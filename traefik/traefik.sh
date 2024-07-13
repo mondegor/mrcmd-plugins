@@ -18,12 +18,11 @@ function mrcmd_plugins_traefik_method_init() {
     "TRAEFIK_DOCKER_COMPOSE_CONFIG_DIR"
     "TRAEFIK_DOCKER_IMAGE"
     "TRAEFIK_DOCKER_IMAGE_FROM"
+    "TRAEFIK_DOCKER_NETWORK"
 
     "TRAEFIK_PROXY_PUBLIC_PORT"
     "TRAEFIK_API_INTERNAL_PORT"
     "TRAEFIK_WEB_DOMAIN"
-
-    "TRAEFIK_NETWORK"
   )
 
   readonly TRAEFIK_VARS_DEFAULT=(
@@ -34,12 +33,11 @@ function mrcmd_plugins_traefik_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
     "${DOCKER_PACKAGE_NAME}traefik:2.11.2"
     "traefik:2.11.2"
+    "${DOCKER_COMPOSE_NETWORK}"
 
     "127.0.0.1:80"
     "19090"
     "traefik.local"
-
-    "${DOCKER_COMPOSE_LOCAL_NETWORK}"
   )
 
   mrcore_dotenv_init_var_array TRAEFIK_VARS[@] TRAEFIK_VARS_DEFAULT[@]
@@ -81,7 +79,7 @@ function mrcmd_plugins_traefik_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${TRAEFIK_DOCKER_SERVICE}" \
-        "sh" # "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

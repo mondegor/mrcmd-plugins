@@ -85,7 +85,8 @@ function mrcmd_plugins_nodejs_method_exec() {
       ;;
 
     shell)
-      mrcmd_plugins_call_function "nodejs/docker-run" "${DOCKER_DEFAULT_SHELL}" "$@"
+      # sh - shell name
+      mrcmd_plugins_call_function "nodejs/docker-run" sh "$@"
       ;;
 
     npm)
@@ -103,7 +104,7 @@ function mrcmd_plugins_nodejs_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${NODEJS_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

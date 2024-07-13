@@ -106,7 +106,8 @@ function mrcmd_plugins_php_cli_method_exec() {
       ;;
 
     shell)
-      mrcmd_plugins_call_function "php-cli/docker-run" "${DOCKER_DEFAULT_SHELL}" "$@"
+      # sh - shell name
+      mrcmd_plugins_call_function "php-cli/docker-run" sh "$@"
       ;;
 
     install-tools)

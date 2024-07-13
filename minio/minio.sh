@@ -40,13 +40,13 @@ function mrcmd_plugins_minio_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}minio:2023-11-15"
-    "minio/minio:RELEASE.2023-11-15T20-43-25Z.fips"
+    "${DOCKER_PACKAGE_NAME}minio:2024-07-13"
+    "minio/minio:RELEASE.2024-07-13T01-46-15Z.fips"
 
     "${MINIO_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-minio:1.25.3"
-    "nginx:1.25.3-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}nginx-minio:1.27.0"
+    "nginx:1.27.0-alpine3.19"
     "127.0.0.1:9984"
 
     "127.0.0.1:9000"
@@ -105,7 +105,7 @@ function mrcmd_plugins_minio_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${MINIO_DOCKER_SERVICE}" \
-        "bash" # "${DOCKER_DEFAULT_SHELL}"
+        bash # shell name
       ;;
 
     logs)
@@ -125,7 +125,7 @@ function mrcmd_plugins_minio_method_exec() {
     ng-into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${MINIO_NGINX_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     ng-logs)

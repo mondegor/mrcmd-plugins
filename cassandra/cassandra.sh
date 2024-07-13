@@ -109,7 +109,7 @@ function mrcmd_plugins_cassandra_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${CASSANDRA_DOCKER_SERVICE}" \
-        "bash" # "${DOCKER_DEFAULT_SHELL}"
+        bash # shell name
       ;;
 
     # nodetool status

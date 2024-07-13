@@ -22,7 +22,7 @@ services:
 #      - CASSANDRA_RACK=${CASSANDRA_RACK}
 #      - CASSANDRA_ENDPOINT_SNITCH=${CASSANDRA_ENDPOINT_SNITCH}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
 
 volumes:
   db-cassandra-volume:

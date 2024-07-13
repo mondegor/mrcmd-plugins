@@ -2,7 +2,6 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG DEFAULT_SHELL
 ARG HOST_USER_ID
 ARG HOST_GROUP_ID
 
@@ -11,10 +10,6 @@ ARG HOST_GROUP_ID
 # RUN echo "GOROOT: ${GOROOT}"
 
 RUN apk add --no-cache git
-
-RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
-      apk add --no-cache ${DEFAULT_SHELL}; \
-    fi;
 
 RUN addgroup -g 1000 golang && adduser -u 1000 -G golang -s /bin/sh -D golang
 RUN chown -R golang:golang /go

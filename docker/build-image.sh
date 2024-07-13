@@ -16,6 +16,5 @@ function mrcmd_func_docker_build_image() {
   # --progress=plain \
   docker build "${dockerContextDir}" ${dockerFilePath} -t "${dockerImageName}" \
     --build-arg "DOCKER_IMAGE_FROM=${dockerImageFrom}" \
-    --build-arg "DEFAULT_SHELL=${DOCKER_DEFAULT_SHELL}" \
     "$@"
 }

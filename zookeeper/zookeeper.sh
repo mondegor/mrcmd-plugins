@@ -78,7 +78,7 @@ function mrcmd_plugins_zookeeper_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${ZOOKEEPER_DOCKER_SERVICE}" \
-        "sh" # "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

@@ -13,4 +13,4 @@ services:
       - KEYCLOAK_ADMIN=${KEYCLOAK_WEB_ADMIN_USER}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_WEB_ADMIN_PASSWORD}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network

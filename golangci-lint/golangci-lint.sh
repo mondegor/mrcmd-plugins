@@ -24,8 +24,8 @@ function mrcmd_plugins_golangci_lint_method_init() {
   readonly GOLANGCI_LINT_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}golangci-lint:v1.59.0"
-    "golangci/golangci-lint:v1.59.0-alpine"
+    "${DOCKER_PACKAGE_NAME}golangci-lint:1.59.1"
+    "golangci/golangci-lint:v1.59.1-alpine"
 
     "${GOLANGCI_LINT_TMP_DIR}/golang"
     "${GOLANGCI_LINT_TMP_DIR}/golangci-lint"
@@ -57,11 +57,9 @@ function mrcmd_plugins_golangci_lint_method_export_config() {
 }
 
 function mrcmd_plugins_golangci_lint_method_install() {
-  if [ ! -d "${GOLANGCI_LINT_TMP_DIR}" ]; then
-    mrcore_lib_mkdir "${GOLANGCI_LINT_TMP_DIR}"
-    mrcore_lib_mkdir "${GOLANGCI_GOPATH_DIR}"
-    mrcore_lib_mkdir "${GOLANGCI_LINT_CACHE_DIR}"
-  fi
+  mrcore_lib_mkdir "${GOLANGCI_LINT_TMP_DIR}"
+  mrcore_lib_mkdir "${GOLANGCI_GOPATH_DIR}"
+  mrcore_lib_mkdir "${GOLANGCI_LINT_CACHE_DIR}"
 
   mrcmd_plugins_golangci_lint_docker_build --no-cache
 }

@@ -18,4 +18,4 @@ services:
       - APPX_SERVICE_BIND=${JAVA_WEBAPP_BIND}
       - APPX_SERVICE_PORT=${JAVA_WEBAPP_PORT}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network

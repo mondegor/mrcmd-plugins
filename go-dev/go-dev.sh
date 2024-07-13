@@ -91,6 +91,7 @@ function mrcmd_plugins_go_dev_method_install() {
   fi
 
   mrcmd_plugins_go_dev_install_tools
+  mrcmd_plugins_go_dev_workdir go mod tidy
   mrcmd_plugins_go_dev_workdir go mod download
 }
 

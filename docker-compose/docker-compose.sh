@@ -6,30 +6,21 @@ function mrcmd_plugins_docker_compose_method_depends() {
 function mrcmd_plugins_docker_compose_method_init() {
   readonly DOCKER_COMPOSE_CAPTION="Docker Compose"
 
-  export DOCKER_COMPOSE_LOCAL_NETWORK="local-network"
-  export DOCKER_COMPOSE_GENERAL_NETWORK="general-network"
-  export DOCKER_COMPOSE_GENERAL_NETWORK_IS_EXTERNAL=true
-
   readonly DOCKER_COMPOSE_VARS=(
     "DOCKER_COMPOSE_CONFIG_DIR"
     "DOCKER_COMPOSE_CONFIG_FILE_LAST"
-    "DOCKER_COMPOSE_USE_GENERAL_NETWORK"
+    "DOCKER_COMPOSE_NETWORK"
   )
 
   readonly DOCKER_COMPOSE_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}"
     "${APPX_DIR}/docker-compose-app.yaml"
-    "false"
+    "${APPX_ID}-local-network"
   )
 
   mrcore_dotenv_init_var_array DOCKER_COMPOSE_VARS[@] DOCKER_COMPOSE_DEFAULT[@]
-  mrcore_validate_file_required "Docker compose network" "${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_LOCAL_NETWORK}.yaml"
 
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_LOCAL_NETWORK}.yaml")
-
-  if [[ "${DOCKER_COMPOSE_USE_GENERAL_NETWORK}" == true ]]; then
-    DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_DIR}/${DOCKER_COMPOSE_GENERAL_NETWORK}.yaml")
-  fi
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/local-network.yaml")
 
   if [ -f "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" ]; then
     DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${DOCKER_COMPOSE_CONFIG_FILE_LAST}")
@@ -57,11 +48,11 @@ function mrcmd_plugins_docker_compose_method_start() {
 }
 
 function mrcmd_plugins_docker_compose_method_stop() {
-  mrcmd_plugins_call_function "docker-compose/command" down --remove-orphans
+  mrcmd_plugins_docker_compose_down --remove-orphans
 }
 
 function mrcmd_plugins_docker_compose_method_uninstall() {
-  mrcmd_plugins_call_function "docker-compose/command" down -v --remove-orphans --rmi=all
+  mrcmd_plugins_docker_compose_down -v --remove-orphans --rmi=all
 }
 
 function mrcmd_plugins_docker_compose_method_exec() {
@@ -94,7 +85,7 @@ function mrcmd_plugins_docker_compose_method_exec() {
       ;;
 
     down)
-      mrcmd_plugins_call_function "docker-compose/command" down --remove-orphans
+      mrcmd_plugins_docker_compose_down --remove-orphans
       ;;
 
     dc-start)
@@ -143,11 +134,18 @@ function mrcmd_plugins_docker_compose_method_help() {
 
 # private
 function mrcmd_plugins_docker_compose_up() {
-  if [[ "${DOCKER_COMPOSE_USE_GENERAL_NETWORK}" == true ]]; then
-    if ! docker network ls | grep "${DOCKER_COMPOSE_GENERAL_NETWORK}" > /dev/null; then
-      DOCKER_COMPOSE_GENERAL_NETWORK_IS_EXTERNAL=false
-    fi
+  if [[ "${DOCKER_COMPOSE_NETWORK}" != "${DOCKER_GENERAL_NETWORK}" ]]; then
+    mrcmd_plugins_call_function "docker/create-network" "${DOCKER_COMPOSE_NETWORK}" bridge
   fi
 
   mrcmd_plugins_call_function "docker-compose/command" up "$@"
+}
+
+# private
+function mrcmd_plugins_docker_compose_down() {
+  mrcmd_plugins_call_function "docker-compose/command" down "$@"
+
+  if [[ "${DOCKER_COMPOSE_NETWORK}" != "${DOCKER_GENERAL_NETWORK}" ]]; then
+    mrcmd_plugins_call_function "docker/remove-network" "${DOCKER_COMPOSE_NETWORK}"
+  fi
 }

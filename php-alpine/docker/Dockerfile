@@ -2,7 +2,6 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG DEFAULT_SHELL
 ARG INSTALL_ZIP
 ARG INSTALL_SOCKETS
 ARG INSTALL_XSLT
@@ -21,10 +20,6 @@ ARG HOST_GROUP_ID
 
 # install base packages
 #RUN apk add --no-cache oniguruma-dev
-
-RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
-      apk add --no-cache ${DEFAULT_SHELL}; \
-    fi;
 
 # install Zip, Bz2 libs
 RUN if [[ "${INSTALL_ZIP}" == true ]]; then \

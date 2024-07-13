@@ -29,8 +29,8 @@ function mrcmd_plugins_postgres_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}postgres:15.5"
-    "postgres:15.5-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}postgres:15.7"
+    "postgres:15.7-alpine3.20"
 
     "127.0.0.1:5432"
     "user_pg"
@@ -89,7 +89,7 @@ function mrcmd_plugins_postgres_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${POSTGRES_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

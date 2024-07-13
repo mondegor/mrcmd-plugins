@@ -27,8 +27,8 @@ function mrcmd_plugins_prometheus_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}prometheus:2.51.2"
-    "prom/prometheus:v2.51.2"
+    "${DOCKER_PACKAGE_NAME}prometheus:2.53.1"
+    "prom/prometheus:v2.53.1"
 
     "127.0.0.1:9090"
     "prometheus.local"
@@ -73,7 +73,7 @@ function mrcmd_plugins_prometheus_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${PROMETHEUS_DOCKER_SERVICE}" \
-        "sh" # "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

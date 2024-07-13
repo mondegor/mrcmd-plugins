@@ -90,7 +90,7 @@ function mrcmd_plugins_mongo_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${MONGO_DOCKER_SERVICE}" \
-        "bash" # "${DOCKER_DEFAULT_SHELL}"
+        bash # shell name
       ;;
 
     logs)

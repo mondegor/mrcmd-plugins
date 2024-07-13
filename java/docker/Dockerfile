@@ -2,7 +2,6 @@ ARG DOCKER_IMAGE_FROM
 
 FROM ${DOCKER_IMAGE_FROM}
 
-ARG DEFAULT_SHELL
 ARG HOST_USER_ID
 ARG HOST_GROUP_ID
 
@@ -13,10 +12,6 @@ ARG HOST_GROUP_ID
 #RUN apt-get update && apt-get install -y \
 #    gettext \
 #    && rm -rf /var/lib/apt/lists/*
-
-RUN if [[ ${DEFAULT_SHELL} != "sh" ]]; then \
-      apk add --no-cache ${DEFAULT_SHELL}; \
-    fi;
 
 RUN addgroup -g 1000 java && adduser -u 1000 -G java -s /bin/sh -D java
 

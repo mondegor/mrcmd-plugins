@@ -1,16 +1,17 @@
 
 function mrcmd_plugins_docker_method_init() {
   readonly DOCKER_CAPTION="Docker"
+
   DOCKER_DAEMON_IS_RUNNING=false
 
   readonly DOCKER_VARS=(
     "DOCKER_PACKAGE_NAME"
-    "DOCKER_DEFAULT_SHELL" # sh, bash
+    "DOCKER_GENERAL_NETWORK"
   )
 
   readonly DOCKER_DEFAULT=(
     "p/"
-    "sh"
+    "" # "general-network"
   )
 
   mrcore_dotenv_init_var_array DOCKER_VARS[@] DOCKER_DEFAULT[@]
@@ -20,8 +21,6 @@ function mrcmd_plugins_docker_method_init() {
   else
     readonly DOCKER_IS_ENABLED=false
   fi
-
-  DOCKER_DEFAULT_SHELL=$(mrcore_get_shell "${DOCKER_DEFAULT_SHELL}")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${DOCKER_CAPTION}' was deactivated"
@@ -48,6 +47,18 @@ function mrcmd_plugins_docker_method_config() {
 
 function mrcmd_plugins_docker_method_export_config() {
   mrcore_dotenv_export_var_array DOCKER_VARS[@]
+}
+
+function mrcmd_plugins_docker_method_start() {
+  if [ -n "${DOCKER_GENERAL_NETWORK}" ]; then
+    mrcmd_plugins_call_function "docker/create-network" "${DOCKER_GENERAL_NETWORK}" bridge
+  fi
+}
+
+function mrcmd_plugins_docker_method_uninstall() {
+  if [ -n "${DOCKER_GENERAL_NETWORK}" ]; then
+    mrcmd_plugins_call_function "docker/remove-network" "${DOCKER_GENERAL_NETWORK}"
+  fi
 }
 
 function mrcmd_plugins_docker_method_exec() {

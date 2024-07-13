@@ -2,5 +2,5 @@ version: "3.9"
 
 networks:
   local-network:
-    name: ${APPX_ID}-local-network
-    driver: bridge
+    name: ${DOCKER_COMPOSE_NETWORK}
+    external: true

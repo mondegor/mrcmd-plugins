@@ -91,7 +91,7 @@ function mrcmd_plugins_keycloak_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${KEYCLOAK_DOCKER_SERVICE}" \
-        "bash" # "${DOCKER_DEFAULT_SHELL}"
+        bash # shell name
       ;;
 
     logs)

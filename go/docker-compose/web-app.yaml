@@ -19,4 +19,4 @@ services:
       - APPX_SERVICE_BIND=${GO_WEBAPP_BIND}
       - APPX_SERVICE_PORT=${GO_WEBAPP_PORT}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network

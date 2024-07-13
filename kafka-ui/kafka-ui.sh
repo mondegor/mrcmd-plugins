@@ -80,7 +80,7 @@ function mrcmd_plugins_kafka_ui_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${KAFKA_UI_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

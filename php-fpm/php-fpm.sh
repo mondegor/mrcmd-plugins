@@ -52,8 +52,8 @@ function mrcmd_plugins_php_fpm_method_init() {
 
     "${PHP_FPM_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${PHP_FPM_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.25.3"
-    "nginx:1.25.3-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.27.0"
+    "nginx:1.27.0-alpine3.19"
 
     "127.0.0.1:8080"
     "web-app.local"
@@ -118,7 +118,7 @@ function mrcmd_plugins_php_fpm_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${PHP_FPM_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)
@@ -134,7 +134,7 @@ function mrcmd_plugins_php_fpm_method_exec() {
     ng-into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${PHP_FPM_NGINX_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     ng-logs)

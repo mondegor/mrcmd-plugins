@@ -86,13 +86,14 @@ function mrcmd_plugins_java_method_exec() {
       ;;
 
     shell)
-      mrcmd_plugins_call_function "java/docker-run" "${DOCKER_DEFAULT_SHELL}" "$@"
+      # sh - shell name
+      mrcmd_plugins_call_function "java/docker-run" sh "$@"
       ;;
 
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${JAVA_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

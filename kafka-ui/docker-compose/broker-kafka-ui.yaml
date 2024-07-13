@@ -14,7 +14,7 @@ services:
       - SERVER_PORT=${KAFKA_UI_WEB_INTERNAL_PORT}
       - DYNAMIC_CONFIG_ENABLED=false
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.${READONLY_KAFKA_UI_DOCKER_HOST}.rule=Host(`${KAFKA_UI_WEB_DOMAIN}`)

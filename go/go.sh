@@ -7,6 +7,7 @@ function mrcmd_plugins_go_method_depends() {
 function mrcmd_plugins_go_method_init() {
   readonly GO_CAPTION="Go alpine"
   readonly GO_DOCKER_SERVICE="web-app"
+  readonly GO_TMP_DIR="${APPX_DIR}/.cache"
 
   readonly GO_VARS=(
     "READONLY_GO_DOCKER_HOST"
@@ -37,10 +38,10 @@ function mrcmd_plugins_go_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}go:1.21.4"
-    "golang:1.21.4-alpine3.18"
+    "${DOCKER_PACKAGE_NAME}go:1.22.5"
+    "golang:1.22.5-alpine3.20"
 
-    "${APPX_DIR}/golang"
+    "${GO_TMP_DIR}/golang"
     "${APPX_DIR}/.env.app"
     "./cmd/app/main.go"
 
@@ -79,9 +80,12 @@ function mrcmd_plugins_go_method_export_config() {
 }
 
 function mrcmd_plugins_go_method_install() {
+  mrcore_lib_mkdir "${GO_TMP_DIR}"
   mrcore_lib_mkdir "${GO_GOPATH_DIR}"
+
   mrcmd_plugins_go_docker_build --no-cache
   mrcmd_plugins_go_install_tools
+  mrcmd_plugins_call_function "go/docker-run" go mod tidy
   mrcmd_plugins_call_function "go/docker-run" go mod download
 }
 
@@ -90,7 +94,7 @@ function mrcmd_plugins_go_method_start() {
 }
 
 function mrcmd_plugins_go_method_uninstall() {
-  mrcore_lib_rmdir "${GO_GOPATH_DIR}"
+  mrcore_lib_rmdir "${GO_TMP_DIR}"
 }
 
 function mrcmd_plugins_go_method_exec() {
@@ -109,7 +113,8 @@ function mrcmd_plugins_go_method_exec() {
       ;;
 
     shell)
-      mrcmd_plugins_call_function "go/docker-run" "${DOCKER_DEFAULT_SHELL}" "$@"
+       # sh - shell name
+      mrcmd_plugins_call_function "go/docker-run" sh "$@"
       ;;
 
     env)
@@ -131,7 +136,7 @@ function mrcmd_plugins_go_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${GO_DOCKER_SERVICE}" \
-        "${DOCKER_DEFAULT_SHELL}"
+        sh # shell name
       ;;
 
     logs)

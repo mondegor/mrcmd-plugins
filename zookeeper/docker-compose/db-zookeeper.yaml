@@ -15,7 +15,7 @@ services:
       - ZOOKEEPER_TICK_TIME=${ZOOKEEPER_TICK_TIME}
       - ZOOKEEPER_SYNC_LIMIT=${ZOOKEEPER_SYNC_LIMIT}
     networks:
-      - ${DOCKER_COMPOSE_LOCAL_NETWORK}
+      - local-network
 
 volumes:
   db-zookeeper-volume:
