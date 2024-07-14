@@ -33,15 +33,12 @@ function mrcmd_plugins_nodejs_method_init() {
 
     "127.0.0.1:3000"
 
-    "${APPX_DIR}/.env.app"
+    "${APPX_DIR}/.env"
   )
 
   mrcore_dotenv_init_var_array NODEJS_VARS[@] NODEJS_VARS_DEFAULT[@]
 
-  mrcmd_plugins_call_function "docker-compose/register" \
-    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
-    "${NODEJS_APP_ENV_FILE}" \
-    "${NODEJS_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${NODEJS_CAPTION}' was deactivated"

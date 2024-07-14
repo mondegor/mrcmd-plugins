@@ -9,6 +9,7 @@ function mrcmd_func_java_docker_run() {
     --rm \
     -v "$(mrcmd_os_realpath "${APPX_WORK_DIR}"):/opt/app" \
     --env "TZ=${APPX_TZ}" \
+    --env-file "$(mrcmd_os_realpath "${JAVA_APP_ENV_FILE}")" \
     "${JAVA_DOCKER_IMAGE}" \
     "$@"
 }

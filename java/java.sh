@@ -38,16 +38,13 @@ function mrcmd_plugins_java_method_init() {
     "0.0.0.0"
     "8080"
 
-    "${APPX_DIR}/.env.app"
+    "${APPX_DIR}/.env"
     "./app.jar"
   )
 
   mrcore_dotenv_init_var_array JAVA_VARS[@] JAVA_VARS_DEFAULT[@]
 
-  mrcmd_plugins_call_function "docker-compose/register" \
-    "${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
-    "${JAVA_APP_ENV_FILE}" \
-    "${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${JAVA_CAPTION}' was deactivated"

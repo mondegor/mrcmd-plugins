@@ -58,7 +58,7 @@ function mrcmd_plugins_php_fpm_method_init() {
     "127.0.0.1:8080"
     "web-app.local"
 
-    "${APPX_DIR}/.env.app"
+    "${APPX_DIR}/.env"
 
 #    "${APPX_DB_HOST:-db-postgres}"
 #    "${APPX_DB_PORT:-5432}"
@@ -73,10 +73,7 @@ function mrcmd_plugins_php_fpm_method_init() {
 
   mrcore_dotenv_init_var_array PHP_FPM_VARS[@] PHP_FPM_VARS_DEFAULT[@]
 
-  mrcmd_plugins_call_function "docker-compose/register" \
-    "${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
-    "${PHP_FPM_APP_ENV_FILE}" \
-    "${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${PHP_FPM_CAPTION}' was deactivated"

@@ -15,5 +15,7 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
+    env_file:
+      - ${JAVA_APP_ENV_FILE}
     networks:
       - local-network

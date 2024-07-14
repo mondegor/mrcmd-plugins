@@ -12,6 +12,8 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
+    env_file:
+      - ${PHP_FPM_APP_ENV_FILE}
     networks:
       - local-network
 

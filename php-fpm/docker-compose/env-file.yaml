@@ -1,6 +1,0 @@
-version: "3.9"
-
-services:
-  web-app: # ${PHP_FPM_DOCKER_SERVICE}
-    env_file:
-      - ${PHP_FPM_APP_ENV_FILE}

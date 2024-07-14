@@ -3,11 +3,16 @@
 
 ## 2024-07-14
 ### Added
+- Для плагинов `go`, `java`, `php*`, `nodejs` при запуске модулей (`docker` и `docker-compose`)
+  прикрепляется `env-file` путь к которому может быть изменён.
+
+### Changed
 - Доработано определение версии `APPX_ENV`;
 
 ### Removed
 - Удалены переменные `APPX_SERVICE_BIND`, `APPX_SERVICE_PORT`, такого вида
   переменные можно задавать через `.env.app` конкретного проекта;
+- Удалена функция `mrcmd_func_docker_compose_register()`;
 
 ## 2024-07-13
 ### Added

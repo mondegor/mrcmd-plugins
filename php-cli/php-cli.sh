@@ -36,7 +36,7 @@ function mrcmd_plugins_php_cli_method_init() {
     "${DOCKER_PACKAGE_NAME}php-cli-alpine:8.2.11"
     "php:8.2.11-cli-alpine3.18"
 
-    "${APPX_DIR}/.env.app"
+    "${APPX_DIR}/.env"
 
     "composer" # phive, composer, false
     "e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02" # composer setup hash

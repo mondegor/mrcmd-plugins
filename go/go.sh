@@ -42,7 +42,7 @@ function mrcmd_plugins_go_method_init() {
     "golang:1.22.5-alpine3.20"
 
     "${GO_TMP_DIR}/golang"
-    "${APPX_DIR}/.env.app"
+    "${APPX_DIR}/.env"
     "./cmd/app/main.go"
 
     "127.0.0.1:8080"
@@ -57,10 +57,7 @@ function mrcmd_plugins_go_method_init() {
 
   mrcore_dotenv_init_var_array GO_VARS[@] GO_VARS_DEFAULT[@]
 
-  mrcmd_plugins_call_function "docker-compose/register" \
-    "${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml" \
-    "${GO_APP_ENV_FILE}" \
-    "${GO_DOCKER_COMPOSE_CONFIG_DIR}/env-file.yaml"
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${GO_CAPTION}' was deactivated"
