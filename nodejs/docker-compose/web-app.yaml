@@ -15,6 +15,7 @@ services:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
+      - APPX_VER=${APPX_VER}
     env_file:
       - ${NODEJS_APP_ENV_FILE}
     networks:
