@@ -3,12 +3,12 @@
 
 ## 2024-07-21
 ### Added
-- Добавлены следующие плагины:
+- Добавлены следующие плагины логирования и мониторинга:
     - `Grafana`;
     - `Grafana Loki`;
     - `Grafana Promtail`;
-    - `Node Exporter`;
-    - `Postgres Exporter`;
+    - `Node Exporter for Prometheus`;
+    - `Postgres Exporter for Prometheus`;
 - Добавлена переменная `DOCKER_COMPOSE_REQUIRED_SOURCES`;
 - Добавлена поддержка `base auth` для трафика проходящего через `traefik`; 
 - Добавлены переменные для `prometheus`:
@@ -21,7 +21,6 @@
     - `*_DB_URL` -> `*_DB_DSN`;
     - `*_APP_ENV_FILE` -> `*_APPX_ENV_FILE`;
     - `*_APP_MAIN_FILE` -> `*_APPX_MAIN_FILE`;
-    - `*_DB_URL` -> `*_DB_DSN`;
     - `*_WEBAPP_DOMAIN` -> `*_WEBAPP_INTERNAL_DOMAIN`;
 Заменено правило старта `docker`: `always` -> `unless-stopped`;
 Заменена `READONLY_*_DOCKER_HOST` -> `*_DOCKER_SERVICE`;
