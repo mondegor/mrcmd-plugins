@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  mn-grafana-promtail: # ${GRAFANA_PROMTAIL_DOCKER_SERVICE}
+    image: ${GRAFANA_PROMTAIL_DOCKER_IMAGE}
+    container_name: ${GRAFANA_PROMTAIL_DOCKER_CONTAINER}
+    restart: unless-stopped
+    #ports:
+    #  - ${GRAFANA_PROMTAIL_WEB_PUBLIC_PORT}:9080
+    volumes:
+      - mn-grafana-promtail-volume:/var/promtail
+      - mn-grafana-promtail-log-volume:/var/log:ro
+      - ${GRAFANA_PROMTAIL_CONFIG_PATH}:/etc/promtail/config.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${GRAFANA_PROMTAIL_DOCKER_SERVICE}.rule=Host(`${GRAFANA_PROMTAIL_WEB_DOMAIN}`)
+      - traefik.http.routers.${GRAFANA_PROMTAIL_DOCKER_SERVICE}.entrypoints=web
+      - traefik.http.routers.${GRAFANA_PROMTAIL_DOCKER_SERVICE}.middlewares=general-auth
+      - traefik.http.services.${GRAFANA_PROMTAIL_DOCKER_SERVICE}.loadbalancer.server.port=9080
+
+volumes:
+  mn-grafana-promtail-volume:
+  mn-grafana-promtail-log-volume:

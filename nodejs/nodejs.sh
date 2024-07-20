@@ -5,11 +5,11 @@ function mrcmd_plugins_nodejs_method_depends() {
 }
 
 function mrcmd_plugins_nodejs_method_init() {
+  export NODEJS_DOCKER_SERVICE="web-app"
+
   readonly NODEJS_CAPTION="NodeJS"
-  readonly NODEJS_DOCKER_SERVICE="web-app"
 
   readonly NODEJS_VARS=(
-    "READONLY_NODEJS_DOCKER_HOST"
     "NODEJS_DOCKER_CONTAINER"
     "NODEJS_DOCKER_CONTEXT_DIR"
     "NODEJS_DOCKER_DOCKERFILE"
@@ -18,12 +18,12 @@ function mrcmd_plugins_nodejs_method_init() {
     "NODEJS_DOCKER_IMAGE_FROM"
 
     "NODEJS_WEBAPP_PUBLIC_PORT"
+    "NODEJS_WEBAPP_DOMAIN"
 
-    "NODEJS_APP_ENV_FILE"
+    "NODEJS_APPX_ENV_FILE"
   )
 
   readonly NODEJS_VARS_DEFAULT=(
-    "${NODEJS_DOCKER_SERVICE}"
     "${APPX_ID}-${NODEJS_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -32,6 +32,7 @@ function mrcmd_plugins_nodejs_method_init() {
     "node:21.2.0-alpine3.18"
 
     "127.0.0.1:3000"
+    "web-client.local"
 
     "${APPX_DIR}/.env"
   )
@@ -51,6 +52,7 @@ function mrcmd_plugins_nodejs_method_canexec() {
 
 function mrcmd_plugins_nodejs_method_config() {
   mrcore_dotenv_echo_var_array NODEJS_VARS[@]
+  mrcore_echo_var "NODEJS_DOCKER_SERVICE (host, readonly)" "${NODEJS_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_nodejs_method_export_config() {

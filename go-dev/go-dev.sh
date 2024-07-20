@@ -9,7 +9,7 @@ function mrcmd_plugins_go_dev_method_init() {
 
   readonly GO_DEV_VARS=(
     "GO_DEV_TOOLS_BIN_DIR"
-    "GO_DEV_APP_MAIN_FILE"
+    "GO_DEV_APPX_MAIN_FILE"
     "GO_DEV_LOCAL_PACKAGE"
 
     "GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION"
@@ -110,7 +110,7 @@ function mrcmd_plugins_go_dev_method_exec() {
       ;;
 
     run)
-      mrcmd_plugins_go_dev_workdir go run "${GO_DEV_APP_MAIN_FILE}"
+      mrcmd_plugins_go_dev_workdir go run "${GO_DEV_APPX_MAIN_FILE}"
       ;;
 
     get)
@@ -217,7 +217,7 @@ function mrcmd_plugins_go_dev_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
   echo -e "  env                 Prints Go environment information."
-  echo -e "  run                 Compiles and runs package ${CC_BLUE}${GO_DEV_APP_MAIN_FILE}${CC_END}"
+  echo -e "  run                 Compiles and runs package ${CC_BLUE}${GO_DEV_APPX_MAIN_FILE}${CC_END}"
   echo -e "  get [arguments]     Downloads the packages named by the import paths,"
   echo -e "                      along with their dependencies."
   echo -e "  get-upgrade         Downloads and upgrade the packages."

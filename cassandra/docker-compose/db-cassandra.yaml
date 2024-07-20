@@ -4,7 +4,7 @@ services:
   db-cassandra: # ${CASSANDRA_DOCKER_SERVICE}
     image: ${CASSANDRA_DOCKER_IMAGE}
     container_name: ${CASSANDRA_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
     ports:
       - ${CASSANDRA_DB_PUBLIC_PORT}:9042
     volumes:

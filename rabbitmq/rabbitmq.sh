@@ -5,11 +5,11 @@ function mrcmd_plugins_rabbitmq_method_depends() {
 }
 
 function mrcmd_plugins_rabbitmq_method_init() {
+  export RABBITMQ_DOCKER_SERVICE="broker-rabbitmq"
+
   readonly RABBITMQ_CAPTION="RabbitMQ"
-  readonly RABBITMQ_DOCKER_SERVICE="broker-rabbitmq"
 
   readonly RABBITMQ_VARS=(
-    "READONLY_RABBITMQ_DOCKER_HOST"
     "RABBITMQ_DOCKER_CONTAINER"
     "RABBITMQ_DOCKER_CONTEXT_DIR"
     "RABBITMQ_DOCKER_DOCKERFILE"
@@ -25,7 +25,6 @@ function mrcmd_plugins_rabbitmq_method_init() {
   )
 
   readonly RABBITMQ_VARS_DEFAULT=(
-    "${RABBITMQ_DOCKER_SERVICE}"
     "${APPX_ID}-${RABBITMQ_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -55,6 +54,7 @@ function mrcmd_plugins_rabbitmq_method_canexec() {
 
 function mrcmd_plugins_rabbitmq_method_config() {
   mrcore_dotenv_echo_var_array RABBITMQ_VARS[@]
+  mrcore_echo_var "RABBITMQ_DOCKER_SERVICE (host, readonly)" "${RABBITMQ_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_rabbitmq_method_export_config() {

@@ -4,8 +4,8 @@ services:
   broker-rabbitmq: # ${RABBITMQ_DOCKER_SERVICE}
     image: ${RABBITMQ_DOCKER_IMAGE}
     container_name: ${RABBITMQ_DOCKER_CONTAINER}
-    hostname: ${READONLY_RABBITMQ_DOCKER_HOST} # ${RABBITMQ_DOCKER_SERVICE}
-    restart: always
+    hostname: ${RABBITMQ_DOCKER_SERVICE}
+    restart: unless-stopped
     ports:
       - ${RABBITMQ_PUBLIC_PORT}:5672
       - ${RABBITMQ_WEB_PUBLIC_PORT}:15672

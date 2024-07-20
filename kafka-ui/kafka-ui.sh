@@ -6,11 +6,11 @@ function mrcmd_plugins_kafka_ui_method_depends() {
 }
 
 function mrcmd_plugins_kafka_ui_method_init() {
+  export KAFKA_UI_DOCKER_SERVICE="broker-kafka-ui"
+
   readonly KAFKA_UI_CAPTION="UI for Apache Kafka"
-  readonly KAFKA_UI_DOCKER_SERVICE="broker-kafka-ui"
 
   readonly KAFKA_UI_VARS=(
-    "READONLY_KAFKA_UI_DOCKER_HOST"
     "KAFKA_UI_DOCKER_CONTAINER"
     "KAFKA_UI_DOCKER_CONTEXT_DIR"
     "KAFKA_UI_DOCKER_DOCKERFILE"
@@ -21,12 +21,12 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "KAFKA_UI_KAFKA_HOSTS_PORTS"
     "KAFKA_UI_ZOOKEEPER_HOST_PORT"
 
-    "KAFKA_UI_WEB_DOMAIN"
+    # "KAFKA_UI_WEB_PUBLIC_PORT"
     "KAFKA_UI_WEB_INTERNAL_PORT"
+    "KAFKA_UI_WEB_DOMAIN"
   )
 
   readonly KAFKA_UI_VARS_DEFAULT=(
-    "${KAFKA_UI_DOCKER_SERVICE}"
     "${APPX_ID}-${KAFKA_UI_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -37,8 +37,9 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "broker-kafka:9092" # ${KAFKA_DOCKER_SERVICE} or broker-kafka1:9092,broker-kafka2:9092
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}
 
-    "kafka.local"
+    # "127.0.0.1:9952"
     "8080"
+    "kafka.local"
   )
 
   mrcore_dotenv_init_var_array KAFKA_UI_VARS[@] KAFKA_UI_VARS_DEFAULT[@]
@@ -56,6 +57,7 @@ function mrcmd_plugins_kafka_ui_method_canexec() {
 
 function mrcmd_plugins_kafka_ui_method_config() {
   mrcore_dotenv_echo_var_array KAFKA_UI_VARS[@]
+  mrcore_echo_var "KAFKA_UI_DOCKER_SERVICE (host, readonly)" "${KAFKA_UI_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_kafka_ui_method_export_config() {

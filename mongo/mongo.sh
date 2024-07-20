@@ -5,11 +5,11 @@ function mrcmd_plugins_mongo_method_depends() {
 }
 
 function mrcmd_plugins_mongo_method_init() {
+  export MONGO_DOCKER_SERVICE="db-mongo"
+
   readonly MONGO_CAPTION="Mongo Jammy"
-  readonly MONGO_DOCKER_SERVICE="db-mongo"
 
   readonly MONGO_VARS=(
-    "READONLY_MONGO_DOCKER_HOST"
     "MONGO_DOCKER_CONTAINER"
     "MONGO_DOCKER_CONTEXT_DIR"
     "MONGO_DOCKER_DOCKERFILE"
@@ -23,7 +23,6 @@ function mrcmd_plugins_mongo_method_init() {
   )
 
   readonly MONGO_VARS_DEFAULT=(
-    "${MONGO_DOCKER_SERVICE}"
     "${APPX_ID}-${MONGO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -37,7 +36,7 @@ function mrcmd_plugins_mongo_method_init() {
   )
 
   mrcore_dotenv_init_var_array MONGO_VARS[@] MONGO_VARS_DEFAULT[@]
-  mrcmd_plugins_mongo_db_url_init
+  mrcmd_plugins_mongo_db_dsn_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MONGO_DOCKER_COMPOSE_CONFIG_DIR}/db-mongo.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MONGO_DOCKER_COMPOSE_CONFIG_DIR}/db-mongo-init.yaml")
@@ -53,8 +52,9 @@ function mrcmd_plugins_mongo_method_canexec() {
 
 function mrcmd_plugins_mongo_method_config() {
   mrcore_dotenv_echo_var_array MONGO_VARS[@]
-  mrcore_echo_var "MONGO_DB_URL" "${MONGO_DB_URL}"
-  mrcore_echo_var "MONGO_DB_URL_JDBC" "${MONGO_DB_URL_JDBC}"
+  mrcore_echo_var "MONGO_DOCKER_SERVICE (host, readonly)" "${MONGO_DOCKER_SERVICE}"
+  mrcore_echo_var "MONGO_DB_DSN (readonly)" "${MONGO_DB_DSN}"
+  mrcore_echo_var "MONGO_DB_URL_JDBC (readonly)" "${MONGO_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_mongo_method_export_config() {
@@ -122,8 +122,8 @@ function mrcmd_plugins_mongo_method_help() {
   echo -e "  restart     Restarts the container"
 }
 
-function mrcmd_plugins_mongo_db_url_init() {
-  readonly MONGO_DB_URL="mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DOCKER_SERVICE}:27017/${MONGO_DB_NAME}"
+function mrcmd_plugins_mongo_db_dsn_init() {
+  readonly MONGO_DB_DSN="mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DOCKER_SERVICE}:27017/${MONGO_DB_NAME}"
   readonly MONGO_DB_URL_JDBC="jdbc:mongo://${MONGO_DOCKER_SERVICE}:27017/${MONGO_DB_NAME}"
 }
 

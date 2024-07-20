@@ -4,7 +4,7 @@ services:
   db-zookeeper: # ${ZOOKEEPER_DOCKER_SERVICE}
     image: ${ZOOKEEPER_DOCKER_IMAGE}
     container_name: ${ZOOKEEPER_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
     ports:
       - ${ZOOKEEPER_PUBLIC_PORT}:${ZOOKEEPER_CLIENT_PORT}
     volumes:

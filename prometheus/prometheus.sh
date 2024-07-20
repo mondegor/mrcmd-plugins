@@ -5,11 +5,11 @@ function mrcmd_plugins_prometheus_method_depends() {
 }
 
 function mrcmd_plugins_prometheus_method_init() {
+  export PROMETHEUS_DOCKER_SERVICE="mn-prometheus"
+
   readonly PROMETHEUS_CAPTION="Prometheus"
-  readonly PROMETHEUS_DOCKER_SERVICE="mn-prometheus"
 
   readonly PROMETHEUS_VARS=(
-    "READONLY_PROMETHEUS_DOCKER_HOST"
     "PROMETHEUS_DOCKER_CONTAINER"
     "PROMETHEUS_DOCKER_CONTEXT_DIR"
     "PROMETHEUS_DOCKER_DOCKERFILE"
@@ -17,12 +17,15 @@ function mrcmd_plugins_prometheus_method_init() {
     "PROMETHEUS_DOCKER_IMAGE"
     "PROMETHEUS_DOCKER_IMAGE_FROM"
 
-    "PROMETHEUS_PUBLIC_PORT"
+    "PROMETHEUS_CONFIG_PATH"
+    "PROMETHEUS_STORAGE_TSDB_RETENTION_TIME"
+    "PROMETHEUS_STORAGE_TSDB_RETENTION_SIZE"
+
+    # "PROMETHEUS_WEB_PUBLIC_PORT"
     "PROMETHEUS_WEB_DOMAIN"
   )
 
   readonly PROMETHEUS_VARS_DEFAULT=(
-    "${PROMETHEUS_DOCKER_SERVICE}"
     "${APPX_ID}-${PROMETHEUS_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -30,12 +33,21 @@ function mrcmd_plugins_prometheus_method_init() {
     "${DOCKER_PACKAGE_NAME}prometheus:2.53.1"
     "prom/prometheus:v2.53.1"
 
-    "127.0.0.1:9090"
+    ""
+    "10d"
+    "5GB"
+
+    # "127.0.0.1:9090"
     "prometheus.local"
   )
 
   mrcore_dotenv_init_var_array PROMETHEUS_VARS[@] PROMETHEUS_VARS_DEFAULT[@]
 
+  if [ -z "${PROMETHEUS_CONFIG_PATH}" ]; then
+    PROMETHEUS_CONFIG_PATH="${PROMETHEUS_DOCKER_COMPOSE_CONFIG_DIR}/default-config.yaml"
+  fi
+
+  DOCKER_COMPOSE_REQUIRED_SOURCES+=("Prometheus config path" "${PROMETHEUS_CONFIG_PATH}")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${PROMETHEUS_DOCKER_COMPOSE_CONFIG_DIR}/mn-prometheus.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
@@ -49,6 +61,7 @@ function mrcmd_plugins_prometheus_method_canexec() {
 
 function mrcmd_plugins_prometheus_method_config() {
   mrcore_dotenv_echo_var_array PROMETHEUS_VARS[@]
+  mrcore_echo_var "PROMETHEUS_DOCKER_SERVICE (host, readonly)" "${PROMETHEUS_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_prometheus_method_export_config() {

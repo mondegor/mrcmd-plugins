@@ -5,12 +5,12 @@ function mrcmd_plugins_php_fpm_method_depends() {
 }
 
 function mrcmd_plugins_php_fpm_method_init() {
+  export PHP_FPM_DOCKER_SERVICE="web-app"
+  export PHP_FPM_NGINX_DOCKER_SERVICE="web-app-nginx"
+
   readonly PHP_FPM_CAPTION="PHP FPM"
-  readonly PHP_FPM_DOCKER_SERVICE="web-app"
-  readonly PHP_FPM_NGINX_DOCKER_SERVICE="web-app-nginx"
 
   readonly PHP_FPM_VARS=(
-    "READONLY_PHP_FPM_DOCKER_HOST"
     "PHP_FPM_DOCKER_CONTAINER"
     "PHP_FPM_DOCKER_CONTEXT_DIR"
     "PHP_FPM_DOCKER_DOCKERFILE"
@@ -19,7 +19,6 @@ function mrcmd_plugins_php_fpm_method_init() {
     "PHP_FPM_DOCKER_IMAGE_FROM"
     "PHP_FPM_ALPINE_DOCKER_IMAGE_FROM"
 
-    "READONLY_PHP_FPM_NGINX_DOCKER_HOST"
     "PHP_FPM_NGINX_DOCKER_CONTAINER"
     "PHP_FPM_NGINX_DOCKER_IMAGE"
     "PHP_FPM_NGINX_DOCKER_IMAGE_FROM"
@@ -27,7 +26,7 @@ function mrcmd_plugins_php_fpm_method_init() {
     "PHP_FPM_WEBAPP_PUBLIC_PORT"
     "PHP_FPM_WEBAPP_DOMAIN"
 
-    "PHP_FPM_APP_ENV_FILE"
+    "PHP_FPM_APPX_ENV_FILE"
 
 #    "WEB_PHP_DB_HOST"
 #    "WEB_PHP_DB_PORT"
@@ -41,7 +40,6 @@ function mrcmd_plugins_php_fpm_method_init() {
   )
 
   readonly PHP_FPM_VARS_DEFAULT=(
-    "${PHP_FPM_DOCKER_SERVICE}"
     "${APPX_ID}-${PHP_FPM_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -50,7 +48,6 @@ function mrcmd_plugins_php_fpm_method_init() {
     "${DOCKER_PACKAGE_NAME}php-fpm-alpine:8.2.11"
     "php:8.2.11-fpm-alpine3.18"
 
-    "${PHP_FPM_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${PHP_FPM_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.27.0"
     "nginx:1.27.0-alpine3.19"
@@ -87,6 +84,8 @@ function mrcmd_plugins_php_fpm_method_canexec() {
 function mrcmd_plugins_php_fpm_method_config() {
   mrcore_dotenv_echo_var_array PHP_ALPINE_VARS[@]
   mrcore_dotenv_echo_var_array PHP_FPM_VARS[@]
+  mrcore_echo_var "PHP_FPM_DOCKER_SERVICE (host, readonly)" "${PHP_FPM_DOCKER_SERVICE}"
+  mrcore_echo_var "PHP_FPM_NGINX_DOCKER_SERVICE (host, readonly)" "${PHP_FPM_NGINX_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_php_fpm_method_export_config() {

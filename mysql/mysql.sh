@@ -5,11 +5,11 @@ function mrcmd_plugins_mysql_method_depends() {
 }
 
 function mrcmd_plugins_mysql_method_init() {
+  export MYSQL_DOCKER_SERVICE="db-mysql"
+
   readonly MYSQL_CAPTION="Mysql"
-  readonly MYSQL_DOCKER_SERVICE="db-mysql"
 
   readonly MYSQL_VARS=(
-    "READONLY_MYSQL_DOCKER_HOST"
     "MYSQL_DOCKER_CONTAINER"
     "MYSQL_DOCKER_CONTEXT_DIR"
     "MYSQL_DOCKER_DOCKERFILE"
@@ -22,7 +22,6 @@ function mrcmd_plugins_mysql_method_init() {
   )
 
   readonly MYSQL_VARS_DEFAULT=(
-    "${MYSQL_DOCKER_SERVICE}"
     "${APPX_ID}-${MYSQL_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -35,7 +34,7 @@ function mrcmd_plugins_mysql_method_init() {
   )
 
   mrcore_dotenv_init_var_array MYSQL_VARS[@] MYSQL_VARS_DEFAULT[@]
-  mrcmd_plugins_mysql_db_url_init
+  mrcmd_plugins_mysql_db_dsn_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${MYSQL_DOCKER_COMPOSE_CONFIG_DIR}/db-mysql-init.yaml")
@@ -51,8 +50,9 @@ function mrcmd_plugins_mysql_method_canexec() {
 
 function mrcmd_plugins_mysql_method_config() {
   mrcore_dotenv_echo_var_array MYSQL_VARS[@]
-  mrcore_echo_var "MYSQL_DB_URL" "${MYSQL_DB_URL}"
-  mrcore_echo_var "MYSQL_DB_URL_JDBC" "${MYSQL_DB_URL_JDBC}"
+  mrcore_echo_var "MYSQL_DOCKER_SERVICE (host, readonly)" "${MYSQL_DOCKER_SERVICE}"
+  mrcore_echo_var "MYSQL_DB_DSN (readonly)" "${MYSQL_DB_DSN}"
+  mrcore_echo_var "MYSQL_DB_URL_JDBC (readonly)" "${MYSQL_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_mysql_method_export_config() {
@@ -119,8 +119,8 @@ function mrcmd_plugins_mysql_method_help() {
 }
 
 # private
-function mrcmd_plugins_mysql_db_url_init() {
-  readonly MYSQL_DB_URL="mysql://${MYSQL_DB_USER}:${MYSQL_DB_PASSWORD}@tcp${MYSQL_DOCKER_SERVICE}:3306/${MYSQL_DB_NAME}"
+function mrcmd_plugins_mysql_db_dsn_init() {
+  readonly MYSQL_DB_DSN="mysql://${MYSQL_DB_USER}:${MYSQL_DB_PASSWORD}@tcp${MYSQL_DOCKER_SERVICE}:3306/${MYSQL_DB_NAME}"
   readonly MYSQL_DB_URL_JDBC="jdbc:mysql://${MYSQL_DOCKER_SERVICE}:3306/${MYSQL_DB_NAME}"
 }
 

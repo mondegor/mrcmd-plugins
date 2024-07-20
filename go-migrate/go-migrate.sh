@@ -14,7 +14,7 @@ function mrcmd_plugins_go_migrate_method_init() {
     "GO_MIGRATE_DOCKER_IMAGE_FROM"
     "GO_MIGRATE_DOCKER_NETWORK"
 
-    "GO_MIGRATE_DB_URL"
+    "GO_MIGRATE_DB_DSN"
     "GO_MIGRATE_DB_TABLE"
 
     "GO_MIGRATE_DB_SRC_DIR"
@@ -27,7 +27,7 @@ function mrcmd_plugins_go_migrate_method_init() {
     "migrate/migrate:v4.17.1"
     "${DOCKER_COMPOSE_NETWORK}"
 
-    "POSTGRES_DB_URL" # var with value or value
+    "POSTGRES_DB_DSN" # var with value or value
     "schema_migrations"
 
     "${APPX_DIR}/migrations"

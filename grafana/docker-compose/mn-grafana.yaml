@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  mn-grafana: # ${GRAFANA_DOCKER_SERVICE}
+    image: ${GRAFANA_DOCKER_IMAGE}
+    container_name: ${GRAFANA_DOCKER_CONTAINER}
+    restart: unless-stopped
+    #ports:
+    #  - ${GRAFANA_WEB_PUBLIC_PORT}:3000
+    volumes:
+      - mn-grafana-volume:/var/lib/grafana
+      - mn-grafana-provisioning-volume:/etc/grafana/provisioning
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${GRAFANA_DOCKER_SERVICE}.rule=Host(`${GRAFANA_WEB_DOMAIN}`)
+      - traefik.http.routers.${GRAFANA_DOCKER_SERVICE}.entrypoints=web
+      - traefik.http.services.${GRAFANA_DOCKER_SERVICE}.loadbalancer.server.port=3000
+
+volumes:
+  mn-grafana-volume:
+  mn-grafana-provisioning-volume:

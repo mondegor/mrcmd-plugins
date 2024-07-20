@@ -11,7 +11,7 @@ function mrcmd_func_go_docker_run() {
     -v "$(mrcmd_os_realpath "${GO_GOPATH_DIR}"):/go" \
     -v "$(mrcmd_os_realpath "${APPX_WORK_DIR}"):/opt/app" \
     --env "TZ=${APPX_TZ}" \
-    --env-file "$(mrcmd_os_realpath "${GO_APP_ENV_FILE}")" \
+    --env-file "$(mrcmd_os_realpath "${GO_APPX_ENV_FILE}")" \
     "${GO_DOCKER_IMAGE}" \
     "$@"
 }

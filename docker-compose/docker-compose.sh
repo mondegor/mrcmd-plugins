@@ -20,6 +20,7 @@ function mrcmd_plugins_docker_compose_method_init() {
 
   mrcore_dotenv_init_var_array DOCKER_COMPOSE_VARS[@] DOCKER_COMPOSE_DEFAULT[@]
 
+  DOCKER_COMPOSE_REQUIRED_SOURCES=("APPX work dir" "${APPX_WORK_DIR}") # for mount volumes (caption => source path)
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY=("${DOCKER_COMPOSE_CONFIG_DIR}/local-network.yaml")
 
   if [ -f "${DOCKER_COMPOSE_CONFIG_FILE_LAST}" ]; then
@@ -44,6 +45,7 @@ function mrcmd_plugins_docker_compose_method_export_config() {
 }
 
 function mrcmd_plugins_docker_compose_method_start() {
+  mrcmd_plugins_docker_compose_validate_required_resources "${DOCKER_COMPOSE_REQUIRED_SOURCES[@]}"
   mrcmd_plugins_docker_compose_up -d --remove-orphans
 }
 
@@ -58,6 +60,8 @@ function mrcmd_plugins_docker_compose_method_uninstall() {
 function mrcmd_plugins_docker_compose_method_exec() {
   local currentCommand="${1:?}"
   shift
+
+  mrcmd_plugins_docker_compose_validate_required_resources "${DOCKER_COMPOSE_REQUIRED_SOURCES[@]}"
 
   case "${currentCommand}" in
 
@@ -130,6 +134,19 @@ function mrcmd_plugins_docker_compose_method_help() {
   echo -e "                      using project yaml config"
   echo -e "  cmd ${CC_BLUE}--help${CC_END}          More information about tool 'docker compose'"
   echo ""
+}
+
+# private
+function mrcmd_plugins_docker_compose_validate_required_resources() {
+  local caption="${1:?}"
+  local path="${2:?}"
+  shift; shift
+
+  mrcore_validate_resource_required "${caption}" "${path}"
+
+  if [ -n "${1-}" ]; then
+    mrcmd_plugins_docker_compose_validate_required_resources "$@"
+  fi
 }
 
 # private

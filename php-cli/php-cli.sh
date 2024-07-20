@@ -14,7 +14,7 @@ function mrcmd_plugins_php_cli_method_init() {
     "PHP_CLI_DOCKER_IMAGE_FROM"
     "PHP_CLI_ALPINE_DOCKER_IMAGE_FROM"
 
-    "PHP_CLI_APP_ENV_FILE"
+    "PHP_CLI_APPX_ENV_FILE"
 
     "PHP_CLI_TOOLS_INSTALL_BASE" # phive, composer, false
     "PHP_CLI_TOOLS_INSTALL_COMPOSER_SETUP_HASH"

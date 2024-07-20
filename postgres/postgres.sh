@@ -5,11 +5,11 @@ function mrcmd_plugins_postgres_method_depends() {
 }
 
 function mrcmd_plugins_postgres_method_init() {
+  export POSTGRES_DOCKER_SERVICE="db-postgres"
+
   readonly POSTGRES_CAPTION="Postgres"
-  readonly POSTGRES_DOCKER_SERVICE="db-postgres"
 
   readonly POSTGRES_VARS=(
-    "READONLY_POSTGRES_DOCKER_HOST"
     "POSTGRES_DOCKER_CONTAINER"
     "POSTGRES_DOCKER_CONTEXT_DIR"
     "POSTGRES_DOCKER_DOCKERFILE"
@@ -24,7 +24,6 @@ function mrcmd_plugins_postgres_method_init() {
   )
 
   readonly POSTGRES_VARS_DEFAULT=(
-    "${POSTGRES_DOCKER_SERVICE}"
     "${APPX_ID}-${POSTGRES_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -39,7 +38,7 @@ function mrcmd_plugins_postgres_method_init() {
   )
 
   mrcore_dotenv_init_var_array POSTGRES_VARS[@] POSTGRES_VARS_DEFAULT[@]
-  mrcmd_plugins_postgres_db_url_init
+  mrcmd_plugins_postgres_db_dsn_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${POSTGRES_DOCKER_COMPOSE_CONFIG_DIR}/db-postgres.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${POSTGRES_DOCKER_COMPOSE_CONFIG_DIR}/db-postgres-init.yaml")
@@ -55,8 +54,9 @@ function mrcmd_plugins_postgres_method_canexec() {
 
 function mrcmd_plugins_postgres_method_config() {
   mrcore_dotenv_echo_var_array POSTGRES_VARS[@]
-  mrcore_echo_var "POSTGRES_DB_URL" "${POSTGRES_DB_URL}"
-  mrcore_echo_var "POSTGRES_DB_URL_JDBC" "${POSTGRES_DB_URL_JDBC}"
+  mrcore_echo_var "POSTGRES_DOCKER_SERVICE (host, readonly)" "${POSTGRES_DOCKER_SERVICE}"
+  mrcore_echo_var "POSTGRES_DB_DSN (readonly)" "${POSTGRES_DB_DSN}"
+  mrcore_echo_var "POSTGRES_DB_URL_JDBC (readonly)" "${POSTGRES_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_postgres_method_export_config() {
@@ -89,7 +89,7 @@ function mrcmd_plugins_postgres_method_exec() {
     into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${POSTGRES_DOCKER_SERVICE}" \
-        sh # shell name
+        bash # shell name
       ;;
 
     logs)
@@ -137,8 +137,8 @@ function mrcmd_plugins_postgres_method_help() {
 }
 
 # private
-function mrcmd_plugins_postgres_db_url_init() {
-  readonly POSTGRES_DB_URL="postgres://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@${POSTGRES_DOCKER_SERVICE}:5432/${POSTGRES_DB_NAME}?sslmode=disable"
+function mrcmd_plugins_postgres_db_dsn_init() {
+  readonly POSTGRES_DB_DSN="postgres://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@${POSTGRES_DOCKER_SERVICE}:5432/${POSTGRES_DB_NAME}?sslmode=disable"
   readonly POSTGRES_DB_URL_JDBC="jdbc:postgresql://${POSTGRES_DOCKER_SERVICE}:5432/${POSTGRES_DB_NAME}"
 }
 

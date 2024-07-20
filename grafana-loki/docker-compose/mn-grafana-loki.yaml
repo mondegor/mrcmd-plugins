@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  mn-grafana-loki: # ${GRAFANA_LOKI_DOCKER_SERVICE}
+    image: ${GRAFANA_LOKI_DOCKER_IMAGE}
+    container_name: ${GRAFANA_LOKI_DOCKER_CONTAINER}
+    restart: unless-stopped
+    volumes:
+      - mn-grafana-loki-volume:/loki
+      - ${GRAFANA_LOKI_CONFIG_PATH}:/etc/loki/local-config.yaml:ro
+    environment:
+      - TZ=${APPX_TZ}
+    networks:
+      - local-network
+
+volumes:
+  mn-grafana-loki-volume:

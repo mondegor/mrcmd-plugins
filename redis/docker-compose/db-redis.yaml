@@ -5,7 +5,7 @@ services:
     image: ${REDIS_DOCKER_IMAGE}
     container_name: ${REDIS_DOCKER_CONTAINER}
     privileged: true
-    restart: always
+    restart: unless-stopped
     ports:
       - ${REDIS_PUBLIC_PORT}:6379
     volumes:

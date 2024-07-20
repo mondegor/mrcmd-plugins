@@ -4,7 +4,9 @@ services:
   broker-kafka-ui: # ${KAFKA_UI_DOCKER_SERVICE}
     image: ${KAFKA_UI_DOCKER_IMAGE}
     container_name: ${KAFKA_UI_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
+    #ports:
+    #  - ${KAFKA_UI_WEB_PUBLIC_PORT}:${KAFKA_UI_WEB_INTERNAL_PORT}
     environment:
       - TZ=${APPX_TZ}
       - KAFKA_CLUSTERS_0_NAME=local
@@ -17,6 +19,7 @@ services:
       - local-network
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${READONLY_KAFKA_UI_DOCKER_HOST}.rule=Host(`${KAFKA_UI_WEB_DOMAIN}`)
-      - traefik.http.routers.${READONLY_KAFKA_UI_DOCKER_HOST}.entrypoints=web
-      - traefik.http.services.${READONLY_KAFKA_UI_DOCKER_HOST}.loadbalancer.server.port=${KAFKA_UI_WEB_INTERNAL_PORT}
+      - traefik.http.routers.${KAFKA_UI_DOCKER_SERVICE}.rule=Host(`${KAFKA_UI_WEB_DOMAIN}`)
+      - traefik.http.routers.${KAFKA_UI_DOCKER_SERVICE}.entrypoints=web
+      - traefik.http.routers.${KAFKA_UI_DOCKER_SERVICE}.middlewares=general-auth
+      - traefik.http.services.${KAFKA_UI_DOCKER_SERVICE}.loadbalancer.server.port=${KAFKA_UI_WEB_INTERNAL_PORT}

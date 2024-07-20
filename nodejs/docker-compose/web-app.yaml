@@ -4,7 +4,7 @@ services:
   web-app: # ${NODEJS_DOCKER_SERVICE}
     image: ${NODEJS_DOCKER_IMAGE}
     container_name: ${NODEJS_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
     command:
       - npm
       - run
@@ -17,6 +17,11 @@ services:
       - TZ=${APPX_TZ}
       - APPX_VER=${APPX_VER}
     env_file:
-      - ${NODEJS_APP_ENV_FILE}
+      - ${NODEJS_APPX_ENV_FILE}
     networks:
       - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NODEJS_DOCKER_SERVICE}.rule=Host(`${NODEJS_WEBAPP_DOMAIN}`)
+      - traefik.http.routers.${NODEJS_DOCKER_SERVICE}.entrypoints=web
+      - traefik.http.services.${NODEJS_DOCKER_SERVICE}.loadbalancer.server.port=3000

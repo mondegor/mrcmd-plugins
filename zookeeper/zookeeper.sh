@@ -6,11 +6,11 @@ function mrcmd_plugins_zookeeper_method_depends() {
 }
 
 function mrcmd_plugins_zookeeper_method_init() {
+  export ZOOKEEPER_DOCKER_SERVICE="db-zookeeper"
+
   readonly ZOOKEEPER_CAPTION="Apache Zookeeper"
-  readonly ZOOKEEPER_DOCKER_SERVICE="db-zookeeper"
 
   readonly ZOOKEEPER_VARS=(
-    "READONLY_ZOOKEEPER_DOCKER_HOST"
     "ZOOKEEPER_DOCKER_CONTAINER"
     "ZOOKEEPER_DOCKER_CONTEXT_DIR"
     "ZOOKEEPER_DOCKER_DOCKERFILE"
@@ -25,7 +25,6 @@ function mrcmd_plugins_zookeeper_method_init() {
   )
 
   readonly ZOOKEEPER_VARS_DEFAULT=(
-    "${ZOOKEEPER_DOCKER_SERVICE}"
     "${APPX_ID}-${ZOOKEEPER_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -54,6 +53,7 @@ function mrcmd_plugins_zookeeper_method_canexec() {
 
 function mrcmd_plugins_zookeeper_method_config() {
   mrcore_dotenv_echo_var_array ZOOKEEPER_VARS[@]
+  mrcore_echo_var "ZOOKEEPER_DOCKER_SERVICE (host, readonly)" "${ZOOKEEPER_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_zookeeper_method_export_config() {

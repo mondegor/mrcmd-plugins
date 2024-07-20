@@ -8,11 +8,11 @@ function mrcmd_plugins_kafka_method_depends() {
 }
 
 function mrcmd_plugins_kafka_method_init() {
+  export KAFKA_DOCKER_SERVICE="broker-kafka"
+
   readonly KAFKA_CAPTION="Apache Kafka"
-  readonly KAFKA_DOCKER_SERVICE="broker-kafka"
 
   readonly KAFKA_VARS=(
-    "READONLY_KAFKA_DOCKER_HOST"
     "KAFKA_DOCKER_CONTAINER"
     "KAFKA_DOCKER_CONTEXT_DIR"
     "KAFKA_DOCKER_DOCKERFILE"
@@ -25,7 +25,6 @@ function mrcmd_plugins_kafka_method_init() {
   )
 
   readonly KAFKA_VARS_DEFAULT=(
-    "${KAFKA_DOCKER_SERVICE}"
     "${APPX_ID}-${KAFKA_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -52,6 +51,7 @@ function mrcmd_plugins_kafka_method_canexec() {
 
 function mrcmd_plugins_kafka_method_config() {
   mrcore_dotenv_echo_var_array KAFKA_VARS[@]
+  mrcore_echo_var "KAFKA_DOCKER_SERVICE (host, readonly)" "${KAFKA_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_kafka_method_export_config() {

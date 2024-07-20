@@ -5,11 +5,11 @@ function mrcmd_plugins_cassandra_method_depends() {
 }
 
 function mrcmd_plugins_cassandra_method_init() {
+  export CASSANDRA_DOCKER_SERVICE="db-cassandra"
+
   readonly CASSANDRA_CAPTION="Cassandra"
-  readonly CASSANDRA_DOCKER_SERVICE="db-cassandra"
 
   readonly CASSANDRA_VARS=(
-    "READONLY_CASSANDRA_DOCKER_HOST"
     "CASSANDRA_DOCKER_CONTAINER"
     "CASSANDRA_DOCKER_CONTEXT_DIR"
     "CASSANDRA_DOCKER_DOCKERFILE"
@@ -35,7 +35,6 @@ function mrcmd_plugins_cassandra_method_init() {
   )
 
   readonly CASSANDRA_VARS_DEFAULT=(
-    "${CASSANDRA_DOCKER_SERVICE}"
     "${APPX_ID}-${CASSANDRA_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -61,7 +60,7 @@ function mrcmd_plugins_cassandra_method_init() {
   )
 
   mrcore_dotenv_init_var_array CASSANDRA_VARS[@] CASSANDRA_VARS_DEFAULT[@]
-  mrcmd_plugins_cassandra_db_url_init
+  mrcmd_plugins_cassandra_db_dsn_init
 
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${CASSANDRA_DOCKER_COMPOSE_CONFIG_DIR}/db-cassandra.yaml")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${CASSANDRA_DOCKER_COMPOSE_CONFIG_DIR}/db-cassandra-init.yaml")
@@ -77,8 +76,9 @@ function mrcmd_plugins_cassandra_method_canexec() {
 
 function mrcmd_plugins_cassandra_method_config() {
   mrcore_dotenv_echo_var_array CASSANDRA_VARS[@]
-  mrcore_echo_var "CASSANDRA_DB_URL" "${CASSANDRA_DB_URL}"
-  mrcore_echo_var "CASSANDRA_DB_URL_JDBC" "${CASSANDRA_DB_URL_JDBC}"
+  mrcore_echo_var "CASSANDRA_DOCKER_SERVICE (host, readonly)" "${CASSANDRA_DOCKER_SERVICE}"
+  mrcore_echo_var "CASSANDRA_DB_DSN (readonly)" "${CASSANDRA_DB_DSN}"
+  mrcore_echo_var "CASSANDRA_DB_URL_JDBC (readonly)" "${CASSANDRA_DB_URL_JDBC}"
 }
 
 function mrcmd_plugins_cassandra_method_export_config() {
@@ -150,8 +150,8 @@ function mrcmd_plugins_cassandra_method_help() {
 }
 
 # private
-function mrcmd_plugins_cassandra_db_url_init() {
-  readonly CASSANDRA_DB_URL="cassandra://${CASSANDRA_DB_USER}:${CASSANDRA_DB_PASSWORD}@${CASSANDRA_DOCKER_SERVICE}:9042/${CASSANDRA_DB_NAME}"
+function mrcmd_plugins_cassandra_db_dsn_init() {
+  readonly CASSANDRA_DB_DSN="cassandra://${CASSANDRA_DB_USER}:${CASSANDRA_DB_PASSWORD}@${CASSANDRA_DOCKER_SERVICE}:9042/${CASSANDRA_DB_NAME}"
   readonly CASSANDRA_DB_URL_JDBC="jdbc:cassandra://${CASSANDRA_DOCKER_SERVICE}:9042/${CASSANDRA_DB_NAME}"
 }
 

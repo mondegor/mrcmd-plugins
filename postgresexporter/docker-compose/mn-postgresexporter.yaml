@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  mn-postgresexporter: # ${POSTGRESEXPORTER_DOCKER_SERVICE}
+    image: ${POSTGRESEXPORTER_DOCKER_IMAGE}
+    container_name: ${POSTGRESEXPORTER_DOCKER_CONTAINER}
+    restart: unless-stopped
+    environment:
+      - TZ=${APPX_TZ}
+      - DATA_SOURCE_URI=${POSTGRESEXPORTER_DB_URI}
+      - DATA_SOURCE_USER=${POSTGRESEXPORTER_DB_USER}
+      - DATA_SOURCE_PASS=${POSTGRESEXPORTER_DB_PASSWORD}
+      # - PG_EXPORTER_WEB_TELEMETRY_PATH= # Path under which to expose metrics. Default is /metrics.
+      # - PG_EXPORTER_DISABLE_DEFAULT_METRICS= # Use only metrics supplied from queries.yaml. Value can be true or false. Default is false.
+      # - PG_EXPORTER_DISABLE_SETTINGS_METRICS= # Use the flag if you don't want to scrape pg_settings. Value can be true or false. Default is false.
+      # - PG_EXPORTER_EXTEND_QUERY_PATH= # Path to a YAML file containing custom queries to run. Check out queries.yaml for examples of the format.
+      # - PG_EXPORTER_METRIC_PREFIX= # A prefix to use for each of the default metrics exported by postgres-exporter. Default is pg
+    networks:
+      - local-network

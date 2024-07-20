@@ -5,7 +5,7 @@ services:
     image: ${MYSQL_DOCKER_IMAGE}
     platform: linux/x86_64
     container_name: ${MYSQL_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
     ports:
       - ${MYSQL_DB_PUBLIC_PORT}:3306
     volumes:

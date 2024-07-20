@@ -5,12 +5,12 @@ function mrcmd_plugins_go_method_depends() {
 }
 
 function mrcmd_plugins_go_method_init() {
+  export GO_DOCKER_SERVICE="web-app"
+
   readonly GO_CAPTION="Go alpine"
-  readonly GO_DOCKER_SERVICE="web-app"
   readonly GO_TMP_DIR="${APPX_DIR}/.cache"
 
   readonly GO_VARS=(
-    "READONLY_GO_DOCKER_HOST"
     "GO_DOCKER_CONTAINER"
     "GO_DOCKER_CONTEXT_DIR"
     "GO_DOCKER_DOCKERFILE"
@@ -19,12 +19,13 @@ function mrcmd_plugins_go_method_init() {
     "GO_DOCKER_IMAGE_FROM"
 
     "GO_GOPATH_DIR"
-    "GO_APP_ENV_FILE"
-    "GO_APP_MAIN_FILE"
+    "GO_APPX_ENV_FILE"
+    "GO_APPX_MAIN_FILE"
 
     "GO_WEBAPP_PUBLIC_PORT"
     "GO_WEBAPP_BIND"
-    "GO_WEBAPP_PORT"
+    "GO_WEBAPP_INTERNAL_PORT"
+    "GO_WEBAPP_DOMAIN"
 
     "GO_TOOLS_INSTALL_GOIMPORTS_VERSION"
     "GO_TOOLS_INSTALL_STATICCHECK_VERSION"
@@ -33,7 +34,6 @@ function mrcmd_plugins_go_method_init() {
   )
 
   readonly GO_VARS_DEFAULT=(
-    "${GO_DOCKER_SERVICE}"
     "${APPX_ID}-${GO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -48,6 +48,7 @@ function mrcmd_plugins_go_method_init() {
     "127.0.0.1:8080"
     "0.0.0.0"
     "8080"
+    "web-app.local"
 
     "v0.8.0"
     "v0.4.3"
@@ -57,6 +58,7 @@ function mrcmd_plugins_go_method_init() {
 
   mrcore_dotenv_init_var_array GO_VARS[@] GO_VARS_DEFAULT[@]
 
+  DOCKER_COMPOSE_REQUIRED_SOURCES+=("GOPATH dir" "${GO_GOPATH_DIR}")
   DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
@@ -70,6 +72,7 @@ function mrcmd_plugins_go_method_canexec() {
 
 function mrcmd_plugins_go_method_config() {
   mrcore_dotenv_echo_var_array GO_VARS[@]
+  mrcore_echo_var "GO_DOCKER_SERVICE (host, readonly)" "${GO_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_go_method_export_config() {
@@ -84,10 +87,6 @@ function mrcmd_plugins_go_method_install() {
   mrcmd_plugins_go_install_tools
   mrcmd_plugins_call_function "go/docker-run" go mod tidy
   mrcmd_plugins_call_function "go/docker-run" go mod download
-}
-
-function mrcmd_plugins_go_method_start() {
-  mrcore_validate_dir_required "GOPATH dir" "${GO_GOPATH_DIR}"
 }
 
 function mrcmd_plugins_go_method_uninstall() {

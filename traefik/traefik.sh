@@ -7,11 +7,11 @@ function mrcmd_plugins_traefik_method_depends() {
 }
 
 function mrcmd_plugins_traefik_method_init() {
+  export TRAEFIK_DOCKER_SERVICE="proxy-traefik"
+
   readonly TRAEFIK_CAPTION="Traefik"
-  readonly TRAEFIK_DOCKER_SERVICE="proxy-traefik"
 
   readonly TRAEFIK_VARS=(
-    "READONLY_TRAEFIK_DOCKER_HOST"
     "TRAEFIK_DOCKER_CONTAINER"
     "TRAEFIK_DOCKER_CONTEXT_DIR"
     "TRAEFIK_DOCKER_DOCKERFILE"
@@ -26,7 +26,6 @@ function mrcmd_plugins_traefik_method_init() {
   )
 
   readonly TRAEFIK_VARS_DEFAULT=(
-    "${TRAEFIK_DOCKER_SERVICE}"
     "${APPX_ID}-${TRAEFIK_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -55,6 +54,7 @@ function mrcmd_plugins_traefik_method_canexec() {
 
 function mrcmd_plugins_traefik_method_config() {
   mrcore_dotenv_echo_var_array TRAEFIK_VARS[@]
+  mrcore_echo_var "TRAEFIK_DOCKER_SERVICE (host, readonly)" "${TRAEFIK_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_traefik_method_export_config() {

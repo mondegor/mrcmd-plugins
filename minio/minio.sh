@@ -6,12 +6,12 @@ function mrcmd_plugins_minio_method_depends() {
 }
 
 function mrcmd_plugins_minio_method_init() {
+  export MINIO_DOCKER_SERVICE="s3-minio"
+  export MINIO_NGINX_DOCKER_SERVICE="s3-minio-nginx"
+
   readonly MINIO_CAPTION="Minio"
-  readonly MINIO_DOCKER_SERVICE="s3-minio"
-  readonly MINIO_NGINX_DOCKER_SERVICE="s3-minio-nginx"
 
   readonly MINIO_VARS=(
-    "READONLY_MINIO_DOCKER_HOST"
     "MINIO_DOCKER_CONTAINER"
     "MINIO_DOCKER_CONTEXT_DIR"
     "MINIO_DOCKER_DOCKERFILE"
@@ -19,23 +19,21 @@ function mrcmd_plugins_minio_method_init() {
     "MINIO_DOCKER_IMAGE"
     "MINIO_DOCKER_IMAGE_FROM"
 
-    "READONLY_MINIO_NGINX_DOCKER_HOST"
     "MINIO_NGINX_DOCKER_CONTAINER"
     "MINIO_NGINX_DOCKER_IMAGE"
     "MINIO_NGINX_DOCKER_IMAGE_FROM"
-    "MINIO_NGINX_PUBLIC_PORT"
+    # "MINIO_NGINX_PUBLIC_PORT"
 
     "MINIO_API_PUBLIC_PORT"
     "MINIO_API_INTERNAL_PORT"
     "MINIO_API_USER"
     "MINIO_API_PASSWORD"
 
-    "MINIO_WEB_INTERNAL_PORT"
     "MINIO_WEB_DOMAIN"
+    "MINIO_WEB_INTERNAL_PORT"
   )
 
   readonly MINIO_VARS_DEFAULT=(
-    "${MINIO_DOCKER_SERVICE}"
     "${APPX_ID}-${MINIO_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -43,19 +41,18 @@ function mrcmd_plugins_minio_method_init() {
     "${DOCKER_PACKAGE_NAME}minio:2024-07-13"
     "minio/minio:RELEASE.2024-07-13T01-46-15Z.fips"
 
-    "${MINIO_NGINX_DOCKER_SERVICE}"
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-minio:1.27.0"
     "nginx:1.27.0-alpine3.19"
-    "127.0.0.1:9984"
+    # "127.0.0.1:9984"
 
     "127.0.0.1:9000"
     "9000"
     "admin"
     "12345678"
 
-    "9001"
     "minio.local"
+    "9001"
   )
 
   mrcore_dotenv_init_var_array MINIO_VARS[@] MINIO_VARS_DEFAULT[@]
@@ -73,6 +70,8 @@ function mrcmd_plugins_minio_method_canexec() {
 
 function mrcmd_plugins_minio_method_config() {
   mrcore_dotenv_echo_var_array MINIO_VARS[@]
+  mrcore_echo_var "MINIO_DOCKER_SERVICE (host, readonly)" "${MINIO_DOCKER_SERVICE}"
+  mrcore_echo_var "MINIO_NGINX_DOCKER_SERVICE (host, readonly)" "${MINIO_NGINX_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_minio_method_export_config() {
@@ -125,7 +124,7 @@ function mrcmd_plugins_minio_method_exec() {
     ng-into)
       mrcmd_plugins_call_function "docker-compose/command-exec-shell" \
         "${MINIO_NGINX_DOCKER_SERVICE}" \
-        sh # shell name
+        bash # shell name
       ;;
 
     ng-logs)

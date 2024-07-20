@@ -7,11 +7,11 @@ function mrcmd_plugins_keycloak_method_depends() {
 }
 
 function mrcmd_plugins_keycloak_method_init() {
+  export KEYCLOAK_DOCKER_SERVICE="auth-keycloak"
+
   readonly KEYCLOAK_CAPTION="Keycloak Quay.io"
-  readonly KEYCLOAK_DOCKER_SERVICE="auth-keycloak"
 
   readonly KEYCLOAK_VARS=(
-    "READONLY_KEYCLOAK_DOCKER_HOST"
     "KEYCLOAK_DOCKER_CONTAINER"
     "KEYCLOAK_DOCKER_CONTEXT_DIR"
     "KEYCLOAK_DOCKER_DOCKERFILE"
@@ -32,7 +32,6 @@ function mrcmd_plugins_keycloak_method_init() {
   )
 
   readonly KEYCLOAK_VARS_DEFAULT=(
-    "${KEYCLOAK_DOCKER_SERVICE}"
     "${APPX_ID}-${KEYCLOAK_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -67,6 +66,7 @@ function mrcmd_plugins_keycloak_method_canexec() {
 
 function mrcmd_plugins_keycloak_method_config() {
   mrcore_dotenv_echo_var_array KEYCLOAK_VARS[@]
+  mrcore_echo_var "KEYCLOAK_DOCKER_SERVICE (host, readonly)" "${KEYCLOAK_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_keycloak_method_export_config() {

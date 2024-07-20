@@ -5,11 +5,11 @@ function mrcmd_plugins_redis_method_depends() {
 }
 
 function mrcmd_plugins_redis_method_init() {
+  export REDIS_DOCKER_SERVICE="db-redis"
+
   readonly REDIS_CAPTION="Redis"
-  readonly REDIS_DOCKER_SERVICE="db-redis"
 
   readonly REDIS_VARS=(
-    "READONLY_REDIS_DOCKER_HOST"
     "REDIS_DOCKER_CONTAINER"
     "REDIS_DOCKER_CONTEXT_DIR"
     "REDIS_DOCKER_DOCKERFILE"
@@ -22,7 +22,6 @@ function mrcmd_plugins_redis_method_init() {
   )
 
   readonly REDIS_VARS_DEFAULT=(
-    "${REDIS_DOCKER_SERVICE}"
     "${APPX_ID}-${REDIS_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -49,6 +48,7 @@ function mrcmd_plugins_redis_method_canexec() {
 
 function mrcmd_plugins_redis_method_config() {
   mrcore_dotenv_echo_var_array REDIS_VARS[@]
+  mrcore_echo_var "REDIS_DOCKER_SERVICE (host, readonly)" "${REDIS_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_redis_method_export_config() {

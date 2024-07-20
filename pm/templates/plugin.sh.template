@@ -24,6 +24,7 @@ function mrcmd_plugins_${MRVAR_PLUGIN_NAME}_method_init() {
 
   mrcore_dotenv_init_var_array ${MRVAR_PLUGIN_NAME_UPPER}_VARS[@] ${MRVAR_PLUGIN_NAME_UPPER}_VARS_DEFAULT[@]
 
+  # DOCKER_COMPOSE_REQUIRED_SOURCES+=("Path" "${${MRVAR_PLUGIN_NAME_UPPER}_PATH}")
   # DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${${MRVAR_PLUGIN_NAME_UPPER}_DOCKER_COMPOSE_CONFIG_DIR}/service-name.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then

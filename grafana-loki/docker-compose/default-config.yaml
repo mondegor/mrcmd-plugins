@@ -1,0 +1,43 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2024-07-01
+      object_store: filesystem
+      schema: v13
+      store: tsdb
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  retention_period: 10d
+  max_query_lookback: 10d
+
+analytics:
+  reporting_enabled: false
+
+compactor:
+  working_directory: /loki/retention
+  delete_request_store: filesystem
+  compaction_interval: 15m
+  retention_enabled: true
+  retention_delete_delay: 2h
+  retention_delete_worker_count: 150
+
+querier:
+  query_ingesters_within: 2h # avoid https://github.com/grafana/loki/issues/6043

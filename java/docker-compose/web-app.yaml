@@ -4,19 +4,24 @@ services:
   web-app: # ${JAVA_DOCKER_SERVICE}
     image: ${JAVA_DOCKER_IMAGE}
     container_name: ${JAVA_DOCKER_CONTAINER}
-    restart: always
+    restart: unless-stopped
     command:
       - java
       - -jar
-      - ${JAVA_APP_JAR_PATH}
+      - ${JAVA_APPX_JAR_PATH}
     ports:
-      - ${JAVA_WEBAPP_PUBLIC_PORT}:${JAVA_WEBAPP_PORT}
+      - ${JAVA_WEBAPP_PUBLIC_PORT}:${JAVA_WEBAPP_INTERNAL_PORT}
     volumes:
       - ${APPX_WORK_DIR}:/opt/app
     environment:
       - TZ=${APPX_TZ}
       - APPX_VER=${APPX_VER}
     env_file:
-      - ${JAVA_APP_ENV_FILE}
+      - ${JAVA_APPX_ENV_FILE}
     networks:
       - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${JAVA_DOCKER_SERVICE}.rule=Host(`${JAVA_WEBAPP_DOMAIN}`)
+      - traefik.http.routers.${JAVA_DOCKER_SERVICE}.entrypoints=web
+      - traefik.http.services.${JAVA_DOCKER_SERVICE}.loadbalancer.server.port=${JAVA_WEBAPP_INTERNAL_PORT}

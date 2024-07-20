@@ -5,11 +5,11 @@ function mrcmd_plugins_java_method_depends() {
 }
 
 function mrcmd_plugins_java_method_init() {
+  export JAVA_DOCKER_SERVICE="web-app"
+
   readonly JAVA_CAPTION="Java OpenJDK 17"
-  readonly JAVA_DOCKER_SERVICE="web-app"
 
   readonly JAVA_VARS=(
-    "READONLY_JAVA_DOCKER_HOST"
     "JAVA_DOCKER_CONTAINER"
     "JAVA_DOCKER_CONTEXT_DIR"
     "JAVA_DOCKER_DOCKERFILE"
@@ -19,14 +19,14 @@ function mrcmd_plugins_java_method_init() {
 
     "JAVA_WEBAPP_PUBLIC_PORT"
     "JAVA_WEBAPP_BIND"
-    "JAVA_WEBAPP_PORT"
+    "JAVA_WEBAPP_INTERNAL_PORT"
+    "JAVA_WEBAPP_DOMAIN"
 
-    "JAVA_APP_ENV_FILE"
-    "JAVA_APP_JAR_PATH"
+    "JAVA_APPX_ENV_FILE"
+    "JAVA_APPX_JAR_PATH"
   )
 
   readonly JAVA_VARS_DEFAULT=(
-    "${JAVA_DOCKER_SERVICE}"
     "${APPX_ID}-${JAVA_DOCKER_SERVICE}"
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
@@ -37,6 +37,7 @@ function mrcmd_plugins_java_method_init() {
     "127.0.0.1:8080"
     "0.0.0.0"
     "8080"
+    "web-app.local"
 
     "${APPX_DIR}/.env"
     "./app.jar"
@@ -57,6 +58,7 @@ function mrcmd_plugins_java_method_canexec() {
 
 function mrcmd_plugins_java_method_config() {
   mrcore_dotenv_echo_var_array JAVA_VARS[@]
+  mrcore_echo_var "JAVA_DOCKER_SERVICE (host, readonly)" "${JAVA_DOCKER_SERVICE}"
 }
 
 function mrcmd_plugins_java_method_export_config() {

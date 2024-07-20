@@ -1,6 +1,31 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2024-07-21
+### Added
+- Добавлены следующие плагины:
+    - `Grafana`;
+    - `Grafana Loki`;
+    - `Grafana Promtail`;
+    - `Node Exporter`;
+    - `Postgres Exporter`;
+- Добавлена переменная `DOCKER_COMPOSE_REQUIRED_SOURCES`;
+- Добавлена поддержка `base auth` для трафика проходящего через `traefik`; 
+- Добавлены переменные для `prometheus`:
+    - `PROMETHEUS_CONFIG_PATH`;
+    - `PROMETHEUS_STORAGE_TSDB_RETENTION_TIME`;
+    - `PROMETHEUS_STORAGE_TSDB_RETENTION_SIZE`;
+
+### Changed
+- Переименованы следующие переменные:
+    - `*_DB_URL` -> `*_DB_DSN`;
+    - `*_APP_ENV_FILE` -> `*_APPX_ENV_FILE`;
+    - `*_APP_MAIN_FILE` -> `*_APPX_MAIN_FILE`;
+    - `*_DB_URL` -> `*_DB_DSN`;
+    - `*_WEBAPP_DOMAIN` -> `*_WEBAPP_INTERNAL_DOMAIN`;
+Заменено правило старта `docker`: `always` -> `unless-stopped`;
+Заменена `READONLY_*_DOCKER_HOST` -> `*_DOCKER_SERVICE`;
+
 ## 2024-07-14
 ### Added
 - Для плагинов `go`, `java`, `php*`, `nodejs` при запуске модулей (`docker` и `docker-compose`)
