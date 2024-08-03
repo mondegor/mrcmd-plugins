@@ -25,8 +25,8 @@ schema_config:
         period: 24h
 
 limits_config:
-  retention_period: 10d
-  max_query_lookback: 10d
+  retention_period: 14d
+  max_query_lookback: 14d
 
 analytics:
   reporting_enabled: false

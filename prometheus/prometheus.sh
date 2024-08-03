@@ -34,7 +34,7 @@ function mrcmd_plugins_prometheus_method_init() {
     "prom/prometheus:v2.53.1"
 
     ""
-    "10d"
+    "14d"
     "5GB"
 
     # "127.0.0.1:9090"
