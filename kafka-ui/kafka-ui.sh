@@ -21,7 +21,7 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "KAFKA_UI_KAFKA_HOSTS_PORTS"
     "KAFKA_UI_ZOOKEEPER_HOST_PORT"
 
-    # "KAFKA_UI_WEB_PUBLIC_PORT"
+    ##### "KAFKA_UI_WEB_PUBLIC_PORT"
     "KAFKA_UI_WEB_INTERNAL_PORT"
     "KAFKA_UI_WEB_DOMAIN"
   )
@@ -37,7 +37,7 @@ function mrcmd_plugins_kafka_ui_method_init() {
     "broker-kafka:9092" # ${KAFKA_DOCKER_SERVICE} or broker-kafka1:9092,broker-kafka2:9092
     "db-zookeeper:2181" # ${ZOOKEEPER_DOCKER_SERVICE}
 
-    # "127.0.0.1:9952"
+    ##### "127.0.0.1:9952"
     "8080"
     "kafka.local"
   )

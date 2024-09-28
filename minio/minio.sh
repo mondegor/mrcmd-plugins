@@ -22,7 +22,7 @@ function mrcmd_plugins_minio_method_init() {
     "MINIO_NGINX_DOCKER_CONTAINER"
     "MINIO_NGINX_DOCKER_IMAGE"
     "MINIO_NGINX_DOCKER_IMAGE_FROM"
-    # "MINIO_NGINX_PUBLIC_PORT"
+    ##### "MINIO_NGINX_PUBLIC_PORT"
 
     "MINIO_API_PUBLIC_PORT"
     "MINIO_API_INTERNAL_PORT"
@@ -44,7 +44,7 @@ function mrcmd_plugins_minio_method_init() {
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
     "${DOCKER_PACKAGE_NAME}nginx-minio:1.27.0"
     "nginx:1.27.0-alpine3.19"
-    # "127.0.0.1:9984"
+    ##### "127.0.0.1:9984"
 
     "127.0.0.1:9000"
     "9000"

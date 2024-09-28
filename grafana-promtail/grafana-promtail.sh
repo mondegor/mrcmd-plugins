@@ -19,7 +19,7 @@ function mrcmd_plugins_grafana_promtail_method_init() {
 
     "GRAFANA_PROMTAIL_CONFIG_PATH"
 
-    # "GRAFANA_PROMTAIL_WEB_PUBLIC_PORT"
+    ##### "GRAFANA_PROMTAIL_WEB_PUBLIC_PORT"
     "GRAFANA_PROMTAIL_WEB_DOMAIN"
   )
 
@@ -33,7 +33,7 @@ function mrcmd_plugins_grafana_promtail_method_init() {
 
     ""
 
-    # "127.0.0.1:9080"
+    ##### "127.0.0.1:9080"
     "promtail.local"
   )
 

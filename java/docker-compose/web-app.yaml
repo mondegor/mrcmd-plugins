@@ -9,8 +9,8 @@ services:
       - java
       - -jar
       - ${JAVA_APPX_JAR_PATH}
-    ports:
-      - ${JAVA_WEBAPP_PUBLIC_PORT}:${JAVA_WEBAPP_INTERNAL_PORT}
+    #ports:
+    #  - ${JAVA_WEBAPP_PUBLIC_PORT}:${JAVA_WEBAPP_INTERNAL_PORT}
     volumes:
       - ${APPX_WORK_DIR}:/opt/app
     environment:

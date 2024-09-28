@@ -6,6 +6,7 @@ services:
     container_name: ${TRAEFIK_DOCKER_CONTAINER}
     restart: unless-stopped
     command:
+      # - --log.level=DEBUG
       # api
       - --api.dashboard=true
       - --api.insecure=true

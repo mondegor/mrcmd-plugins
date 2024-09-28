@@ -1,6 +1,12 @@
 # https://hub.docker.com/r/grafana/grafana
 # for auth type: "admin / admin", after set new password 12345678
 
+# https://grafana.com/grafana/dashboards
+# 3662 - Prometheus 2.0 Overview
+# 1860 - Node Exporter Full
+# 9628 - PostgreSQL Database
+# 6671 - Go Processes
+
 function mrcmd_plugins_grafana_method_depends() {
   MRCMD_PLUGIN_DEPENDS_ARRAY=("global" "docker" "docker-compose")
 }
@@ -18,7 +24,7 @@ function mrcmd_plugins_grafana_method_init() {
     "GRAFANA_DOCKER_IMAGE"
     "GRAFANA_DOCKER_IMAGE_FROM"
 
-    "GRAFANA_WEB_PUBLIC_PORT"
+    ##### "GRAFANA_WEB_PUBLIC_PORT"
     "GRAFANA_WEB_DOMAIN"
   )
 
@@ -30,7 +36,7 @@ function mrcmd_plugins_grafana_method_init() {
     "${DOCKER_PACKAGE_NAME}grafana:11.0.1"
     "grafana/grafana:11.0.1"
 
-    "127.0.0.1:3000"
+    ##### "127.0.0.1:3000"
     "grafana.local"
   )
 

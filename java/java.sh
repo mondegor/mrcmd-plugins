@@ -17,8 +17,7 @@ function mrcmd_plugins_java_method_init() {
     "JAVA_DOCKER_IMAGE"
     "JAVA_DOCKER_IMAGE_FROM"
 
-    "JAVA_WEBAPP_PUBLIC_PORT"
-    "JAVA_WEBAPP_BIND"
+    ##### "JAVA_WEBAPP_PUBLIC_PORT"
     "JAVA_WEBAPP_INTERNAL_PORT"
     "JAVA_WEBAPP_DOMAIN"
 
@@ -34,8 +33,7 @@ function mrcmd_plugins_java_method_init() {
     "${DOCKER_PACKAGE_NAME}openjdk:17"
     "openjdk:17-alpine3.14"
 
-    "127.0.0.1:8080"
-    "0.0.0.0"
+    ##### "127.0.0.1:8080"
     "8080"
     "web-app.local"
 
@@ -45,7 +43,7 @@ function mrcmd_plugins_java_method_init() {
 
   mrcore_dotenv_init_var_array JAVA_VARS[@] JAVA_VARS_DEFAULT[@]
 
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${JAVA_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${JAVA_CAPTION}' was deactivated"

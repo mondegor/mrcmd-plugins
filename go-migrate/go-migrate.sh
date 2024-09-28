@@ -30,7 +30,7 @@ function mrcmd_plugins_go_migrate_method_init() {
     "POSTGRES_DB_DSN" # var with value or value
     "schema_migrations"
 
-    "${APPX_DIR}/migrations"
+    "${APPX_WORK_DIR}/migrations"
   )
 
   mrcore_dotenv_init_var_array GO_MIGRATE_VARS[@] GO_MIGRATE_VARS_DEFAULT[@]

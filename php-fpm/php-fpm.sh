@@ -23,20 +23,10 @@ function mrcmd_plugins_php_fpm_method_init() {
     "PHP_FPM_NGINX_DOCKER_IMAGE"
     "PHP_FPM_NGINX_DOCKER_IMAGE_FROM"
 
-    "PHP_FPM_WEBAPP_PUBLIC_PORT"
+    ##### "PHP_FPM_WEBAPP_PUBLIC_PORT"
     "PHP_FPM_WEBAPP_DOMAIN"
 
     "PHP_FPM_APPX_ENV_FILE"
-
-#    "WEB_PHP_DB_HOST"
-#    "WEB_PHP_DB_PORT"
-#    "WEB_PHP_DB_NAME"
-#    "WEB_PHP_DB_USER"
-#    "WEB_PHP_DB_PASSWORD"
-#
-#    "WEB_PHP_REDIS_HOST"
-#    "WEB_PHP_REDIS_PORT"
-#    "WEB_PHP_REDIS_PASSWORD"
   )
 
   readonly PHP_FPM_VARS_DEFAULT=(
@@ -52,25 +42,15 @@ function mrcmd_plugins_php_fpm_method_init() {
     "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.27.0"
     "nginx:1.27.0-alpine3.19"
 
-    "127.0.0.1:8080"
+    ##### "127.0.0.1:8080"
     "web-app.local"
 
     "${APPX_DIR}/.env"
-
-#    "${APPX_DB_HOST:-db-postgres}"
-#    "${APPX_DB_PORT:-5432}"
-#    "${APPX_DB_NAME:-db_app}"
-#    "${APPX_DB_USER:-user_app}"
-#    "${APPX_DB_PASSWORD:-12345}"
-#
-#    "${APPX_REDIS_HOST:-db-redis}"
-#    "${APPX_REDIS_PORT:-6379}"
-#    "${APPX_REDIS_PASSWORD:-12345}"
   )
 
   mrcore_dotenv_init_var_array PHP_FPM_VARS[@] PHP_FPM_VARS_DEFAULT[@]
 
-  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${GO_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
+  DOCKER_COMPOSE_CONFIG_FILES_ARRAY+=("${PHP_FPM_DOCKER_COMPOSE_CONFIG_DIR}/web-app.yaml")
 
   if [[ "${DOCKER_IS_ENABLED}" == false ]]; then
     mrcore_echo_warning "Command 'docker' not installed, so plugin '${PHP_FPM_CAPTION}' was deactivated"
@@ -146,10 +126,10 @@ function mrcmd_plugins_php_fpm_method_exec() {
 
 function mrcmd_plugins_php_fpm_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
-  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${JAVA_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
+  echo -e "${CC_YELLOW}Docker commands for ${CC_GREEN}${PHP_FPM_DOCKER_IMAGE}${CC_YELLOW}:${CC_END}"
   echo -e "  docker-build        Builds or rebuilds the image"
   echo -e ""
-  echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${JAVA_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
+  echo -e "${CC_YELLOW}Docker compose commands for ${CC_GREEN}${PHP_FPM_DOCKER_CONTAINER}${CC_YELLOW}:${CC_END}"
   echo -e "  into        Enters to shell in the running container"
   echo -e "  logs        View output from the running container"
   echo -e "  restart     Restarts the container"

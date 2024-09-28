@@ -9,8 +9,8 @@ services:
       - go
       - run
       - ${GO_APPX_MAIN_FILE}
-    ports:
-      - ${GO_WEBAPP_PUBLIC_PORT}:${GO_WEBAPP_INTERNAL_PORT}
+    #ports:
+    #  - ${GO_WEBAPP_PUBLIC_PORT}:${GO_WEBAPP_INTERNAL_PORT}
     volumes:
       - ${GO_GOPATH_DIR}:/go
       - ${APPX_WORK_DIR}:/opt/app

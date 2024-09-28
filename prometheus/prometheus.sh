@@ -21,7 +21,7 @@ function mrcmd_plugins_prometheus_method_init() {
     "PROMETHEUS_STORAGE_TSDB_RETENTION_TIME"
     "PROMETHEUS_STORAGE_TSDB_RETENTION_SIZE"
 
-    # "PROMETHEUS_WEB_PUBLIC_PORT"
+    ##### "PROMETHEUS_WEB_PUBLIC_PORT"
     "PROMETHEUS_WEB_DOMAIN"
   )
 
@@ -37,7 +37,7 @@ function mrcmd_plugins_prometheus_method_init() {
     "14d"
     "5GB"
 
-    # "127.0.0.1:9090"
+    ##### "127.0.0.1:9090"
     "prometheus.local"
   )
 

@@ -22,5 +22,6 @@ RUN if [[ ${HOST_USER_ID} -gt 0 ]] && [[ ${HOST_GROUP_ID} -gt 0 ]]; then \
     fi;
 
 WORKDIR /opt/app
+RUN chown -R java:java /opt
 
 USER java
