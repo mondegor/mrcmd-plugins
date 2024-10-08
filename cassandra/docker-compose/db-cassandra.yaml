@@ -23,6 +23,8 @@ services:
 #      - CASSANDRA_ENDPOINT_SNITCH=${CASSANDRA_ENDPOINT_SNITCH}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   db-cassandra-volume:

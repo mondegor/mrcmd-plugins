@@ -6,14 +6,20 @@ services:
     container_name: ${REDIS_DOCKER_CONTAINER}
     privileged: true
     restart: unless-stopped
-    ports:
-      - ${REDIS_PUBLIC_PORT}:6379
+    #ports:
+    #  - ${REDIS_PUBLIC_PORT}:6379
     volumes:
       - db-redis-volume:/data
     environment:
       - TZ=${APPX_TZ}
     networks:
       - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.${REDIS_DOCKER_SERVICE}.rule=HostSNI(`*`) # ${REDIS_DB_DOMAIN}
+      - traefik.tcp.routers.${REDIS_DOCKER_SERVICE}.entrypoints=redis
+      - traefic.tcp.routers.${REDIS_DOCKER_SERVICE}.tls=false
+      - traefik.tcp.services.${REDIS_DOCKER_SERVICE}.loadbalancer.server.port=6379
 
 volumes:
   db-redis-volume:

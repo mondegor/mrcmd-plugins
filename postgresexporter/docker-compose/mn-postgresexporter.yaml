@@ -17,3 +17,5 @@ services:
       # - PG_EXPORTER_METRIC_PREFIX= # A prefix to use for each of the default metrics exported by postgres-exporter. Default is pg
     networks:
       - local-network
+    labels:
+      - traefik.enable=false

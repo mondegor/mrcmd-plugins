@@ -206,13 +206,17 @@ function mrcmd_plugins_go_method_exec() {
       ;;
 
     test)
-      mrcmd_plugins_call_function "go/docker-run" go test -cover -count=1 ./...
+      mrcmd_plugins_call_function "go/docker-run" go test -cover ./...
       ;;
 
     test-report)
       mrcmd_plugins_call_function "go/docker-run" sh -c "go test -coverprofile=tmp-test-coverage.out ./... && \
                                                          go tool cover -html=tmp-test-coverage.out -o ./test-coverage-full.html && \
                                                          rm ./tmp-test-coverage.out"
+      ;;
+
+    bench)
+      mrcmd_plugins_call_function "go/docker-run" go test -run=NONE -bench=. -benchmem ./...
       ;;
 
     mockgen | protoc-gen-go | protoc-gen-go-grpc | protoc-gen-grpc-gateway | protoc-gen-openapiv2)
@@ -258,6 +262,7 @@ function mrcmd_plugins_go_method_help() {
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
   echo -e "  test-report         Generates the test report: ${CC_BLUE}${APPX_WORK_DIR}test-coverage-full.html${CC_END}"
+  echo -e "  bench               Run benchmarks of the packages named by the import paths."
   echo -e ""
   echo -e "${CC_YELLOW}Go tools:${CC_END}"
   echo -e "  mockgen [args]              It is a mocking framework for the Go."

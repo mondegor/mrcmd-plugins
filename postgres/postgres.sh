@@ -17,7 +17,8 @@ function mrcmd_plugins_postgres_method_init() {
     "POSTGRES_DOCKER_IMAGE"
     "POSTGRES_DOCKER_IMAGE_FROM"
 
-    "POSTGRES_DB_PUBLIC_PORT"
+    ##### "POSTGRES_DB_PUBLIC_PORT"
+    ##### "POSTGRES_DB_DOMAIN"
     "POSTGRES_DB_USER"
     "POSTGRES_DB_PASSWORD"
     "POSTGRES_DB_NAME"
@@ -31,7 +32,8 @@ function mrcmd_plugins_postgres_method_init() {
     "${DOCKER_PACKAGE_NAME}postgres:15.7"
     "postgres:15.7-alpine3.20"
 
-    "127.0.0.1:5432"
+    ##### "127.0.0.1:5432"
+    ##### "postrges.db.local"
     "user_pg"
     "123456"
     "db_pg"

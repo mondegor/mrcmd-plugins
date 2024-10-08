@@ -12,6 +12,8 @@ services:
       - TZ=${APPX_TZ}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   mn-grafana-loki-volume:

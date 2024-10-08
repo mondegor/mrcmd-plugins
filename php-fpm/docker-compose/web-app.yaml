@@ -17,6 +17,8 @@ services:
       - ${PHP_FPM_APPX_ENV_FILE}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
   web-app-nginx: # ${PHP_FPM_NGINX_DOCKER_SERVICE}
     image: ${PHP_FPM_NGINX_DOCKER_IMAGE}

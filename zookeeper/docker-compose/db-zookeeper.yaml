@@ -16,6 +16,8 @@ services:
       - ZOOKEEPER_SYNC_LIMIT=${ZOOKEEPER_SYNC_LIMIT}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   db-zookeeper-volume:

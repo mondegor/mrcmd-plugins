@@ -5,14 +5,20 @@ services:
     image: ${POSTGRES_DOCKER_IMAGE}
     container_name: ${POSTGRES_DOCKER_CONTAINER}
     restart: unless-stopped
-    ports:
-      - ${POSTGRES_DB_PUBLIC_PORT}:5432
+    #ports:
+    #  - ${POSTGRES_DB_PUBLIC_PORT}:5432
     volumes:
       - db-postgres-volume:/var/lib/postgresql/data
     environment:
       - TZ=${APPX_TZ}
     networks:
       - local-network
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.${POSTGRES_DOCKER_SERVICE}.rule=HostSNI(`*`) # ${POSTGRES_DB_DOMAIN}
+      - traefik.tcp.routers.${POSTGRES_DOCKER_SERVICE}.entrypoints=postgres
+      - traefic.tcp.routers.${POSTGRES_DOCKER_SERVICE}.tls=false
+      - traefik.tcp.services.${POSTGRES_DOCKER_SERVICE}.loadbalancer.server.port=5432
 
 volumes:
   db-postgres-volume:

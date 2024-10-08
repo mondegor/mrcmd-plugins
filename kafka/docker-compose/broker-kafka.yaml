@@ -21,6 +21,8 @@ services:
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   broker-kafka-volume:

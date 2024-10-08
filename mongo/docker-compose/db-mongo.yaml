@@ -13,6 +13,8 @@ services:
       - TZ=${APPX_TZ}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   db-mongo-volume:

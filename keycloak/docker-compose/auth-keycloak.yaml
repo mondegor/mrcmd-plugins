@@ -14,3 +14,5 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_WEB_ADMIN_PASSWORD}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false

@@ -17,7 +17,8 @@ function mrcmd_plugins_redis_method_init() {
     "REDIS_DOCKER_IMAGE"
     "REDIS_DOCKER_IMAGE_FROM"
 
-    "REDIS_PUBLIC_PORT"
+    ##### "REDIS_PUBLIC_PORT"
+    ##### "REDIS_DB_DOMAIN"
     "REDIS_PASSWORD"
   )
 
@@ -29,7 +30,8 @@ function mrcmd_plugins_redis_method_init() {
     "${DOCKER_PACKAGE_NAME}redis:7.2.5"
     "redis:7.2.5-alpine3.20"
 
-    "127.0.0.1:6379"
+    ##### "127.0.0.1:6379"
+    ##### "redis.db.local"
     "123456"
   )
 

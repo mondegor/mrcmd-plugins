@@ -17,6 +17,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     networks:
       - local-network
+    labels:
+      - traefik.enable=false
 
 volumes:
   broker-rabbitmq-volume:
