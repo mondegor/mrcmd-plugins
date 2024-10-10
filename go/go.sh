@@ -29,6 +29,7 @@ function mrcmd_plugins_go_method_init() {
 
     "GO_TOOLS_INSTALL_GOFUMPT_VERSION"
     "GO_TOOLS_INSTALL_GOIMPORTS_VERSION"
+    "GO_TOOLS_INSTALL_GCI_VERSION"
 
     "GO_TOOLS_INSTALL_MOCKGEN_VERSION"
     "GO_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION"
@@ -54,6 +55,7 @@ function mrcmd_plugins_go_method_init() {
     "8080"
     "web-app.local"
 
+    "latest"
     "latest"
     "latest"
 
@@ -201,6 +203,24 @@ function mrcmd_plugins_go_method_exec() {
       mrcmd_plugins_call_function "go/docker-run" goimports -l -w ${extraParams} ./
       ;;
 
+    gci)
+      local extraParams=()
+      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
+        extraParams=(-s "prefix(${GO_IMPORTS_LOCAL_PREFIXES})")
+      fi
+
+      mrcmd_plugins_call_function "go/docker-run" gci diff --skip-generated -s standard -s default "${extraParams[@]}" .
+      ;;
+
+    fmti2 | gci-fix)
+      local extraParams=()
+      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
+        extraParams=(-s "prefix(${GO_IMPORTS_LOCAL_PREFIXES})")
+      fi
+
+      mrcmd_plugins_call_function "go/docker-run" gci write --skip-generated -s standard -s default "${extraParams[@]}" .
+      ;;
+
     generate)
       mrcmd_plugins_call_function "go/docker-run" go generate ./...
       ;;
@@ -257,7 +277,10 @@ function mrcmd_plugins_go_method_help() {
   echo -e "  fmt                 Run gofumpt-fix."
   echo -e "  goimports[-fix]     Updates your Go import lines, adding missing ones"
   echo -e "                      and removing unreferenced ones."
-  echo -e "  fmti                Run goimports-fix."
+  echo -e "  gci[-fix]           Controls Go package import order and makes"
+  echo -e "                      it always deterministic."
+  echo -e "  fmti                Alias for goimports-fix."
+  echo -e "  fmti2               Alias for gci-fix."
   echo -e "  generate            Generate runs commands described by directives"
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
@@ -288,6 +311,7 @@ function mrcmd_plugins_go_install_tools() {
   local toolsArray=(
     "mvdan.cc/gofumpt"                 "${GO_TOOLS_INSTALL_GOFUMPT_VERSION}"
     "golang.org/x/tools/cmd/goimports" "${GO_TOOLS_INSTALL_GOIMPORTS_VERSION}"
+    "github.com/daixiang0/gci"         "${GO_TOOLS_INSTALL_GCI_VERSION}"
     "github.com/golang/mock/mockgen"   "${GO_TOOLS_INSTALL_MOCKGEN_VERSION}"
     "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
