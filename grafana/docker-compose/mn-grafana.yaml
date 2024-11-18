@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   mn-grafana: # ${GRAFANA_DOCKER_SERVICE}
     image: ${GRAFANA_DOCKER_IMAGE}

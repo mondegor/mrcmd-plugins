@@ -1,5 +1,3 @@
-version: "3.9"
-
 networks:
   local-network:
     name: ${DOCKER_COMPOSE_NETWORK}

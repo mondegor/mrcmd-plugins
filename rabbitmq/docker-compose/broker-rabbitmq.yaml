@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   broker-rabbitmq: # ${RABBITMQ_DOCKER_SERVICE}
     image: ${RABBITMQ_DOCKER_IMAGE}

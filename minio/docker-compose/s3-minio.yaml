@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   s3-minio: # ${MINIO_DOCKER_SERVICE}
     image: ${MINIO_DOCKER_IMAGE}

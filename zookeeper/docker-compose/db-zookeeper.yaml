@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db-zookeeper: # ${ZOOKEEPER_DOCKER_SERVICE}
     image: ${ZOOKEEPER_DOCKER_IMAGE}

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   proxy-traefik: # ${TRAEFIK_DOCKER_SERVICE}
     image: ${TRAEFIK_DOCKER_IMAGE}

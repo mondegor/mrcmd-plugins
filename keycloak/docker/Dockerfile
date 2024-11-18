@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE_FROM
+ARG DOCKER_IMAGE_FROM=quay.io/keycloak/keycloak:22.0.1
 
 FROM ${DOCKER_IMAGE_FROM}
 

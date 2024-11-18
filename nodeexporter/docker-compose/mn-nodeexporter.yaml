@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   mn-nodeexporter: # ${NODEEXPORTER_DOCKER_SERVICE}
     image: ${NODEEXPORTER_DOCKER_IMAGE}

@@ -1,13 +1,13 @@
-# Plugins for Mrcmd Tool v0.14.2
+# Plugins for Mrcmd Tool v0.14.3
 Этот репозиторий содержит базовые плагины для [Mrcmd Tool](https://github.com/mondegor/mrcmd).
 
 ## Статус проекта
-Проект находится на стадии бета-тестирования и активно применяется при разработке.
+Данный инструмент проверен на Windows и Linux системах и используется в локальной разработке.
 
 ## Инсталляция плагинов
 - Выбрать рабочую директорию, содержащую директорию `mrcmd`;
-- `curl -fsSL -o mrcmd-plugins.zip https://github.com/mondegor/mrcmd-plugins/archive/refs/tags/v0.14.2.zip --ssl-no-revoke`
-- `unzip mrcmd-plugins.zip && rm mrcmd-plugins.zip && mv mrcmd-plugins-0.14.2 mrcmd/plugins`
+- `curl -fsSL -o mrcmd-plugins.zip https://github.com/mondegor/mrcmd-plugins/archive/refs/tags/v0.14.3.zip --ssl-no-revoke`
+- `unzip mrcmd-plugins.zip && rm mrcmd-plugins.zip && mv mrcmd-plugins-0.14.3 mrcmd/plugins`
 - `mrcmd state` // проверить, что плагины утилиты были установлены (см. Shared plugins path)
 
 ## Краткое описание плагинов
@@ -29,7 +29,6 @@
 - `php-alpine` - PHP на образе Alpine `Docker` (https://www.php.net/docs.php);
 - `php-cli` - PHP Cli `Docker` (https://www.php.net/docs.php);
 - `php-fpm` - PHP FPM `Docker` (https://www.php.net/docs.php);
-- `php-symfony` - установщик Symfony `Docker` (https://www.php.net/docs.php);
 
 ### Реляционные и NoSQL базы данных
 - `cassandra` - хранилище данных Apache Cassandra `Docker` (https://cassandra.apache.org/doc/latest/);

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   mn-prometheus: # ${PROMETHEUS_DOCKER_SERVICE}
     image: ${PROMETHEUS_DOCKER_IMAGE}

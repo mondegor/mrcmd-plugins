@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   web-app: # ${NODEJS_DOCKER_SERVICE}
     image: ${NODEJS_DOCKER_IMAGE}

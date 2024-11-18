@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   web-app: # ${JAVA_DOCKER_SERVICE}
     image: ${JAVA_DOCKER_IMAGE}

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   auth-keycloak: # ${KEYCLOAK_DOCKER_SERVICE}
     image: ${KEYCLOAK_DOCKER_IMAGE}

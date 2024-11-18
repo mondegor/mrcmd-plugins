@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   broker-kafka: # ${KAFKA_DOCKER_SERVICE}
     image: ${KAFKA_DOCKER_IMAGE}

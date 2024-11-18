@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   mn-postgresexporter: # ${POSTGRESEXPORTER_DOCKER_SERVICE}
     image: ${POSTGRESEXPORTER_DOCKER_IMAGE}

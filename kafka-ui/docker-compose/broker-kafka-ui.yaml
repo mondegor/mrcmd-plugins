@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   broker-kafka-ui: # ${KAFKA_UI_DOCKER_SERVICE}
     image: ${KAFKA_UI_DOCKER_IMAGE}
