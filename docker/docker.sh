@@ -73,6 +73,13 @@ function mrcmd_plugins_docker_method_exec() {
 
       d-start | d-restart | d-stop)
         mrcore_validate_tool_required docker
+
+        # if the following message is displayed, then you need to close the docker socket:
+        # 'Warning: Stopping docker.service, but it can still be activated by docker.socket'
+        if [[ "${currentCommand}" == "d-stop" && "${1:-}" == "force" ]]; then
+          sudo systemctl stop docker.socket
+        fi
+
         sudo service docker "${currentCommand:2:${#currentCommand}}"
         return
         ;;
@@ -150,18 +157,6 @@ function mrcmd_plugins_docker_method_exec() {
       ${MRCORE_TTY_INTERFACE} docker "$@"
       ;;
 
-    d-start)
-      sudo service docker start
-      ;;
-
-    d-restart)
-      sudo service docker restart
-      ;;
-
-    d-stop)
-      sudo service docker stop
-      ;;
-
     *)
       ${RETURN_UNKNOWN_COMMAND}
       ;;
@@ -193,9 +188,9 @@ function mrcmd_plugins_docker_method_help() {
   echo -e "  cmd ${CC_BLUE}--help${CC_END}          More information about tool 'docker'"
   echo ""
   echo -e "${CC_YELLOW}Docker service commands:${CC_END}"
-  echo -e "  d-start     sudo service docker start"
-  echo -e "  d-restart   sudo service docker restart"
-  echo -e "  d-stop      sudo service docker stop"
+  echo -e "  d-start             sudo service docker start"
+  echo -e "  d-restart           sudo service docker restart"
+  echo -e "  d-stop [force]      sudo service docker stop + systemctl stop docker.socket"
 }
 
 # private
