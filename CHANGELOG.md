@@ -1,12 +1,13 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
-## 2025-09-13
+## 2025-09-13 (v0.14.6)
 ### Added
 - Добавлено подключение библиотеки `gotext` в `go-dev`;
 
 ### Changed
 - Обновлен `golangci-lint` до версии `v1.64.8`
+- Обновлен `plantuml` до версии `1.2025.7`
 
 ## 2024-11-19
 ### Changed
