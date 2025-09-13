@@ -20,6 +20,7 @@ function mrcmd_plugins_go_dev_method_init() {
     "GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION"
     "GO_DEV_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION"
     "GO_DEV_TOOLS_INSTALL_PROTOC_GEN_OPENAPIV2_VERSION"
+    "GO_DEV_TOOLS_INSTALL_GOTEXT_VERSION"
   )
 
   readonly GO_DEV_VARS_DEFAULT=(
@@ -35,6 +36,7 @@ function mrcmd_plugins_go_dev_method_init() {
     "false" # v1.3.0
     "false" # v2.20.0
     "false" # v2.20.0
+    "false" # v0.27.0
   )
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
@@ -261,6 +263,7 @@ function mrcmd_plugins_go_dev_install_tools() {
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" "${GO_DEV_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"    "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_OPENAPIV2_VERSION}"
+    "golang.org/x/text/cmd/gotext" "${GO_DEV_TOOLS_INSTALL_GOTEXT_VERSION}"
   )
 
   mrcmd_plugins_call_function "go-dev/install-tools" toolsArray[@]

@@ -24,8 +24,8 @@ function mrcmd_plugins_golangci_lint_method_init() {
   readonly GOLANGCI_LINT_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}golangci-lint:1.59.1"
-    "golangci/golangci-lint:v1.59.1-alpine"
+    "${DOCKER_PACKAGE_NAME}golangci-lint:1.64.8"
+    "golangci/golangci-lint:v1.64.8-alpine"
 
     "${GOLANGCI_LINT_TMP_DIR}/golang"
     "${GOLANGCI_LINT_TMP_DIR}/golangci-lint"

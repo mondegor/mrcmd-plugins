@@ -1,4 +1,4 @@
-# Plugins for Mrcmd Tool v0.14.4
+# Plugins for Mrcmd Tool v0.14.5
 Этот репозиторий содержит базовые плагины для [Mrcmd Tool](https://github.com/mondegor/mrcmd).
 
 ## Статус проекта
@@ -6,8 +6,8 @@
 
 ## Инсталляция плагинов
 - Выбрать рабочую директорию, содержащую директорию `mrcmd`;
-- `curl -fsSL -o mrcmd-plugins.zip https://github.com/mondegor/mrcmd-plugins/archive/refs/tags/v0.14.4.zip --ssl-no-revoke`
-- `unzip mrcmd-plugins.zip && rm mrcmd-plugins.zip && mv mrcmd-plugins-0.14.4 mrcmd/plugins`
+- `curl -fsSL -o mrcmd-plugins.zip https://github.com/mondegor/mrcmd-plugins/archive/refs/tags/v0.14.5.zip --ssl-no-revoke`
+- `unzip mrcmd-plugins.zip && rm mrcmd-plugins.zip && mv mrcmd-plugins-0.14.5 mrcmd/plugins`
 - `mrcmd state` // проверить, что плагины утилиты были установлены (см. Shared plugins path)
 
 ## Краткое описание плагинов
