@@ -29,8 +29,8 @@ function mrcmd_plugins_postgres_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}postgres:15.7"
-    "postgres:15.7-alpine3.20"
+    "${DOCKER_PACKAGE_NAME}postgres:18.3"
+    "postgres:18.3-alpine3.23"
 
     ##### "127.0.0.1:5432"
     ##### "postrges.db.local"

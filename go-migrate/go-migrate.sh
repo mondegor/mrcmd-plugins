@@ -23,8 +23,8 @@ function mrcmd_plugins_go_migrate_method_init() {
   readonly GO_MIGRATE_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}go-migrate:4.17.1"
-    "migrate/migrate:v4.17.1"
+    "${DOCKER_PACKAGE_NAME}go-migrate:4.19.1"
+    "migrate/migrate:v4.19.1"
     "${DOCKER_COMPOSE_NETWORK}"
 
     "POSTGRES_DB_DSN" # var with value or value

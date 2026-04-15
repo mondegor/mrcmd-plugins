@@ -27,8 +27,8 @@ function mrcmd_plugins_redis_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}redis:7.2.5"
-    "redis:7.2.5-alpine3.20"
+    "${DOCKER_PACKAGE_NAME}redis:7.4.8"
+    "redis:7.4.8-alpine3.21"
 
     ##### "127.0.0.1:6379"
     ##### "redis.db.local"

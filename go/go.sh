@@ -30,6 +30,7 @@ function mrcmd_plugins_go_method_init() {
     "GO_TOOLS_INSTALL_GOFUMPT_VERSION"
     "GO_TOOLS_INSTALL_GOIMPORTS_VERSION"
     "GO_TOOLS_INSTALL_GCI_VERSION"
+    "GO_TOOLS_INSTALL_GOLANGCI_LINT_VERSION"
 
     "GO_TOOLS_INSTALL_MOCKGEN_VERSION"
     "GO_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION"
@@ -43,8 +44,8 @@ function mrcmd_plugins_go_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}go:1.23.3"
-    "golang:1.23.3-alpine3.20"
+    "${DOCKER_PACKAGE_NAME}go:1.26.2"
+    "golang:1.26.2-alpine3.23"
 
     "${GO_TMP_DIR}/golang"
     "${APPX_DIR}/.env"
@@ -58,12 +59,13 @@ function mrcmd_plugins_go_method_init() {
     "latest"
     "latest"
     "latest"
+    "latest"
 
     "false" # v1.6.0
-    "false" # v1.34.1
-    "false" # v1.3.0
-    "false" # v2.20.0
-    "false" # v2.20.0
+    "false" # v1.36.10
+    "false" # v1.5.1
+    "false" # v2.27.3
+    "false" # v2.27.3
   )
 
   mrcore_dotenv_init_var_array GO_VARS[@] GO_VARS_DEFAULT[@]
@@ -221,6 +223,22 @@ function mrcmd_plugins_go_method_exec() {
       mrcmd_plugins_call_function "go/docker-run" gci write --skip-generated -s standard -s default "${extraParams[@]}" .
       ;;
 
+    lint)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint run ./...
+      ;;
+
+    lint-fast)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint run --fast-only ./...
+      ;;
+
+    lint-fix)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint run --fix ./...
+      ;;
+
+    lint-linters)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint linters
+      ;;
+
     generate)
       mrcmd_plugins_call_function "go/docker-run" go generate ./...
       ;;
@@ -281,6 +299,10 @@ function mrcmd_plugins_go_method_help() {
   echo -e "                      it always deterministic."
   echo -e "  fmti                Alias for goimports-fix."
   echo -e "  fmti2               Alias for gci-fix."
+  echo -e "  lint                Alias for golangci-lint run"
+  echo -e "  lint-fast           Alias for golangci-lint run --fast-only"
+  echo -e "  lint-fix            Alias for golangci-lint run --fix"
+  echo -e "  lint-linters        Alias for golangci-lint linters"
   echo -e "  generate            Generate runs commands described by directives"
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
@@ -312,7 +334,8 @@ function mrcmd_plugins_go_install_tools() {
     "mvdan.cc/gofumpt"                 "${GO_TOOLS_INSTALL_GOFUMPT_VERSION}"
     "golang.org/x/tools/cmd/goimports" "${GO_TOOLS_INSTALL_GOIMPORTS_VERSION}"
     "github.com/daixiang0/gci"         "${GO_TOOLS_INSTALL_GCI_VERSION}"
-    "github.com/golang/mock/mockgen"   "${GO_TOOLS_INSTALL_MOCKGEN_VERSION}"
+    "github.com/golangci/golangci-lint/v2/cmd/golangci-lint" "${GO_TOOLS_INSTALL_GOLANGCI_LINT_VERSION}"
+    "github.com/golang/mock/mockgen"                "${GO_TOOLS_INSTALL_MOCKGEN_VERSION}"
     "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" "${GO_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION}"

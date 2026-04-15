@@ -39,8 +39,8 @@ function mrcmd_plugins_php_fpm_method_init() {
     "php:8.2.11-fpm-alpine3.18"
 
     "${APPX_ID}-${PHP_FPM_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.27.0"
-    "nginx:1.27.0-alpine3.19"
+    "${DOCKER_PACKAGE_NAME}nginx-php-fpm:1.30.0"
+    "nginx:1.30.0-alpine3.23"
 
     ##### "127.0.0.1:8080"
     "web-app.local"

@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE_FROM=golang:1.23.3-alpine3.20
+ARG DOCKER_IMAGE_FROM=golang:1.26.2-alpine3.23
 
 FROM ${DOCKER_IMAGE_FROM}
 
@@ -10,7 +10,8 @@ ARG WEBAPP_INTERNAL_PORT=8080
 # RUN echo "GOBIN: ${GOBIN}"
 # RUN echo "GOROOT: ${GOROOT}"
 
-RUN apk add --no-cache git
+RUN sed -i 's/https/http/' /etc/apk/repositories && \
+    apk add --no-cache git
 
 RUN addgroup -g 1000 golang && adduser -u 1000 -G golang -s /bin/sh -D golang
 

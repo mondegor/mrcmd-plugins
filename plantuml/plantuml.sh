@@ -23,8 +23,8 @@ function mrcmd_plugins_plantuml_method_init() {
   readonly PLANTUML_VARS_DEFAULT=(
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
-    "${DOCKER_PACKAGE_NAME}plantuml:1.2025.7"
-    "plantuml/plantuml:1.2025.7"
+    "${DOCKER_PACKAGE_NAME}plantuml:1.2026.2"
+    "plantuml/plantuml:1.2026.2"
 
     "${APPX_DIR}"
     "./resources"

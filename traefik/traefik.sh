@@ -30,8 +30,8 @@ function mrcmd_plugins_traefik_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}traefik:2.11.2"
-    "traefik:2.11.2"
+    "${DOCKER_PACKAGE_NAME}traefik:2.11.42"
+    "traefik:2.11.42"
     "${DOCKER_COMPOSE_NETWORK}"
 
     "127.0.0.1:80"

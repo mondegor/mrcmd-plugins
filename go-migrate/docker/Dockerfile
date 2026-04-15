@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE_FROM=migrate/migrate:v4.17.1
+ARG DOCKER_IMAGE_FROM=migrate/migrate:v4.19.1
 
 FROM ${DOCKER_IMAGE_FROM}
 

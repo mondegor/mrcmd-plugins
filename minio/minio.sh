@@ -38,12 +38,12 @@ function mrcmd_plugins_minio_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}minio:2024-07-13"
-    "minio/minio:RELEASE.2024-07-13T01-46-15Z.fips"
+    "${DOCKER_PACKAGE_NAME}minio:2024-12-18"
+    "minio/minio:RELEASE.2024-12-18T13-15-44Z.fips"
 
     "${APPX_ID}-${MINIO_NGINX_DOCKER_SERVICE}"
-    "${DOCKER_PACKAGE_NAME}nginx-minio:1.27.0"
-    "nginx:1.27.0-alpine3.19"
+    "${DOCKER_PACKAGE_NAME}nginx-minio:1.30.0"
+    "nginx:1.30.0-alpine3.23"
     ##### "127.0.0.1:9984"
 
     "127.0.0.1:9000"

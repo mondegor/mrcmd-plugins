@@ -28,8 +28,8 @@ function mrcmd_plugins_postgresexporter_method_init() {
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker"
     ""
     "${MRCMD_CURRENT_PLUGIN_DIR}/docker-compose"
-    "${DOCKER_PACKAGE_NAME}postgres-exporter:0.15.0"
-    "prometheuscommunity/postgres-exporter:v0.15.0"
+    "${DOCKER_PACKAGE_NAME}postgres-exporter:0.19.1"
+    "prometheuscommunity/postgres-exporter:v0.19.1"
 
     "db-postgres:5432/postgres?sslmode=disable"
     "user_pg"

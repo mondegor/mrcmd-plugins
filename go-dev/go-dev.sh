@@ -11,9 +11,11 @@ function mrcmd_plugins_go_dev_method_init() {
     "GO_DEV_IMPORTS_LOCAL_PREFIXES"
     "GO_DEV_TOOLS_BIN_DIR"
 
+    "GO_DEV_TOOLS_INSTALL_GODELVE_VERSION"
     "GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION"
     "GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION"
     "GO_DEV_TOOLS_INSTALL_GCI_VERSION"
+    "GO_DEV_TOOLS_INSTALL_GOLANGCI_LINT_VERSION"
 
     "GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION"
     "GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION"
@@ -27,16 +29,18 @@ function mrcmd_plugins_go_dev_method_init() {
     "" # github.com/example/go-sample
     ""
 
+    "false"
+    "latest"
     "latest"
     "latest"
     "latest"
 
     "false" # v1.6.0
-    "false" # v1.34.1
-    "false" # v1.3.0
-    "false" # v2.20.0
-    "false" # v2.20.0
-    "false" # v0.27.0
+    "false" # v1.36.10
+    "false" # v1.5.1
+    "false" # v2.27.3
+    "false" # v2.27.3
+    "false" # v0.36.0
   )
 
   mrcore_dotenv_init_var_array GO_DEV_VARS[@] GO_DEV_VARS_DEFAULT[@]
@@ -145,11 +149,11 @@ function mrcmd_plugins_go_dev_method_exec() {
       ;;
 
     gofumpt)
-      mrcmd_plugins_go_dev_workdir ${GO_DEV_TOOLS_BIN_DIR}/gofumpt -d -extra ./
+      mrcmd_plugins_go_dev_workdir gofumpt -d -extra ./
       ;;
 
     fmt | gofumpt-fix)
-      mrcmd_plugins_go_dev_workdir ${GO_DEV_TOOLS_BIN_DIR}/gofumpt -l -w -extra ./
+      mrcmd_plugins_go_dev_workdir gofumpt -l -w -extra ./
       ;;
 
     goimports)
@@ -158,7 +162,7 @@ function mrcmd_plugins_go_dev_method_exec() {
         extraParams="-local${CMD_SEPARATOR}${GO_DEV_IMPORTS_LOCAL_PREFIXES}"
       fi
 
-      mrcmd_plugins_go_dev_workdir ${GO_DEV_TOOLS_BIN_DIR}/goimports -d ${extraParams} ./
+      mrcmd_plugins_go_dev_workdir goimports -d ${extraParams} ./
       ;;
 
     fmti | goimports-fix)
@@ -167,7 +171,7 @@ function mrcmd_plugins_go_dev_method_exec() {
         extraParams="-local${CMD_SEPARATOR}${GO_DEV_IMPORTS_LOCAL_PREFIXES}"
       fi
 
-      mrcmd_plugins_go_dev_workdir ${GO_DEV_TOOLS_BIN_DIR}/goimports -l -w ${extraParams} ./
+      mrcmd_plugins_go_dev_workdir goimports -l -w ${extraParams} ./
       ;;
 
     gci)
@@ -186,6 +190,22 @@ function mrcmd_plugins_go_dev_method_exec() {
       fi
 
       mrcmd_plugins_go_dev_workdir gci write --skip-generated -s standard -s default "${extraParams[@]}" .
+      ;;
+
+    lint)
+      mrcmd_plugins_go_dev_workdir golangci-lint run ./...
+      ;;
+
+    lint-fast)
+      mrcmd_plugins_go_dev_workdir golangci-lint run --fast-only ./...
+      ;;
+
+    lint-fix)
+      mrcmd_plugins_go_dev_workdir golangci-lint run --fix ./...
+      ;;
+
+    lint-linters)
+      mrcmd_plugins_go_dev_workdir golangci-lint linters
       ;;
 
     generate)
@@ -238,6 +258,10 @@ function mrcmd_plugins_go_dev_method_help() {
   echo -e "                      it always deterministic."
   echo -e "  fmti                Alias for goimports-fix."
   echo -e "  fmti2               Alias for gci-fix."
+  echo -e "  lint                Alias for golangci-lint run"
+  echo -e "  lint-fast           Alias for golangci-lint run --fast-only"
+  echo -e "  lint-fix            Alias for golangci-lint run --fix"
+  echo -e "  lint-linters        Alias for golangci-lint linters"
   echo -e "  generate            Generate runs commands described by directives"
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
@@ -255,10 +279,12 @@ function mrcmd_plugins_go_dev_method_help() {
 # private
 function mrcmd_plugins_go_dev_install_tools() {
   local toolsArray=(
-    "mvdan.cc/gofumpt"                 "${GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION}"
-    "golang.org/x/tools/cmd/goimports" "${GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION}"
-    "github.com/daixiang0/gci"         "${GO_DEV_TOOLS_INSTALL_GCI_VERSION}"
-    "github.com/golang/mock/mockgen"   "${GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION}"
+    "github.com/go-delve/delve/cmd/dlv" "${GO_DEV_TOOLS_INSTALL_GODELVE_VERSION}"
+    "mvdan.cc/gofumpt"                  "${GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION}"
+    "golang.org/x/tools/cmd/goimports"  "${GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION}"
+    "github.com/daixiang0/gci"          "${GO_DEV_TOOLS_INSTALL_GCI_VERSION}"
+    "github.com/golangci/golangci-lint/v2/cmd/golangci-lint" "${GO_DEV_TOOLS_INSTALL_GOLANGCI_LINT_VERSION}"
+    "github.com/golang/mock/mockgen"                "${GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION}"
     "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" "${GO_DEV_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION}"
