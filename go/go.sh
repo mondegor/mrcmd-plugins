@@ -21,15 +21,11 @@ function mrcmd_plugins_go_method_init() {
     "GO_GOPATH_DIR"
     "GO_APPX_ENV_FILE"
     "GO_APPX_MAIN_FILE"
-    "GO_IMPORTS_LOCAL_PREFIXES"
 
     ##### "GO_WEBAPP_PUBLIC_PORT"
     "GO_WEBAPP_INTERNAL_PORT"
     "GO_WEBAPP_DOMAIN"
 
-    "GO_TOOLS_INSTALL_GOFUMPT_VERSION"
-    "GO_TOOLS_INSTALL_GOIMPORTS_VERSION"
-    "GO_TOOLS_INSTALL_GCI_VERSION"
     "GO_TOOLS_INSTALL_GOLANGCI_LINT_VERSION"
 
     "GO_TOOLS_INSTALL_MOCKGEN_VERSION"
@@ -50,18 +46,14 @@ function mrcmd_plugins_go_method_init() {
     "${GO_TMP_DIR}/golang"
     "${APPX_DIR}/.env"
     "./cmd/app/main.go"
-    "" # github.com/example/go-sample
 
     ##### "127.0.0.1:8080"
     "8080"
     "web-app.local"
 
     "latest"
-    "latest"
-    "latest"
-    "latest"
 
-    "false" # v1.6.0
+    "false" # v0.6.0
     "false" # v1.36.10
     "false" # v1.5.1
     "false" # v2.27.3
@@ -95,9 +87,9 @@ function mrcmd_plugins_go_method_install() {
   mrcore_lib_mkdir "${GO_TMP_DIR}"
   mrcore_lib_mkdir "${GO_GOPATH_DIR}"
 
-  mrcmd_plugins_go_docker_build --no-cache
-  mrcmd_plugins_go_install_tools
-  mrcmd_plugins_call_function "go/docker-run" go mod tidy
+  mrcmd_plugins_go_docker_build --no-cache || return
+  mrcmd_plugins_go_install_tools || return
+  mrcmd_plugins_call_function "go/docker-run" go mod tidy || return
   mrcmd_plugins_call_function "go/docker-run" go mod download
 }
 
@@ -171,56 +163,12 @@ function mrcmd_plugins_go_method_exec() {
       mrcmd_plugins_call_function "go/docker-run" go mod tidy
       ;;
 
-    gofmt)
-      mrcmd_plugins_call_function "go/docker-run" gofmt -d -s ./
+    fmt)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint fmt
       ;;
 
-    gofmt-fix)
-      mrcmd_plugins_call_function "go/docker-run" gofmt -l -w ./
-      ;;
-
-    gofumpt)
-      mrcmd_plugins_call_function "go/docker-run" gofumpt -d -extra ./
-      ;;
-
-    fmt | gofumpt-fix)
-      mrcmd_plugins_call_function "go/docker-run" gofumpt -l -w -extra ./
-      ;;
-
-    goimports)
-      local extraParams=""
-      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams="-local${CMD_SEPARATOR}${GO_IMPORTS_LOCAL_PREFIXES}"
-      fi
-
-      mrcmd_plugins_call_function "go/docker-run" goimports -d ${extraParams} ./
-      ;;
-
-    fmti | goimports-fix)
-      local extraParams=""
-      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams="-local${CMD_SEPARATOR}${GO_IMPORTS_LOCAL_PREFIXES}"
-      fi
-
-      mrcmd_plugins_call_function "go/docker-run" goimports -l -w ${extraParams} ./
-      ;;
-
-    gci)
-      local extraParams=()
-      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams=(-s "prefix(${GO_IMPORTS_LOCAL_PREFIXES})")
-      fi
-
-      mrcmd_plugins_call_function "go/docker-run" gci diff --skip-generated -s standard -s default "${extraParams[@]}" .
-      ;;
-
-    fmti2 | gci-fix)
-      local extraParams=()
-      if [ -n "${GO_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams=(-s "prefix(${GO_IMPORTS_LOCAL_PREFIXES})")
-      fi
-
-      mrcmd_plugins_call_function "go/docker-run" gci write --skip-generated -s standard -s default "${extraParams[@]}" .
+    fmt-diff)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint fmt -d
       ;;
 
     lint)
@@ -239,6 +187,10 @@ function mrcmd_plugins_go_method_exec() {
       mrcmd_plugins_call_function "go/docker-run" golangci-lint linters
       ;;
 
+    lint-verify)
+      mrcmd_plugins_call_function "go/docker-run" golangci-lint config verify
+      ;;
+
     generate)
       mrcmd_plugins_call_function "go/docker-run" go generate ./...
       ;;
@@ -249,8 +201,10 @@ function mrcmd_plugins_go_method_exec() {
 
     test-report)
       mrcmd_plugins_call_function "go/docker-run" sh -c "go test -coverprofile=tmp-test-coverage.out ./... && \
-                                                         go tool cover -html=tmp-test-coverage.out -o ./test-coverage-full.html && \
-                                                         rm ./tmp-test-coverage.out"
+                                                         go tool cover -html=tmp-test-coverage.out -o ./test-coverage-full.html; \
+                                                         errorCode=\$?; \
+                                                         rm -f ./tmp-test-coverage.out; \
+                                                         exit \$errorCode"
       ;;
 
     bench)
@@ -290,19 +244,13 @@ function mrcmd_plugins_go_method_help() {
   echo -e "  install [args]      Compile and install packages and dependencies."
   echo -e "  download [args]     Download modules to local cache."
   echo -e "  tidy                Add missing and remove unused modules."
-  echo -e "  gofmt[-fix]         Run formatter for Go source code."
-  echo -e "  gofumpt[-fix]       Run extended formatter for Go source code."
-  echo -e "  fmt                 Run gofumpt-fix."
-  echo -e "  goimports[-fix]     Updates your Go import lines, adding missing ones"
-  echo -e "                      and removing unreferenced ones."
-  echo -e "  gci[-fix]           Controls Go package import order and makes"
-  echo -e "                      it always deterministic."
-  echo -e "  fmti                Alias for goimports-fix."
-  echo -e "  fmti2               Alias for gci-fix."
+  echo -e "  fmt                 Alias for golangci-lint fmt"
+  echo -e "  fmt-diff            Alias for golangci-lint fmt -d"
   echo -e "  lint                Alias for golangci-lint run"
   echo -e "  lint-fast           Alias for golangci-lint run --fast-only"
   echo -e "  lint-fix            Alias for golangci-lint run --fix"
   echo -e "  lint-linters        Alias for golangci-lint linters"
+  echo -e "  lint-verify         Alias for golangci-lint config verify"
   echo -e "  generate            Generate runs commands described by directives"
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
@@ -331,11 +279,8 @@ function mrcmd_plugins_go_docker_build() {
 # private
 function mrcmd_plugins_go_install_tools() {
   local toolsArray=(
-    "mvdan.cc/gofumpt"                 "${GO_TOOLS_INSTALL_GOFUMPT_VERSION}"
-    "golang.org/x/tools/cmd/goimports" "${GO_TOOLS_INSTALL_GOIMPORTS_VERSION}"
-    "github.com/daixiang0/gci"         "${GO_TOOLS_INSTALL_GCI_VERSION}"
     "github.com/golangci/golangci-lint/v2/cmd/golangci-lint" "${GO_TOOLS_INSTALL_GOLANGCI_LINT_VERSION}"
-    "github.com/golang/mock/mockgen"                "${GO_TOOLS_INSTALL_MOCKGEN_VERSION}"
+    "go.uber.org/mock/mockgen"                      "${GO_TOOLS_INSTALL_MOCKGEN_VERSION}"
     "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" "${GO_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION}"

@@ -44,10 +44,10 @@ function mrcmd_plugins_sentry_method_export_config() {
 
 function mrcmd_plugins_sentry_method_install() {
   if [ ! -e "${APPX_WORK_DIR}" ]; then
-    mrcmd_plugins_call_function "vendor/package-get" "${SENTRY_SOURCE_URL}" "${APPX_WORK_DIR}"
+    mrcmd_plugins_call_function "vendor/package-get" "${SENTRY_SOURCE_URL}" "${APPX_WORK_DIR}" || return
   fi
 
-  mrcmd_plugins_sentry_create_custom_env
+  mrcmd_plugins_sentry_create_custom_env || return
 
   local flags=""
 
@@ -55,9 +55,7 @@ function mrcmd_plugins_sentry_method_install() {
     flags="${flags}${CMD_SEPARATOR}--skip-user-creation"
   fi
 
-  cd "${APPX_WORK_DIR}"
-  ./install.sh ${flags}
-  cd "${APPX_DIR_REAL}"
+  (cd "${APPX_WORK_DIR}" && ./install.sh ${flags})
 }
 
 function mrcmd_plugins_sentry_method_start() {
@@ -113,7 +111,7 @@ function mrcmd_plugins_sentry_method_help() {
 
 # private
 function mrcmd_plugins_sentry_create_custom_env() {
-  cp "${APPX_WORK_DIR}/.env" "${SENTRY_ENV_FILE}"
+  cp "${APPX_WORK_DIR}/.env" "${SENTRY_ENV_FILE}" || return
 
   echo -e "\n# exported from ${MRCMD_INFO_NAME} plugin
 COMPOSE_PROJECT_NAME=${APPX_ID}
