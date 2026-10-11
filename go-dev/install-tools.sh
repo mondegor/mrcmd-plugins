@@ -13,10 +13,12 @@ function mrcmd_func_go_dev_each_tool_install() {
 
   if [[ "${version}" != false ]]; then
     echo "Installs tool: ${toolName}@${version}"
-    go install "${toolName}@${version}"
+    go install "${toolName}@${version}" || return
   fi
 
-  if [ -n "${1-}" ]; then
-    mrcmd_func_go_dev_each_tool_install "$@"
+  if [ -z "${1-}" ]; then
+    return
   fi
+
+  mrcmd_func_go_dev_each_tool_install "$@"
 }

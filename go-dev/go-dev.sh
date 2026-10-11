@@ -8,13 +8,9 @@ function mrcmd_plugins_go_dev_method_init() {
   readonly GO_DEV_CAPTION="Go Dev"
 
   readonly GO_DEV_VARS=(
-    "GO_DEV_IMPORTS_LOCAL_PREFIXES"
     "GO_DEV_TOOLS_BIN_DIR"
 
     "GO_DEV_TOOLS_INSTALL_GODELVE_VERSION"
-    "GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION"
-    "GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION"
-    "GO_DEV_TOOLS_INSTALL_GCI_VERSION"
     "GO_DEV_TOOLS_INSTALL_GOLANGCI_LINT_VERSION"
 
     "GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION"
@@ -26,16 +22,12 @@ function mrcmd_plugins_go_dev_method_init() {
   )
 
   readonly GO_DEV_VARS_DEFAULT=(
-    "" # github.com/example/go-sample
     ""
 
     "false"
     "latest"
-    "latest"
-    "latest"
-    "latest"
 
-    "false" # v1.6.0
+    "false" # v0.6.0
     "false" # v1.36.10
     "false" # v1.5.1
     "false" # v2.27.3
@@ -92,8 +84,8 @@ function mrcmd_plugins_go_dev_method_install() {
     return
   fi
 
-  mrcmd_plugins_go_dev_install_tools
-  mrcmd_plugins_go_dev_workdir go mod tidy
+  mrcmd_plugins_go_dev_install_tools || return
+  mrcmd_plugins_go_dev_workdir go mod tidy || return
   mrcmd_plugins_go_dev_workdir go mod download
 }
 
@@ -116,7 +108,7 @@ function mrcmd_plugins_go_dev_method_exec() {
       ;;
 
     deps)
-      mrcmd_plugins_go_dev_workdir go get ./...
+      mrcmd_plugins_go_dev_workdir go get ./... || return
       mrcmd_plugins_go_dev_workdir go mod tidy
       ;;
 
@@ -140,56 +132,12 @@ function mrcmd_plugins_go_dev_method_exec() {
       mrcmd_plugins_go_dev_workdir go mod tidy
       ;;
 
-    gofmt)
-      mrcmd_plugins_go_dev_workdir gofmt -d -s ./
+    fmt)
+      mrcmd_plugins_go_dev_workdir golangci-lint fmt
       ;;
 
-    gofmt-fix)
-      mrcmd_plugins_go_dev_workdir gofmt -l -w ./
-      ;;
-
-    gofumpt)
-      mrcmd_plugins_go_dev_workdir gofumpt -d -extra ./
-      ;;
-
-    fmt | gofumpt-fix)
-      mrcmd_plugins_go_dev_workdir gofumpt -l -w -extra ./
-      ;;
-
-    goimports)
-      local extraParams=""
-      if [ -n "${GO_DEV_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams="-local${CMD_SEPARATOR}${GO_DEV_IMPORTS_LOCAL_PREFIXES}"
-      fi
-
-      mrcmd_plugins_go_dev_workdir goimports -d ${extraParams} ./
-      ;;
-
-    fmti | goimports-fix)
-      local extraParams=""
-      if [ -n "${GO_DEV_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams="-local${CMD_SEPARATOR}${GO_DEV_IMPORTS_LOCAL_PREFIXES}"
-      fi
-
-      mrcmd_plugins_go_dev_workdir goimports -l -w ${extraParams} ./
-      ;;
-
-    gci)
-      local extraParams=()
-      if [ -n "${GO_DEV_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams=(-s "prefix(${GO_DEV_IMPORTS_LOCAL_PREFIXES})")
-      fi
-
-      mrcmd_plugins_go_dev_workdir gci diff --skip-generated -s standard -s default "${extraParams[@]}" .
-      ;;
-
-    fmti2 | gci-fix)
-      local extraParams=()
-      if [ -n "${GO_DEV_IMPORTS_LOCAL_PREFIXES}" ]; then
-        extraParams=(-s "prefix(${GO_DEV_IMPORTS_LOCAL_PREFIXES})")
-      fi
-
-      mrcmd_plugins_go_dev_workdir gci write --skip-generated -s standard -s default "${extraParams[@]}" .
+    fmt-diff)
+      mrcmd_plugins_go_dev_workdir golangci-lint fmt -d
       ;;
 
     lint)
@@ -208,6 +156,10 @@ function mrcmd_plugins_go_dev_method_exec() {
       mrcmd_plugins_go_dev_workdir golangci-lint linters
       ;;
 
+    lint-verify)
+      mrcmd_plugins_go_dev_workdir golangci-lint config verify
+      ;;
+
     generate)
       mrcmd_plugins_go_dev_workdir go generate ./...
       ;;
@@ -217,9 +169,14 @@ function mrcmd_plugins_go_dev_method_exec() {
       ;;
 
     test-report)
-      mrcmd_plugins_go_dev_workdir go test -coverprofile=tmp-test-coverage.out ./...
-      mrcmd_plugins_go_dev_workdir go tool cover -html=tmp-test-coverage.out -o ./test-coverage-full.html
-      mrcmd_plugins_go_dev_workdir rm ./tmp-test-coverage.out
+      local errorCode=0
+
+      mrcmd_plugins_go_dev_workdir go test -coverprofile=tmp-test-coverage.out ./... &&
+        mrcmd_plugins_go_dev_workdir go tool cover -html=tmp-test-coverage.out -o ./test-coverage-full.html ||
+        errorCode="$?"
+
+      mrcmd_plugins_go_dev_workdir rm -f ./tmp-test-coverage.out
+      return "${errorCode}"
       ;;
 
     bench)
@@ -240,7 +197,7 @@ function mrcmd_plugins_go_dev_method_exec() {
 function mrcmd_plugins_go_dev_method_help() {
   #markup:"|-|-|---------|-------|-------|---------------------------------------|"
   echo -e "${CC_YELLOW}Commands:${CC_END}"
-  echo -e "  install-tools       Downloads tools defined in GO_TOOLS_INSTALL_* vars"
+  echo -e "  install-tools       Downloads tools defined in GO_DEV_TOOLS_INSTALL_* vars"
   echo -e "  deps                Downloads modules to local cache if need"
   echo -e "                      and refresh their dependencies."
   echo -e "  env                 Prints Go environment information."
@@ -249,19 +206,13 @@ function mrcmd_plugins_go_dev_method_help() {
   echo -e "  install [args]      Compile and install packages and dependencies."
   echo -e "  download [args]     Download modules to local cache."
   echo -e "  tidy                Add missing and remove unused modules."
-  echo -e "  gofmt[-fix]         Run formatter for Go source code."
-  echo -e "  gofumpt[-fix]       Run extended formatter for Go source code."
-  echo -e "  fmt                 Run gofumpt-fix."
-  echo -e "  goimports[-fix]     Updates your Go import lines, adding missing ones"
-  echo -e "                      and removing unreferenced ones."
-  echo -e "  gci[-fix]           Controls Go package import order and makes"
-  echo -e "                      it always deterministic."
-  echo -e "  fmti                Alias for goimports-fix."
-  echo -e "  fmti2               Alias for gci-fix."
+  echo -e "  fmt                 Alias for golangci-lint fmt"
+  echo -e "  fmt-diff            Alias for golangci-lint fmt -d"
   echo -e "  lint                Alias for golangci-lint run"
   echo -e "  lint-fast           Alias for golangci-lint run --fast-only"
   echo -e "  lint-fix            Alias for golangci-lint run --fix"
   echo -e "  lint-linters        Alias for golangci-lint linters"
+  echo -e "  lint-verify         Alias for golangci-lint config verify"
   echo -e "  generate            Generate runs commands described by directives"
   echo -e "                      within existing files."
   echo -e "  test                Automates testing the packages named by the import paths."
@@ -280,11 +231,8 @@ function mrcmd_plugins_go_dev_method_help() {
 function mrcmd_plugins_go_dev_install_tools() {
   local toolsArray=(
     "github.com/go-delve/delve/cmd/dlv" "${GO_DEV_TOOLS_INSTALL_GODELVE_VERSION}"
-    "mvdan.cc/gofumpt"                  "${GO_DEV_TOOLS_INSTALL_GOFUMPT_VERSION}"
-    "golang.org/x/tools/cmd/goimports"  "${GO_DEV_TOOLS_INSTALL_GOIMPORTS_VERSION}"
-    "github.com/daixiang0/gci"          "${GO_DEV_TOOLS_INSTALL_GCI_VERSION}"
     "github.com/golangci/golangci-lint/v2/cmd/golangci-lint" "${GO_DEV_TOOLS_INSTALL_GOLANGCI_LINT_VERSION}"
-    "github.com/golang/mock/mockgen"                "${GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION}"
+    "go.uber.org/mock/mockgen"                      "${GO_DEV_TOOLS_INSTALL_MOCKGEN_VERSION}"
     "google.golang.org/protobuf/cmd/protoc-gen-go"  "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_VERSION}"
     "google.golang.org/grpc/cmd/protoc-gen-go-grpc" "${GO_DEV_TOOLS_INSTALL_PROTOC_GEN_GO_GRPC_VERSION}"
     "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" "${GO_DEV_TOOLS_INSTALL_PROTOC_GRPC_GATEWAY_VERSION}"
@@ -300,7 +248,5 @@ function mrcmd_plugins_go_dev_workdir() {
   local currentCommand="${1:?}"
   shift
 
-  cd "${APPX_WORK_DIR}"
-  ${currentCommand} "$@"
-  cd "${APPX_DIR_REAL}"
+  (cd "${APPX_WORK_DIR}" && "${currentCommand}" "$@")
 }

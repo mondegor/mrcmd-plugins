@@ -16,10 +16,12 @@ function mrcmd_func_go_each_tool_install() {
     mrcmd_plugins_call_function "go/docker-run" \
       go \
       install \
-      "${toolName}@${version}"
+      "${toolName}@${version}" || return
   fi
 
-  if [ -n "${1-}" ]; then
-    mrcmd_func_go_each_tool_install "$@"
+  if [ -z "${1-}" ]; then
+    return
   fi
+
+  mrcmd_func_go_each_tool_install "$@"
 }

@@ -1,6 +1,38 @@
 # Plugins for Mrcmd Tool Changelog
 Все изменения в Plugins for Mrcmd будут документироваться на этой странице.
 
+## 2026-10-11 (v0.15.0)
+### Added
+- В плагины `go` и `go-dev` добавлена команда `lint-verify` (`golangci-lint config verify`);
+- В плагины `go` и `go-dev` добавлена команда `fmt-diff` (`golangci-lint fmt -d`);
+
+### Changed
+- В плагинах `go` и `go-dev` команда `fmt` теперь запускает `golangci-lint fmt` вместо `gofumpt -l -w -extra`:
+  форматтеры и их настройки берутся из `formatters` в `.golangci.yaml`, сгенерированные файлы пропускаются;
+- В плагинах `go` и `go-dev` `mockgen` устанавливается из `go.uber.org/mock/mockgen` вместо архивного
+  `github.com/golang/mock`, подсказка версии по умолчанию заменена на `v0.6.0`;
+
+### Fixed
+- В плагине `go-dev` команды возвращают ненулевой код, если запущенная утилита завершилась
+  с ошибкой (раньше всегда `0`), а `deps`, `install` и `test-report` прерываются на первом упавшем шаге;
+- В плагине `go` установка возвращает ненулевой код и прерывается на первом упавшем шаге
+  (раньше учитывался только результат `go mod download`);
+- В справке плагина `go-dev` для `install-tools` указаны переменные `GO_DEV_TOOLS_INSTALL_*`;
+- В плагинах `go` и `go-dev` команда `install-tools` возвращает ненулевой код и прерывается,
+  если установка утилиты завершилась с ошибкой (раньше ошибка игнорировалась);
+- В плагинах `go` и `go-dev` команда `test-report` удаляет временный файл `tmp-test-coverage.out`,
+  даже если тесты упали;
+- В плагине `sentry` установка возвращает ненулевой код, если `install.sh` завершился с ошибкой,
+  и не запускает его вне рабочей директории; установка прерывается, если не удалось скачать
+  исходники или создать `.env`;
+
+### Removed
+- Из плагинов `go` и `go-dev` удалены команды `gofmt[-fix]`, `gofumpt[-fix]`, `goimports[-fix]`,
+  `gci[-fix]`, `fmti`, `fmti2` (их заменяют `fmt` и `fmt-diff`);
+- Удалены переменные `GO_IMPORTS_LOCAL_PREFIXES`, `GO_DEV_IMPORTS_LOCAL_PREFIXES`,
+  `GO[_DEV]_TOOLS_INSTALL_{GOFUMPT,GOIMPORTS,GCI}_VERSION`; утилиты `gofumpt`, `goimports`, `gci`
+  больше не устанавливаются через `install-tools`;
+
 ## 2026-04-26 (v0.14.8)
 ### Changed
 - Поправлен `.editorconfig`, теперь `insert_final_newline` всегда `true`;
